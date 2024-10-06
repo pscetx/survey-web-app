@@ -3,9 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 
 export default function Record() {
   const [form, setForm] = useState({
+    respondent_id: "",
     respondent_name: "",
+    respondent_role: "",
     org_name: "",
-    role: "",
+    field: "",
+    staff_size: "",
   });
   const [isNew, setIsNew] = useState(true);
   const params = useParams();
@@ -75,7 +78,7 @@ export default function Record() {
     } catch (error) {
       console.error('A problem occurred adding or updating a record: ', error);
     } finally {
-      setForm({ name: "", position: "", level: "" });
+      setForm({ respondent_id: "", respondent_name: "", respondent_role: "", org_name: "", field: "", staff_size: "" });
       navigate("/");
     }
   }
@@ -100,12 +103,35 @@ export default function Record() {
           </div>
 
           <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 ">
+            
+            {/* Display the Respondent ID (Read-only) */}
+            <div className="sm:col-span-4">
+              <label
+                htmlFor="respondent_id"
+                className="block text-sm font-medium leading-6 text-slate-900"
+              >
+                Respondent ID
+              </label>
+              <div className="mt-2">
+                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-slate-300 sm:max-w-md">
+                  <input
+                    type="text"
+                    name="respondent_id"
+                    id="respondent_id"
+                    className="block flex-1 border-0 bg-slate-200 py-1.5 pl-1 text-slate-900 placeholder:text-slate-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    value={form._id} // Use the ID from the form state
+                    readOnly // Make this field read-only
+                  />
+                </div>
+              </div>
+            </div>
+            
             <div className="sm:col-span-4">
               <label
                 htmlFor="respondent_name"
                 className="block text-sm font-medium leading-6 text-slate-900"
               >
-                Name
+                Ten nguoi khao sat
               </label>
               <div className="mt-2">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-slate-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
@@ -123,10 +149,31 @@ export default function Record() {
             </div>
             <div className="sm:col-span-4">
               <label
+                htmlFor="respondent_role"
+                className="block text-sm font-medium leading-6 text-slate-900"
+              >
+                Chuc vu
+              </label>
+              <div className="mt-2">
+                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-slate-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                  <input
+                    type="text"
+                    name="respondent_role"
+                    id="respondent_role"
+                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-slate-900 placeholder:text-slate-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="First Last"
+                    value={form.respondent_role}
+                    onChange={(e) => updateForm({ respondent_role: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="sm:col-span-4">
+              <label
                 htmlFor="org_name"
                 className="block text-sm font-medium leading-6 text-slate-900"
               >
-                org_name
+                Ten to chuc
               </label>
               <div className="mt-2">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-slate-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
@@ -135,38 +182,54 @@ export default function Record() {
                     name="org_name"
                     id="org_name"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-slate-900 placeholder:text-slate-400 focus:ring-0 sm:text-sm sm:leading-6"
-                    placeholder="Developer Advocate"
+                    placeholder="First Last"
                     value={form.org_name}
                     onChange={(e) => updateForm({ org_name: e.target.value })}
                   />
                 </div>
               </div>
             </div>
-            <div>
-              <fieldset className="mt-4">
-                <legend className="sr-only">Position Options</legend>
-                <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
-                  <label
-                htmlFor="role"
+            <div className="sm:col-span-4">
+              <label
+                htmlFor="field"
                 className="block text-sm font-medium leading-6 text-slate-900"
               >
-                role
+                Linh vuc
               </label>
               <div className="mt-2">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-slate-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                   <input
                     type="text"
-                    name="role"
-                    id="role"
+                    name="field"
+                    id="field"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-slate-900 placeholder:text-slate-400 focus:ring-0 sm:text-sm sm:leading-6"
-                    placeholder="Developer Advocate"
-                    value={form.role}
-                    onChange={(e) => updateForm({ role: e.target.value })}
+                    placeholder="First Last"
+                    value={form.field}
+                    onChange={(e) => updateForm({ field: e.target.value })}
                   />
                 </div>
               </div>
+            </div>
+            <div className="sm:col-span-4">
+              <label
+                htmlFor="staff_size"
+                className="block text-sm font-medium leading-6 text-slate-900"
+              >
+                Số lượng nhân vien
+              </label>
+              <div className="mt-2">
+                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-slate-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                  <input
+                    type="text"
+                    name="staff_size"
+                    id="staff_size"
+                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-slate-900 placeholder:text-slate-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="First Last"
+                    value={form.staff_size}
+                    onChange={(e) => updateForm({ staff_size: e.target.value })}
+                  />
                 </div>
-              </fieldset>
+              </div>
             </div>
           </div>
         </div>

@@ -22,13 +22,16 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     let newDocument = {
-      respondent_id: req.body.respondent_id,
-      question_id: req.body.question_id,
-      selected_option_id: req.body.selected_option_id,
+      category: req.body.category,
+      question_text: req.body.question_text,
+      questions: req.body.questions,
     };
+    if (!Array.isArray(newDocument.questions) || newDocument.questions.some(question => !question._id || question.score === undefined)) {
+      return res.status(400).send("Invalid options format. Each option must have '_id' and 'score' fields.");
+    }
     let collection = await db.collection("answers");
     let result = await collection.insertOne(newDocument);
-    res.send(result).status(204);
+    res.status(201).send({ insertedId: result.insertedId });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error adding record");
@@ -40,15 +43,20 @@ router.patch("/:id", async (req, res) => {
     const query = { _id: new ObjectId(req.params.id) };
     const updates = {
       $set: {
-        respondent_id: req.body.respondent_id,
-        question_id: req.body.question_id,
-        selected_option_id: req.body.selected_option_id,
+        category: req.body.category,
+        question_text: req.body.question_text,
+        questions: req.body.questions,
       },
     };
-
+    if (req.body.questions && (!Array.isArray(req.body.questions) || req.body.questions.some(question => !question._id || question.score === undefined))) {
+      return res.status(400).send("Invalid options format. Each option must have '_id' and 'score' fields.");
+    }
     let collection = await db.collection("answers");
     let result = await collection.updateOne(query, updates);
-    res.send(result).status(200);
+    if (result.matchedCount === 0) {
+      return res.status(404).send("No question found with the given ID.");
+    }
+    res.status(200).send("Question updated successfully");
   } catch (err) {
     console.error(err);
     res.status(500).send("Error updating record");
