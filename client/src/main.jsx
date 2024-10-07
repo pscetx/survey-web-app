@@ -10,6 +10,7 @@ import RecordList from "./components/RecordList";
 import "./index.css";
 import Quiz from "./components/Quiz";
 import Results from "./components/Result";
+import NewRespondent from "./components/NewRespondent";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/create",
-        element: <Record />,
+        element: <NewRespondent />,
       },
     ],
   },

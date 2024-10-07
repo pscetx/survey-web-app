@@ -4,7 +4,6 @@ import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
-// GET all answers
 router.get("/", async (req, res) => {
   try {
     let collection = await db.collection("answers");
@@ -16,7 +15,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET answer by ID
 router.get("/:id", async (req, res) => {
   try {
     let collection = await db.collection("answers");
@@ -34,14 +32,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST new answer
 router.post("/", async (req, res) => {
   try {
-    console.log("Received Payload:", req.body); // Log the incoming payload
-
-    // Validate incoming data
+    console.log("Received Payload:", req.body);
     let newDocument = {
-      respondent_id: req.body.respondent_id,
+      respondent_id: new ObjectId(req.body.respondent_id),
       questions: req.body.questions,
     };
 
@@ -57,24 +52,22 @@ router.post("/", async (req, res) => {
     let collection = await db.collection("answers");
     let result = await collection.insertOne(newDocument);
 
-    // Log the saved document
     const savedDocument = await collection.findOne({ _id: result.insertedId });
-    console.log("Saved Document:", savedDocument); // Log the saved document to verify the scores
+    console.log("Saved Document:", savedDocument);
 
     res.status(201).send({ insertedId: result.insertedId });
   } catch (err) {
-    console.error("Error adding record:", err);
-    res.status(500).send("Error adding record");
+    console.error("Error adding answer:", err);
+    res.status(500).send("Error adding answer");
   }
 });
 
-// PATCH update answer by ID
 router.patch("/:id", async (req, res) => {
   try {
     const query = { _id: new ObjectId(req.params.id) };
     const updates = {
       $set: {
-        respondent_id: req.body.respondent_id,
+        respondent_id: new ObjectId(req.body.respondent_id),
         questions: req.body.questions,
       },
     };
@@ -93,17 +86,16 @@ router.patch("/:id", async (req, res) => {
     let result = await collection.updateOne(query, updates);
 
     if (result.matchedCount === 0) {
-      return res.status(404).send("No question found with the given ID.");
+      return res.status(404).send("No answer found with the given ID.");
     }
 
-    res.status(200).send("Question updated successfully");
+    res.status(200).send("Answer updated successfully");
   } catch (err) {
-    console.error("Error updating record:", err);
-    res.status(500).send("Error updating record");
+    console.error("Error updating answer:", err);
+    res.status(500).send("Error updating answer");
   }
 });
 
-// DELETE answer by ID
 router.delete("/:id", async (req, res) => {
   try {
     const query = { _id: new ObjectId(req.params.id) };
@@ -111,13 +103,13 @@ router.delete("/:id", async (req, res) => {
     let result = await collection.deleteOne(query);
 
     if (result.deletedCount === 0) {
-      return res.status(404).send("No record found to delete.");
+      return res.status(404).send("No answer found to delete.");
     }
 
-    res.status(200).send("Record deleted successfully");
+    res.status(200).send("Answer deleted successfully");
   } catch (err) {
-    console.error("Error deleting record:", err);
-    res.status(500).send("Error deleting record");
+    console.error("Error deleting answer:", err);
+    res.status(500).send("Error deleting answer");
   }
 });
 

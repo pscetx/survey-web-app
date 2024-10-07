@@ -14,14 +14,14 @@ export default function Record() {
   const params = useParams();
   const navigate = useNavigate();
 
+  const [respondentId, setRespondentId] = useState(""); // State to hold the respondent ID
+
   useEffect(() => {
     async function fetchData() {
       const id = params.id?.toString() || undefined;
-      if(!id) return;
+      if (!id) return;
       setIsNew(false);
-      const response = await fetch(
-        `http://localhost:5050/respondent/${params.id.toString()}`
-      );
+      const response = await fetch(`http://localhost:5050/respondent/${id}`);
       if (!response.ok) {
         const message = `An error has occurred: ${response.statusText}`;
         console.error(message);
@@ -34,26 +34,23 @@ export default function Record() {
         return;
       }
       setForm(record);
+      setRespondentId(record._id); // Set the respondentId state
     }
     fetchData();
-    return;
   }, [params.id, navigate]);
 
-  // These methods will update the state properties.
   function updateForm(value) {
-    return setForm((prev) => {
+    setForm((prev) => {
       return { ...prev, ...value };
     });
   }
 
-  // This function will handle the submission.
   async function onSubmit(e) {
     e.preventDefault();
     const person = { ...form };
     try {
       let response;
       if (isNew) {
-        // if we are adding a new record we will POST to /record.
         response = await fetch("http://localhost:5050/respondent", {
           method: "POST",
           headers: {
@@ -62,7 +59,6 @@ export default function Record() {
           body: JSON.stringify(person),
         });
       } else {
-        // if we are updating a record we will PATCH to /record/:id.
         response = await fetch(`http://localhost:5050/respondent/${params.id}`, {
           method: "PATCH",
           headers: {
@@ -71,18 +67,172 @@ export default function Record() {
           body: JSON.stringify(person),
         });
       }
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
     } catch (error) {
-      console.error('A problem occurred adding or updating a record: ', error);
-    } finally {
-      setForm({ respondent_id: "", respondent_name: "", respondent_role: "", org_name: "", field: "", staff_size: "" });
-      navigate("/");
+      console.error("A problem occurred adding or updating a record: ", error);
     }
   }
 
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [isQuizFinished, setIsQuizFinished] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [answeredQuestions, setAnsweredQuestions] = useState(new Set());
+
+  useEffect(() => {
+    async function fetchQuestions() {
+      const response = await fetch(`http://localhost:5050/question`);
+      if (!response.ok) {
+        console.error("Failed to fetch questions");
+        return;
+      }
+      const data = await response.json();
+      setQuestions(data);
+    }
+    fetchQuestions();
+  }, []);
+
+  const handleAnswerSelection = (selectedOption) => {
+    const currentQuestion = questions[currentQuestionIndex];
+    if (selectedOption.score > 0) {
+      setScore((prevScore) => prevScore + selectedOption.score);
+    }
+
+    setSelectedOptions((prev) => {
+      const newSelectedOptions = [...prev];
+      newSelectedOptions[currentQuestionIndex] = selectedOption.text;
+      return newSelectedOptions;
+    });
+
+    setAnsweredQuestions((prev) => {
+      const newAnsweredQuestions = new Set(prev);
+      newAnsweredQuestions.add(currentQuestionIndex);
+      return newAnsweredQuestions;
+    });
+  };
+
+  const handleNextQuestion = () => {
+    const nextQuestionIndex = currentQuestionIndex + 1;
+    if (nextQuestionIndex < questions.length) {
+      setCurrentQuestionIndex(nextQuestionIndex);
+    } else {
+      saveQuizResults(selectedOptions[currentQuestionIndex]?.score || 0);
+      setIsQuizFinished(true);
+    }
+  };
+
+  const saveQuizResults = async (lastQuestionScore) => {
+    const finalScore = score + lastQuestionScore;
+
+    const result = {
+      respondent_id: respondentId, // Use respondentId state
+      questions: questions.map((question, index) => ({
+        _id: question._id,
+        score: selectedOptions[index]
+          ? question.options.find((option) => option.text === selectedOptions[index])?.score || 0
+          : 0,
+      })),
+    };
+
+    try {
+      const response = await fetch(`http://localhost:5050/answer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(result),
+      });
+
+      if (!response.ok) {
+        console.error("Failed to save results", await response.text());
+        return;
+      }
+
+      console.log("Quiz results saved successfully");
+    } catch (error) {
+      console.error("Error saving quiz results:", error);
+    }
+  };
+
+  const restartQuiz = () => {
+    setCurrentQuestionIndex(0);
+    setScore(0);
+    setIsQuizFinished(false);
+    setSelectedOptions([]);
+    setAnsweredQuestions(new Set());
+  };
+
+  const renderNavigationButtons = () => (
+    <div className="navigation-buttons mb-4">
+      {questions.map((_, index) => (
+        <button
+          key={index}
+          onClick={() => setCurrentQuestionIndex(index)}
+          className={`p-2 m-1 rounded-md hover:bg-gray-400 ${
+            answeredQuestions.has(index) ? "bg-green-300" : "bg-gray-300"
+          }`}
+        >
+          {index === questions.length - 1 ? "Finish" : `Question ${index + 1}`}
+        </button>
+      ))}
+    </div>
+  );
+
+  const renderQuestion = () => {
+    if (questions.length === 0) return <p>Loading questions...</p>;
+
+    const currentQuestion = questions[currentQuestionIndex];
+    return (
+      <div className="quiz-question">
+        {renderNavigationButtons()}
+        <h2 className="text-2xl mb-4">{currentQuestion.question_text}</h2>
+        <div className="options-container">
+          {currentQuestionIndex === questions.length - 1 ? (
+            <p>You have reached the final question. Click Finish to complete the quiz.</p>
+          ) : (
+            currentQuestion.options.map((option, index) => (
+              <label key={index} className="block mb-2">
+                <input
+                  type="radio"
+                  name={`question-${currentQuestionIndex}`}
+                  value={option.text}
+                  checked={selectedOptions[currentQuestionIndex] === option.text}
+                  onChange={() => handleAnswerSelection(option)}
+                  className="mr-2"
+                />
+                {option.text}
+              </label>
+            ))
+          )}
+        </div>
+        <button onClick={handleNextQuestion} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md">
+          {currentQuestionIndex === questions.length - 1 ? "Finish" : "Next"}
+        </button>
+      </div>
+    );
+  };
+
+  const renderResult = () => (
+    <div className="quiz-result">
+      <h2 className="text-2xl mb-4">Quiz Finished!</h2>
+      <h3 className="text-lg mb-2">Your Answers:</h3>
+      <ul className="list-disc list-inside">
+        {questions.slice(0, questions.length - 1).map((question, index) => (
+          <li key={index}>
+            <strong>{question.question_text}</strong>: {selectedOptions[index] || "No answer"}
+          </li>
+        ))}
+      </ul>
+      <button onClick={restartQuiz} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md">
+        Restart Quiz
+      </button>
+    </div>
+  );
+
+  
   // This following section will display the form that takes the input from the user.
   return (
     <>
@@ -239,6 +389,10 @@ export default function Record() {
           className="inline-flex items-center justify-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-slate-100 hover:text-accent-foreground h-9 rounded-md px-3 cursor-pointer mt-4"
         />
       </form>
+
+      <div className="quiz-container text-center">
+      {isQuizFinished ? renderResult() : renderQuestion()}
+    </div>
     </>
   );
 }

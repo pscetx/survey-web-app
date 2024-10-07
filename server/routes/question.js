@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
     res.status(201).send({ insertedId: result.insertedId });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error adding record");
+    res.status(500).send("Error adding question");
   }
 });
 
@@ -59,7 +59,7 @@ router.patch("/:id", async (req, res) => {
     res.status(200).send("Question updated successfully");
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error updating record");
+    res.status(500).send("Error updating question");
   }
 });
 
@@ -73,7 +73,7 @@ router.delete("/:id", async (req, res) => {
     res.send(result).status(200);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error deleting record");
+    res.status(500).send("Error deleting question");
   }
 });
 
