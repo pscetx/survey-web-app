@@ -5,12 +5,10 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import App from "./App";
-import Record from "./components/Record";
-import RecordList from "./components/RecordList";
+import Survey from "./components/Survey";
+import RecordList from "./components/RespondentList";
 import "./index.css";
-import Quiz from "./components/Quiz";
-import Results from "./components/Result";
-import NewRespondent from "./components/NewRespondent";
+import RespondentInfo from "./components/RespondentInfo";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +27,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/create",
-        element: <NewRespondent />,
+        element: <RespondentInfo />,
       },
     ],
   },
@@ -39,27 +37,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/edit/:id",
-        element: <Record />,
-      },
-    ],
-  },
-  {
-    path: "/quiz",
-    element: <App />,
-    children: [
-      {
-        path: "/quiz",
-        element: <Quiz />,
-      },
-    ],
-  },
-  {
-    path: "/results",
-    element: <App />,
-    children: [
-      {
-        path: "/results",
-        element: <Results />,
+        element: <Survey />,
       },
     ],
   },
