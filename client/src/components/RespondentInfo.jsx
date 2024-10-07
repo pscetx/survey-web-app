@@ -67,10 +67,11 @@ export default function RespondentInfo() {
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 pb-12 md:grid-cols-2">
         <div>
-          <h1 className="text-xl font-bold">Nhập thông tin của bạn</h1>
+          <h1 className="text-xl font-bold">Nhập thông tin của tiền khảo sát</h1>
           <p className="mt-1 text-sm leading-6 text-slate-600">
             Lưu ý: <br />
-            Bạn vẫn có thể thay đổi các thông tin này trong quá trình làm bài khảo sát.
+            Bạn vẫn có thể thay đổi các thông tin này trong quá trình làm bài khảo sát.<br />
+            Dữ liệu được thu thập..
             </p>
           </div>
 
@@ -182,11 +183,13 @@ export default function RespondentInfo() {
             </div>
           </div>
         </div>
-        <input
-          type="submit"
-          value="Bắt đầu làm bài khảo sát"
-          className="inline-flex items-center justify-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-9 rounded-md px-3 cursor-pointer mt-4"
-        />
+        <div className="flex justify-center">
+          <input
+            type="submit"
+            value="Bắt đầu làm bài khảo sát"
+            className="inline-flex items-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-9 rounded-md px-3 cursor-pointer mt-4"
+          />
+        </div>
       </form>
   );
 }

@@ -9,6 +9,9 @@ import Survey from "./components/Survey";
 import RecordList from "./components/RespondentList";
 import "./index.css";
 import RespondentInfo from "./components/RespondentInfo";
+import Result from "./components/Result";
+import LookUp from "./components/LookUp";
+import Info from "./components/Info";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +41,36 @@ const router = createBrowserRouter([
       {
         path: "/edit/:id",
         element: <Survey />,
+      },
+    ],
+  },
+  {
+    path: "/result",
+    element: <App />,
+    children: [
+      {
+        path: "/result",
+        element: <LookUp />,
+      },
+    ],
+  },
+  {
+    path: "/result/:id",
+    element: <App />,
+    children: [
+      {
+        path: "/result/:id",
+        element: <Result />,
+      },
+    ],
+  },
+  {
+    path: "/info",
+    element: <App />,
+    children: [
+      {
+        path: "/info",
+        element: <Info />,
       },
     ],
   },

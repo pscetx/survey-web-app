@@ -247,22 +247,7 @@ export default function Survey() {
     );
   };
 
-  const renderResult = () => (
-    <div className="quiz-result">
-      <h2 className="text-2xl mb-4">Quiz Finished!</h2>
-      <h3 className="text-lg mb-2">Your Answers:</h3>
-      <ul className="list-disc list-inside">
-        {questions.slice(0, questions.length - 1).map((question, index) => (
-          <li key={index}>
-            <strong>{question.question_text}</strong>: {selectedOptions[index] || "No answer"}
-          </li>
-        ))}
-      </ul>
-      <button onClick={restartQuiz} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md">
-        Restart Quiz
-      </button>
-    </div>
-  );
+  const renderResult = () => {navigate(`/result/${respondentId}`);}
 
   const handleCopyId = () => {
     if (form?._id) {
@@ -281,13 +266,13 @@ export default function Survey() {
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 pb-12 md:grid-cols-2">
         <div>
-          <h1 className="text-xl font-bold">'{form._id}' là mã khảo sát của bạn.</h1>
-          <button
+          <h1 className="text-xl font-bold">'{form._id}' là mã khảo sát của bạn. <span><button
             onClick={handleCopyId}
-            className="inline-flex items-center justify-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-9 rounded-md px-3 cursor-pointer my-2"
+            className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
           >
-            Copy ID
-          </button>
+            Copy
+          </button></span></h1>
+          
           <p className="mt-1 text-sm leading-6 text-slate-600">
             Lưu ý: <br />
             Bạn nhớ lưu lại mã khảo sát để tra cứu kết quả.

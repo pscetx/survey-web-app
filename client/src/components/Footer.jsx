@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 export default function Footer() {
   return (
       <div>
-        <nav className="flex justify-between items-center mt-20 px-20 py-5 bg-secondary">
+        <nav className="flex justify-between items-center px-20 py-5 bg-secondary">
               <div className="flex space-x-5">
                 <NavLink to="/" className="flex items-center">
                     <img alt="ITI logo" className="h-24 inline" src="/logo-original.png" />

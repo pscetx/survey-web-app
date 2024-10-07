@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     let collection = await db.collection("answers");
-    let query = { _id: new ObjectId(req.params.id) };
+    let query = { respondent_id: new ObjectId(req.params.id) };
     let result = await collection.findOne(query);
 
     if (!result) {
