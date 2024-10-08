@@ -157,14 +157,6 @@ export default function Survey() {
     }
   };
 
-  const restartQuiz = () => {
-    setCurrentQuestionIndex(0);
-    setScore(0);
-    setIsQuizFinished(false);
-    setSelectedOptions([]);
-    setAnsweredQuestions(new Set());
-  };
-
   const renderNavigationButtons = () => {
   // Group the questions into rows of 10 buttons each
   const rows = [];
