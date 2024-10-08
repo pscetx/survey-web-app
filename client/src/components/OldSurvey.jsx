@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-export default function Result() {
+export default function Survey() {
   const [form, setForm] = useState({
     respondent_id: "",
     respondent_name: "",
@@ -13,6 +13,8 @@ export default function Result() {
   const [isNew, setIsNew] = useState(true);
   const params = useParams();
   const navigate = useNavigate();
+
+  const [respondentId, setRespondentId] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -73,6 +75,172 @@ export default function Result() {
     }
   }
 
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [isQuizFinished, setIsQuizFinished] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [answeredQuestions, setAnsweredQuestions] = useState(new Set());
+
+  useEffect(() => {
+    async function fetchQuestions() {
+      const response = await fetch(`http://localhost:5050/question`);
+      if (!response.ok) {
+        console.error("Failed to fetch questions");
+        return;
+      }
+      const data = await response.json();
+      setQuestions(data);
+    }
+    fetchQuestions();
+  }, []);
+
+  const handleAnswerSelection = (selectedOption) => {
+    const currentQuestion = questions[currentQuestionIndex];
+    if (selectedOption.score > 0) {
+      setScore((prevScore) => prevScore + selectedOption.score);
+    }
+
+    setSelectedOptions((prev) => {
+      const newSelectedOptions = [...prev];
+      newSelectedOptions[currentQuestionIndex] = selectedOption.text;
+      return newSelectedOptions;
+    });
+
+    setAnsweredQuestions((prev) => {
+      const newAnsweredQuestions = new Set(prev);
+      newAnsweredQuestions.add(currentQuestionIndex);
+      return newAnsweredQuestions;
+    });
+  };
+
+  const handleNextQuestion = () => {
+    const nextQuestionIndex = currentQuestionIndex + 1;
+    if (nextQuestionIndex < questions.length) {
+      setCurrentQuestionIndex(nextQuestionIndex);
+    } else {
+      saveQuizResults(selectedOptions[currentQuestionIndex]?.score || 0);
+      setIsQuizFinished(true);
+    }
+  };
+
+  const saveQuizResults = async (lastQuestionScore) => {
+    const finalScore = score + lastQuestionScore;
+
+    const result = {
+      respondent_id: respondentId,
+      questions: questions.map((question, index) => ({
+        _id: question._id,
+        score: selectedOptions[index]
+          ? question.options.find((option) => option.text === selectedOptions[index])?.score || 0
+          : 0,
+      })),
+    };
+
+    try {
+      const response = await fetch(`http://localhost:5050/answer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(result),
+      });
+
+      if (!response.ok) {
+        console.error("Failed to save results", await response.text());
+        return;
+      }
+
+      console.log("Quiz results saved successfully");
+    } catch (error) {
+      console.error("Error saving quiz results:", error);
+    }
+  };
+
+  const renderNavigationButtons = () => {
+  // Group the questions into rows of 10 buttons each
+  const rows = [];
+  for (let i = 0; i < questions.length; i += 10) {
+    rows.push(questions.slice(i, i + 10));
+  }
+
+  return (
+    <div className="navigation-buttons mb-4">
+      {rows.map((row, rowIndex) => (
+        <div key={rowIndex} className="mb-2">
+          {row.map((_, index) => {
+            // Calculate the overall index of the button
+            const overallIndex = rowIndex * 10 + index;
+            return (
+              <button
+                key={overallIndex}
+                onClick={() => setCurrentQuestionIndex(overallIndex)}
+                className={`p-2 m-1 border rounded-md transition duration-300 ease-in-out ${
+                  overallIndex === questions.length - 1 ? "w-20" : "w-10"
+                } hover:bg-tertiary ${
+                  answeredQuestions.has(overallIndex)
+                    ? "bg-amber-400"
+                    : "bg-white"
+                }`}
+              >
+                {overallIndex === questions.length - 1
+                  ? "Kết thúc"
+                  : `${overallIndex + 1}`}
+              </button>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+  };
+
+  const renderQuestion = () => {
+    if (questions.length === 0) return <p>Loading questions...</p>;
+    const currentQuestion = questions[currentQuestionIndex];
+    return (
+      <div className="quiz-question mt-20 grid grid-cols-1 gap-y-10 pb-10 md:grid-cols-2">
+        <div className="p-6 mx-auto bg-white rounded-lg shadow-lg">
+          <h2 className="text-xl text-left font-semibold mb-6">
+            {currentQuestion.question_text}
+          </h2>
+          <div className="options-container mb-4">
+            {currentQuestionIndex === questions.length - 1 ? (
+              <p className="text-lg text-gray-600 my-20">
+                Đến đây là kết thúc bài khảo sát. Bạn hãy nhấn <span className="font-semibold">Kết thúc</span> để nhận kết quả.
+              </p>
+            ) : (
+              currentQuestion.options.map((option, index) => (
+                <label key={index} className="flex items-center p-2 mb-3 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 transition duration-300 ease-in-out">
+                  <input
+                    type="radio"
+                    name={`question-${currentQuestionIndex}`}
+                    value={option.text}
+                    checked={selectedOptions[currentQuestionIndex] === option.text}
+                    onChange={() => handleAnswerSelection(option)}
+                    className="mr-3 h-4 w-4 accent-primary"
+                  />
+                  <span className="text-md text-gray-700">{option.text}</span>
+                </label>
+              ))
+            )}
+          </div>
+          <button
+            onClick={handleNextQuestion}
+            className={`w-full py-3 mt-4 text-lg rounded-lg transition-colors ${
+              currentQuestionIndex === questions.length - 1 ? "bg-primary hover:bg-red-800" : "bg-sky-500 hover:bg-sky-600"
+            } text-white shadow-md`}
+          >
+            {currentQuestionIndex === questions.length - 1 ? "Kết thúc" : "Câu hỏi tiếp theo"}
+          </button>
+        </div>
+          {renderNavigationButtons()}
+      </div>
+    );
+  };
+
+  const renderResult = () => {navigate(`/result/${respondentId}`);}
+
   const handleCopyId = () => {
     if (form?._id) {
       navigator.clipboard.writeText(form._id)
@@ -84,228 +252,9 @@ export default function Result() {
         });
     }
   };
-  
-  const { id } = useParams();
-  const [result, setResult] = useState(null);
-  const [questionsMap, setQuestionsMap] = useState({});
-  const [respondent, setRespondent] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answeredQuestions, setAnsweredQuestions] = useState(new Set());
-  const [isQuizFinished, setIsQuizFinished] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function fetchResult() {
-      try {
-        const response = await fetch(`http://localhost:5050/answer/${id}`);
-        if (!response.ok) {
-          throw new Error(`Error fetching results: ${response.statusText}`);
-        }
-        const data = await response.json();
-
-        if (isMounted) {
-          setResult(data);
-          await fetchQuestions(data.questions);
-          await fetchRespondent(data.respondent_id);
-        }
-      } catch (error) {
-        if (isMounted) setError("Survey code not found in the database.");
-        console.error(error);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    }
-
-    async function fetchQuestions(questions) {
-      try {
-        const fetchRequests = questions.map((question) =>
-          fetch(`http://localhost:5050/question/${question._id}`)
-        );
-
-        const responses = await Promise.all(fetchRequests);
-        const questionsData = await Promise.all(responses.map((res) => res.json()));
-
-        const questionsMap = questionsData.reduce((acc, question) => {
-          acc[question._id] = question;
-          return acc;
-        }, {});
-
-        setQuestionsMap(questionsMap);
-      } catch (error) {
-        console.error("Error fetching questions:", error);
-        setError("Failed to fetch questions.");
-      }
-    }
-
-    async function fetchRespondent(respondentId) {
-      try {
-        const response = await fetch(`http://localhost:5050/respondent/${respondentId}`);
-        if (!response.ok) {
-          throw new Error(`Error fetching respondent: ${response.statusText}`);
-        }
-        const data = await response.json();
-        setRespondent(data);
-      } catch (error) {
-        console.error("Error fetching respondent:", error);
-        setError("Failed to fetch respondent.");
-      }
-    }
-
-    fetchResult();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [id]);
-
-  const handleOptionChange = async (questionId, newScore, respondentId) => {
-    try {
-      const response = await fetch(`http://localhost:5050/answer/updateScore`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ respondent_id: respondentId, question_id: questionId, new_score: newScore }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error updating score: ${response.statusText}`);
-      }
-
-      setResult((prevState) => ({
-        ...prevState,
-        questions: prevState.questions.map((question) =>
-          question._id === questionId ? { ...question, score: newScore } : question
-        ),
-      }));
-    } catch (error) {
-      console.error("Error updating score:", error);
-    }
-  };
-
-  const renderNavigationButtons = () => {
-    if (!result) return null;
-
-    const rows = [];
-    for (let i = 0; i < result.questions.length; i += 10) {
-      rows.push(result.questions.slice(i, i + 10));
-    }
-
-    return (
-      <div className="navigation-buttons mb-4">
-        {rows.map((row, rowIndex) => (
-          <div key={rowIndex} className="mb-2">
-            {row.map((_, index) => {
-              const overallIndex = rowIndex * 10 + index;
-              return (
-                <button
-                  key={overallIndex}
-                  onClick={() => setCurrentQuestionIndex(overallIndex)}
-                  className={`p-2 m-1 border rounded-md transition duration-300 ease-in-out ${
-                    overallIndex === result.questions.length - 1 ? "w-20" : "w-10"
-                  } hover:bg-tertiary ${
-                    answeredQuestions.has(overallIndex) ? "bg-amber-400" : "bg-white"
-                  }`}
-                >
-                  {overallIndex === result.questions.length - 1 ? "Kết thúc" : `${overallIndex + 1}`}
-                </button>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-    );
-  };
-
-  const renderNavigationButtons2 = () => {
-    return (
-        <div className="flex justify-between mt-4">
-            <button
-                onClick={handlePreviousQuestion}
-                disabled={currentQuestionIndex === 0}
-                className={`py-2 px-4 rounded-lg transition-colors ${
-                    currentQuestionIndex === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-sky-500 hover:bg-sky-600"
-                } text-white shadow-md`}
-            >
-                Previous
-            </button>
-            <button
-                onClick={handleNextQuestion}
-                className={`py-2 px-4 rounded-lg transition-colors ${
-                    currentQuestionIndex === result.questions.length - 1 ? "bg-primary hover:bg-red-800" : "bg-sky-500 hover:bg-sky-600"
-                } text-white shadow-md`}
-            >
-                {currentQuestionIndex === result.questions.length - 1 ? "Kết thúc" : "Next"}
-            </button>
-        </div>
-    );
-  };
-  
-  const handlePreviousQuestion = () => {
-    if (currentQuestionIndex > 0) {
-        setCurrentQuestionIndex(currentQuestionIndex - 1);
-    }
-};
-
-const handleNextQuestion = () => {
-    if (currentQuestionIndex < result.questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-        // Handle survey completion
-        console.log("Survey completed!");
-    }
-};
-
-  const renderQuestion = () => {
-    if (!result || !questionsMap || result.questions.length === 0) return <p>Loading questions...</p>;
-
-    const currentQuestion = result.questions[currentQuestionIndex];
-    const questionDetails = questionsMap[currentQuestion._id];
-
-    if (!questionDetails) return <p>Loading question details...</p>;
-
-    return (
-      <div className="mt-20 grid grid-cols-1 gap-y-10 pb-10 md:grid-cols-2">
-        <div className="p-6 mx-auto bg-white rounded-lg shadow-lg">
-          <h2 className="text-xl text-left font-semibold mb-6">
-            {questionDetails.question_text}
-          </h2>
-          <div className="options-container mb-4">
-            {currentQuestionIndex === result.questions.length - 1 ? (
-              <p className="text-lg text-gray-600 my-20">
-                Đến đây là kết thúc bài khảo sát. Bạn hãy nhấn <span className="font-semibold">Kết thúc</span> để nhận kết quả.
-              </p>
-            ) : (
-              questionDetails.options.map((option) => (
-                <label key={option._id} className="flex items-center p-2 mb-3 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 transition duration-300 ease-in-out">
-                  <input
-                    type="radio"
-                    name={`question-${currentQuestionIndex}`}
-                    value={option.text}
-                    checked={currentQuestion.score === option.score}
-                    onChange={() => handleOptionChange(currentQuestion._id, option.score, respondent._id)}
-                    className="mr-3 h-4 w-4 accent-primary"
-                  />
-                  <span className="text-md text-gray-700">{option.text}</span>
-                </label>
-              ))
-            )}
-          </div>
-          {renderNavigationButtons2()}
-        </div>
-        {renderNavigationButtons()}
-      </div>
-    );
-  };
-
-  const renderResult = () => {navigate(`/result/${respondentId}`);}
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p className="text-primary text-xl">{error}</p>;
 
   return (
-    <div>
+    <>
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 pb-12 md:grid-cols-2">
         <div>
@@ -444,6 +393,6 @@ const handleNextQuestion = () => {
       <div className="quiz-container text-center">
       {isQuizFinished ? renderResult() : renderQuestion()}
       </div>
-    </div>
+    </>
   );
 }

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Radar } from 'react-chartjs-2';
+import 'chart.js/auto';
 
 export default function Result() {
   const { id } = useParams();
@@ -7,12 +9,8 @@ export default function Result() {
   const [questionsMap, setQuestionsMap] = useState({});
   const [respondent, setRespondent] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // Loading state
 
-  // Fetch the result based on respondent ID
   useEffect(() => {
-    let isMounted = true; // Track component mount status
-
     async function fetchResult() {
       try {
         const response = await fetch(`http://localhost:5050/answer/${id}`);
@@ -21,20 +19,15 @@ export default function Result() {
         }
         const data = await response.json();
 
-        if (isMounted) {
-          setResult(data);
-          await fetchQuestions(data.questions);
-          await fetchRespondent(data.respondent_id);
-        }
+        setResult(data);
+        await fetchQuestions(data.questions);
+        await fetchRespondent(data.respondent_id);
       } catch (error) {
-        if (isMounted) setError("Survey code not found in the database.");
+        setError("Không tìm thấy mã khảo sát trong cơ sở dữ liệu.");
         console.error(error);
-      } finally {
-        if (isMounted) setLoading(false); // Set loading to false after fetching
       }
     }
 
-    // Fetch the question details
     async function fetchQuestions(questions) {
       try {
         const fetchRequests = questions.map((question) =>
@@ -56,7 +49,6 @@ export default function Result() {
       }
     }
 
-    // Fetch the respondent details
     async function fetchRespondent(respondentId) {
       try {
         const response = await fetch(`http://localhost:5050/respondent/${respondentId}`);
@@ -72,54 +64,7 @@ export default function Result() {
     }
 
     fetchResult();
-
-    return () => {
-      isMounted = false; // Clean up on component unmount
-    };
   }, [id]);
-
-  // Handle score update when an option is selected
-  const handleOptionChange = async (questionId, newScore, respondentId) => {
-    try {
-      // Log the request payload for debugging
-      console.log("Sending payload:", {
-        respondent_id: respondentId,
-        question_id: questionId,
-        new_score: newScore,
-      });
-
-      const response = await fetch(`http://localhost:5050/answer/updateScore`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          respondent_id: respondentId,
-          question_id: questionId,
-          new_score: newScore,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error updating score: ${response.statusText}`);
-      }
-
-      console.log("Score updated successfully");
-      // Update the local state with the new score
-      setResult((prevState) => ({
-        ...prevState,
-        questions: prevState.questions.map((question) =>
-          question._id === questionId ? { ...question, score: newScore } : question
-        ),
-      }));
-    } catch (error) {
-      console.error("Error updating score:", error);
-    }
-  };
-
-  if (loading) {
-    return <p>Loading...</p>; // Loading message
-  }
 
   if (error) {
     return <p className="text-primary text-xl">{error}</p>;
@@ -131,17 +76,102 @@ export default function Result() {
 
   const questionsToDisplay = result.questions.slice(0, -1);
 
+  const questionsArray = questionsToDisplay.map((question) => {
+  const questionDetails = questionsMap[question._id];
+
+  return {
+    category: questionDetails?.category || '',
+    score: question.score || 0,
+  };
+  });
+ 
+  var score = [0, 0, 0, 0, 0];
+  var count = [0, 0, 0, 0, 0];
+  for (let i = 0; i < questionsArray.length; i++) {
+    if(questionsArray[i].category == 'Quy chế'){
+      score[0] += questionsArray[i].score;
+      count[0] += 1;
+    }
+    if(questionsArray[i].category == 'Tổ chức'){
+      score[1] += questionsArray[i].score;
+      count[1] += 1;
+    }
+    if(questionsArray[i].category == 'Nhân lực'){
+      score[2] += questionsArray[i].score;
+      count[2] += 1;
+    }
+    if(questionsArray[i].category == 'Đầu tư'){
+      score[3] += questionsArray[i].score;
+      count[3] += 1;
+    }
+    if(questionsArray[i].category == 'Vận hành'){
+      score[4] += questionsArray[i].score;
+      count[4] += 1;
+    }
+  }
+  var avg = [score[0]/count[0], score[1]/count[1], score[2]/count[2], score[3]/count[3], score[4]/count[4]];
+
+  const data = {
+    labels: [
+      'QUY CHẾ',
+      'TỔ CHỨC',
+      'NHÂN LỰC',
+      'ĐẦU TƯ',
+      'VẬN HÀNH',
+    ],
+    datasets: [{
+      label: 'Điểm trung bình theo 5 trụ cột',
+      data: avg,
+      fill: true,
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgb(255, 99, 132)',
+      pointBackgroundColor: 'rgb(255, 99, 132)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgb(255, 99, 132)'
+    }],
+  };
+
+  const options = {
+    scales: {
+      r: {
+        angleLines: {
+          display: false
+        },
+        suggestedMin: 0,
+        suggestedMax: 4,
+        ticks: {
+          stepSize: 1
+        }
+      },
+    }
+  };
+
+  const config = {
+    type: 'radar',
+    data: data,
+    options: {
+      elements: {
+        line: {
+          borderWidth: 5
+        }
+      }
+    },
+  };
+
   return (
     <div className="results-container">
       <h2 className="text-2xl mb-4">Kết quả khảo sát</h2>
-
       <div className="mb-4">
-        <p><strong>ID người khảo sát:</strong> {respondent._id}</p>
+        <p><strong>Mã khảo sát:</strong> {respondent._id}</p>
         <p><strong>Tên người khảo sát:</strong> {respondent.respondent_name}</p>
         <p><strong>Chức vụ:</strong> {respondent.respondent_role}</p>
         <p><strong>Tên tổ chức:</strong> {respondent.org_name}</p>
         <p><strong>Lĩnh vực:</strong> {respondent.field}</p>
         <p><strong>Số lượng nhân viên:</strong> {respondent.staff_size}</p>
+      </div>
+      <div style={{ position: 'relative', width: '500px', left: '50%', marginLeft: '-250px', display: 'inline - block' }}>
+        <Radar data={data} config={config} options={options}> </Radar>
       </div>
 
       <table className="min-w-full border border-collapse border-gray-200">
@@ -154,34 +184,17 @@ export default function Result() {
           </tr>
         </thead>
         <tbody>
-          {questionsToDisplay.map((question) => {
+          {questionsToDisplay.map((question, index) => {
             const questionDetails = questionsMap[question._id];
             const selectedOption = questionDetails?.options.find(
               (option) => option.score === question.score
             );
 
             return (
-              <tr key={question._id} className="border-b">
+              <tr key={index} className="border-b">
                 <td className="border border-gray-300 p-4">{questionDetails?.question_text}</td>
                 <td className="border border-gray-300 p-4">{questionDetails?.category}</td>
-                <td className="border border-gray-300 p-4">
-                  <div>
-                    {questionDetails?.options.map((option) => (
-                      <label key={option._id} className="block">
-                        <input
-                          type="radio"
-                          name={`question-${question._id}`}
-                          value={option.text}
-                          checked={selectedOption && selectedOption.text === option.text}
-                          onChange={() => handleOptionChange(question._id, option.score, respondent._id)} 
-                          className="mr-2"
-                          aria-label={option.text} // Improved accessibility
-                        />
-                        {option.text}
-                      </label>
-                    ))}
-                  </div>
-                </td>
+                <td className="border border-gray-300 p-4">{selectedOption ? selectedOption.text : 'N/A'}</td>
                 <td className="border border-gray-300 p-4">{question.score}</td>
               </tr>
             );

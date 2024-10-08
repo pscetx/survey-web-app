@@ -98,6 +98,4 @@ router.patch("/updateScore", async (req, res) => {
   }
 });
 
-// Other API endpoints...
-
 export default router;
