@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Radar } from 'react-chartjs-2';
 import 'chart.js/auto';
 
@@ -9,6 +9,7 @@ export default function Result() {
   const [questionsMap, setQuestionsMap] = useState({});
   const [respondent, setRespondent] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchResult() {
@@ -18,6 +19,12 @@ export default function Result() {
           throw new Error(`Error fetching results: ${response.statusText}`);
         }
         const data = await response.json();
+
+        if (!data.is_finished) {
+          alert("Khảo sát chưa hoàn thành.");
+          navigate("/");
+          return;
+        }
 
         setResult(data);
         await fetchQuestions(data.questions);
@@ -77,39 +84,40 @@ export default function Result() {
   const questionsToDisplay = result.questions.slice(0, -1);
 
   const questionsArray = questionsToDisplay.map((question) => {
-  const questionDetails = questionsMap[question._id];
+    const questionDetails = questionsMap[question._id];
 
-  return {
-    category: questionDetails?.category || '',
-    score: question.score || 0,
-  };
+    return {
+      category: questionDetails?.category || '',
+      score: question.score || 0,
+    };
   });
- 
+
   var score = [0, 0, 0, 0, 0];
   var count = [0, 0, 0, 0, 0];
   for (let i = 0; i < questionsArray.length; i++) {
-    if(questionsArray[i].category == 'Quy chế'){
+    if (questionsArray[i].category === 'Quy chế') {
       score[0] += questionsArray[i].score;
       count[0] += 1;
     }
-    if(questionsArray[i].category == 'Tổ chức'){
+    if (questionsArray[i].category === 'Tổ chức') {
       score[1] += questionsArray[i].score;
       count[1] += 1;
     }
-    if(questionsArray[i].category == 'Nhân lực'){
+    if (questionsArray[i].category === 'Nhân lực') {
       score[2] += questionsArray[i].score;
       count[2] += 1;
     }
-    if(questionsArray[i].category == 'Đầu tư'){
+    if (questionsArray[i].category === 'Đầu tư') {
       score[3] += questionsArray[i].score;
       count[3] += 1;
     }
-    if(questionsArray[i].category == 'Vận hành'){
+    if (questionsArray[i].category === 'Vận hành') {
       score[4] += questionsArray[i].score;
       count[4] += 1;
     }
   }
-  var avg = [score[0]/count[0], score[1]/count[1], score[2]/count[2], score[3]/count[3], score[4]/count[4]];
+
+  var avg = score.map((s, index) => (count[index] !== 0 ? s / count[index] : 0)); // Avoid division by zero
 
   const data = {
     labels: [
@@ -171,7 +179,7 @@ export default function Result() {
         <p><strong>Số lượng nhân viên:</strong> {respondent.staff_size}</p>
       </div>
       <div style={{ position: 'relative', width: '500px', left: '50%', marginLeft: '-250px', display: 'inline - block' }}>
-        <Radar data={data} config={config} options={options}> </Radar>
+        <Radar data={data} config={config} options={options}></Radar>
       </div>
 
       <table className="min-w-full border border-collapse border-gray-200">

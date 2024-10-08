@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ContinueSurvey from "./ContinueSurvey";
 
 export default function RespondentInfo() {
   const [form, setForm] = useState({
@@ -104,10 +105,12 @@ export default function RespondentInfo() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
+    <div>
+      <ContinueSurvey />
+      <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
       <div className="grid grid-cols-1 gap-x-8 gap-y-10 pb-12 md:grid-cols-2">
         <div>
-          <h1 className="text-xl font-bold">Nhập thông tin của tiền khảo sát</h1>
+          <h1 className="text-xl font-bold">Nhập thông tin tiền khảo sát</h1>
           <p className="mt-1 text-sm leading-6 text-slate-600">
             Lưu ý: <br />
             Bạn vẫn có thể thay đổi các thông tin này trong quá trình làm bài khảo sát.<br />
@@ -230,5 +233,6 @@ export default function RespondentInfo() {
         />
       </div>
     </form>
+    </div>
   );
 }

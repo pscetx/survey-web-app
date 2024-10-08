@@ -98,4 +98,23 @@ router.patch("/updateScore", async (req, res) => {
   }
 });
 
+router.patch("/finished/:id", async (req, res) => {
+  try {
+    const query = { respondent_id: new ObjectId(req.params.id) };
+    const update = {
+      $set: { is_finished: true },
+    };
+    let collection = await db.collection("answers");
+    let result = await collection.updateOne(query, update);
+
+    if (result.matchedCount === 0) {
+      return res.status(404).send("No answer found with the given ID.");
+    }
+    res.status(200).send({ message: "Answer updated successfully", updatedDocument });
+  } catch (err) {
+    console.error("Error updating answer:", err);
+    res.status(500).send("Error updating answer");
+  }
+});
+
 export default router;

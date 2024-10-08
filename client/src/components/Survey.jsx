@@ -77,10 +77,10 @@ export default function Result() {
     if (form?._id) {
       navigator.clipboard.writeText(form._id)
         .then(() => {
-          alert('Survey ID copied to clipboard!');
+          alert('Mã khảo sát đã được sao chép!');
         })
         .catch(err => {
-          console.error('Failed to copy: ', err);
+          console.error('Error while copying: ', err);
         });
     }
   };
@@ -92,8 +92,19 @@ export default function Result() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answeredQuestions, setAnsweredQuestions] = useState(new Set());
-  const [isQuizFinished, setIsQuizFinished] = useState(false);
+  const [coloredButtons, setColoredButtons] = useState(new Set());
+
+  const handleColorChange = (index) => {
+    setColoredButtons((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -105,6 +116,12 @@ export default function Result() {
           throw new Error(`Error fetching results: ${response.statusText}`);
         }
         const data = await response.json();
+
+        if (data.is_finished) {
+          alert("Khảo sát đã hoàn thành.");
+          navigate("/");
+          return;
+        }
 
         if (isMounted) {
           setResult(data);
@@ -153,9 +170,7 @@ export default function Result() {
         setError("Failed to fetch respondent.");
       }
     }
-
     fetchResult();
-
     return () => {
       isMounted = false;
     };
@@ -184,6 +199,22 @@ export default function Result() {
     }
   };
 
+  const handleStatusChange = async (respondentId) => {
+  try {
+    const response = await fetch(`http://localhost:5050/answer/finished/${respondentId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ is_finished: true }),
+      });
+      if (!response.ok) {
+        throw new Error(`Error updating status: ${response.statusText}`);
+      }
+      console.log("Status updated successfully");
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
+
   const renderNavigationButtons = () => {
     if (!result) return null;
 
@@ -202,11 +233,10 @@ export default function Result() {
                 <button
                   key={overallIndex}
                   onClick={() => setCurrentQuestionIndex(overallIndex)}
+                  onDoubleClick={() => handleColorChange(overallIndex)} // Change color on double-click
                   className={`p-2 m-1 border rounded-md transition duration-300 ease-in-out ${
                     overallIndex === result.questions.length - 1 ? "w-20" : "w-10"
-                  } hover:bg-tertiary ${
-                    answeredQuestions.has(overallIndex) ? "bg-amber-400" : "bg-white"
-                  }`}
+                  } hover:bg-tertiary ${coloredButtons.has(overallIndex) ? 'bg-amber-400' : 'bg-white'}`} // Change color based on state
                 >
                   {overallIndex === result.questions.length - 1 ? "Kết thúc" : `${overallIndex + 1}`}
                 </button>
@@ -220,25 +250,31 @@ export default function Result() {
 
   const renderNavigationButtons2 = () => {
     return (
-        <div className="flex justify-between mt-4">
-            <button
-                onClick={handlePreviousQuestion}
-                disabled={currentQuestionIndex === 0}
-                className={`py-2 px-4 rounded-lg transition-colors ${
-                    currentQuestionIndex === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-sky-500 hover:bg-sky-600"
-                } text-white shadow-md`}
-            >
-                Previous
-            </button>
-            <button
-                onClick={handleNextQuestion}
-                className={`py-2 px-4 rounded-lg transition-colors ${
-                    currentQuestionIndex === result.questions.length - 1 ? "bg-primary hover:bg-red-800" : "bg-sky-500 hover:bg-sky-600"
-                } text-white shadow-md`}
-            >
-                {currentQuestionIndex === result.questions.length - 1 ? "Kết thúc" : "Next"}
-            </button>
-        </div>
+      <div className="flex justify-between mt-4">
+        <button
+          onClick={handlePreviousQuestion}
+          disabled={currentQuestionIndex === 0}
+          className={`py-2 px-4 rounded-lg transition-colors ${
+            currentQuestionIndex === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-sky-500 hover:bg-sky-600"
+          } text-white shadow-md`}
+        >
+          Trước
+        </button>
+        <button
+          onClick={() => handleColorChange(currentQuestionIndex)}
+          className={`py-2 px-4 rounded-lg transition-colors bg-amber-500 hover:bg-amber-600 text-white shadow-md`}
+        >
+          Đánh dấu
+        </button>
+        <button
+          onClick={handleNextQuestion}
+          className={`py-2 px-4 rounded-lg transition-colors ${
+            currentQuestionIndex === result.questions.length - 1 ? "bg-primary hover:bg-red-800" : "bg-sky-500 hover:bg-sky-600"
+          } text-white shadow-md`}
+        >
+          {currentQuestionIndex === result.questions.length - 1 ? "Kết thúc" : "Sau"}
+        </button>
+      </div>
     );
   };
   
@@ -246,16 +282,20 @@ export default function Result() {
     if (currentQuestionIndex > 0) {
         setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
-};
+  };
 
-const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (currentQuestionIndex < result.questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-        // Handle survey completion
-        console.log("Survey completed!");
+      try {
+        await handleStatusChange(result.respondent_id);
+        navigate(`/result/${result.respondent_id}`);
+      } catch (error) {
+        console.error("Error finishing the survey:", error);
+      }
     }
-};
+  };
 
   const renderQuestion = () => {
     if (!result || !questionsMap || result.questions.length === 0) return <p>Loading questions...</p>;
@@ -298,8 +338,6 @@ const handleNextQuestion = () => {
       </div>
     );
   };
-
-  const renderResult = () => {navigate(`/result/${respondentId}`);}
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-primary text-xl">{error}</p>;
@@ -442,7 +480,7 @@ const handleNextQuestion = () => {
         />
       </form>
       <div className="quiz-container text-center">
-      {isQuizFinished ? renderResult() : renderQuestion()}
+      {renderQuestion()}
       </div>
     </div>
   );
