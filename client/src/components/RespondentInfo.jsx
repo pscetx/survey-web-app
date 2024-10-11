@@ -13,14 +13,12 @@ export default function RespondentInfo() {
   const [questions, setQuestions] = useState([]);
   const navigate = useNavigate();
 
-  // This method will update the state properties.
   function updateForm(value) {
     return setForm((prev) => {
       return { ...prev, ...value };
     });
   }
 
-  // Fetch questions from the API when the component mounts
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -37,12 +35,10 @@ export default function RespondentInfo() {
     fetchQuestions();
   }, []);
 
-  // This function will handle the submission.
   async function onSubmit(e) {
     e.preventDefault();
     const person = { ...form };
     try {
-      // First, create the respondent
       const response = await fetch("http://localhost:5050/respondent", {
         method: "POST",
         headers: {
@@ -55,24 +51,20 @@ export default function RespondentInfo() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // Log the response to inspect its structure
       const newRespondent = await response.json();
       console.log("Response from server:", newRespondent);
 
-      // Access the insertedId directly
       const newId = newRespondent.insertedId;
 
       if (!newId) {
         throw new Error("Respondent ID not found in the response");
       }
 
-      // Prepare answers with score 0 for each question
       const answers = questions.map((question) => ({
         _id: question._id,
         score: 0,
       }));
 
-      // Send the answers to the server
       const answersResponse = await fetch("http://localhost:5050/answer", {
         method: "POST",
         headers: {
@@ -88,12 +80,10 @@ export default function RespondentInfo() {
         throw new Error(`HTTP error! status: ${answersResponse.status}`);
       }
 
-      // Redirect to the edit page with the new respondent's id
       navigate(`/survey/${newId}`);
     } catch (error) {
       console.error("A problem occurred adding the record: ", error);
     } finally {
-      // Reset form fields
       setForm({
         respondent_name: "",
         respondent_role: "",
@@ -107,14 +97,15 @@ export default function RespondentInfo() {
   return (
     <div>
       <ContinueSurvey />
+      <h2 className="text-2xl mb-4 font-bold text-primary">LÀM BÀI KHẢO SÁT MỚI</h2>
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
-      <div className="grid grid-cols-1 gap-x-8 gap-y-10 pb-12 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-12 md:grid-cols-2">
         <div>
-          <h1 className="text-xl font-bold">Nhập thông tin tiền khảo sát</h1>
+          <h1 className="text-lg font-bold">Nhập thông tin tiền khảo sát</h1>
           <p className="mt-1 text-sm leading-6 text-slate-600">
             Lưu ý: <br />
-            Bạn vẫn có thể thay đổi các thông tin này trong quá trình làm bài khảo sát.<br />
-            Dữ liệu được thu thập..
+            Bạn vẫn có thể thay đổi các thông tin này trong quá trình làm bài khảo sát<br />
+            Dữ liệu thu thập sẽ chỉ được sử dụng cho mục đích nghiên cứu và sẽ không được trao đổi với bất kỳ bên thứ ba nào khác nhằm mục đích thương mại
           </p>
         </div>
         <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 ">

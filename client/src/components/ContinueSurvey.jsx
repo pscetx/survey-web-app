@@ -5,7 +5,6 @@ export default function ContinueSurvey() {
   const [respondentId, setRespondentId] = useState("");
   const navigate = useNavigate();
 
-  // Function to handle checking respondent status
   const checkRespondent = async () => {
     if (!respondentId) return;
 
@@ -16,7 +15,6 @@ export default function ContinueSurvey() {
       }
       const answerData = await response.json();
       
-      // Check if is_finished is false
       if (answerData.is_finished === false) {
         navigate(`/survey/${respondentId}`);
       } else {
@@ -29,25 +27,28 @@ export default function ContinueSurvey() {
   };
 
   return (
-    <div className="border rounded-md overflow-hidden p-4 mb-4">
-      <h2 className="text-lg font-bold mb-2">Chưa hoàn thành khảo sát? Nhập mã để tiếp tục:</h2>
-      <div className="flex">
-        <input
-          type="text"
-          name="respondent_id"
-          id="respondent_id"
-          className="flex-1 border-0 py-2 pl-2 text-slate-900 placeholder:text-slate-400"
-          placeholder="Survey ID"
-          onChange={(e) => setRespondentId(e.target.value)}
-          required
-        />
+    <div className="mb-16">
+      <h2 className="text-2xl mb-4 font-bold text-primary">TIẾP TỤC LÀM KHẢO SÁT</h2>
+      <div className="border rounded-md overflow-hidden p-4 mb-4">
+        <h2 className="text-lg mb-4">Nhập mã khảo sát để tiếp tục làm bài:</h2>
+        <div className="flex text-md rounded-sm border-b border-secondary">
+          <input
+            type="text"
+            name="respondent_id"
+            id="respondent_id"
+            className="flex-1 border-0 py-2 pl-2 text-slate-900 placeholder:text-slate-400"
+            placeholder="Survey ID"
+            onChange={(e) => setRespondentId(e.target.value)}
+            required
+          />
+        </div>
         <button
-          type="button"
-          onClick={checkRespondent}
-          className="inline-flex items-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-9 rounded-md px-3 cursor-pointer ml-4"
-        >
-          Tiếp tục làm khảo sát
-        </button>
+            type="button"
+            onClick={checkRespondent}
+            className="mt-4 inline-flex items-center justify-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-9 rounded-md px-3 cursor-pointer"
+          >
+            Tiếp tục làm khảo sát
+          </button>
       </div>
     </div>
   );

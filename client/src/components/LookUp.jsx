@@ -7,26 +7,37 @@ export default function LookUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Redirect to the results page with the respondent ID
     navigate(`/result/${respondentId}`);
   };
 
   return (
     <div className="result-input-container">
-      <h2 className="text-xl mb-4">Nhập mã khảo sát</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={respondentId}
-          onChange={(e) => setRespondentId(e.target.value)}
-          placeholder="Enter survey ID"
-          className="border p-2 mb-4 w-full"
-          required
-        />
-        <button type="submit" className="inline-flex items-center justify-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-9 rounded-md px-3 cursor-pointer">
-          Tra cứu
-        </button>
-      </form>
+      <h2 className="text-2xl mb-4 font-bold text-primary">TRA CỨU KẾT QUẢ</h2>
+      <div className='border rounded-md overflow-hidden p-4'>
+        <h2 className="text-lg mb-4">Nhập mã khảo sát để tra cứu kết quả:</h2>
+        <form onSubmit={handleSubmit}>
+          <div className='flex text-md rounded-sm border-b border-secondary'>
+            <input
+            type="text"
+            value={respondentId}
+            onChange={(e) => setRespondentId(e.target.value)}
+            placeholder="Survey ID"
+            className="flex-1 border-0 py-2 pl-2 text-slate-900 placeholder:text-slate-400"
+            required
+          />
+          </div>
+          <button type="submit" className="mt-4 inline-flex items-center justify-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-9 rounded-md px-3 cursor-pointer">
+            Tra cứu kết quả
+          </button>
+        </form>
+      </div>
+      <p className="md:mt-16 mt-8 text-sm leading-6 text-slate-600">
+        Lưu ý: <br />
+        Mã khảo sát đã được cung cấp sau khi bạn điền thông tin khảo sát<br />
+        Bạn chỉ có thể tra cứu kết quả sau khi đã hoàn thành khảo sát<br /><br />
+        Chưa hoàn thành khảo sát? Tiếp tục làm <a href="/create" className="text-primary underline">tại đây</a><br />
+        Xem chi tiết hướng dẫn làm khảo sát <a href="/info" className="text-primary underline">tại đây</a><br />
+      </p>
     </div>
   );
 }

@@ -223,7 +223,7 @@ export default function Result() {
     }
 
     return (
-      <div className="navigation-buttons mb-4">
+      <div className="navigation-buttons mt-8">
         {rows.map((row, rowIndex) => (
           <div key={rowIndex} className="mb-2">
             {row.map((_, index) => {
@@ -232,10 +232,10 @@ export default function Result() {
                 <button
                   key={overallIndex}
                   onClick={() => setCurrentQuestionIndex(overallIndex)}
-                  onDoubleClick={() => handleColorChange(overallIndex)} // Change color on double-click
+                  onDoubleClick={() => handleColorChange(overallIndex)}
                   className={`p-2 m-1 border rounded-md transition duration-300 ease-in-out ${
                     overallIndex === result.questions.length - 1 ? "w-20" : "w-10"
-                  } hover:bg-tertiary ${coloredButtons.has(overallIndex) ? 'bg-amber-400' : 'bg-white'}`} // Change color based on state
+                  } hover:bg-tertiary ${coloredButtons.has(overallIndex) ? 'bg-amber-500' : 'bg-white'}`}
                 >
                   {overallIndex === result.questions.length - 1 ? "Kết thúc" : `${overallIndex + 1}`}
                 </button>
@@ -249,12 +249,12 @@ export default function Result() {
 
   const renderNavigationButtons2 = () => {
     return (
-      <div className="flex justify-between mt-4">
+      <div className="flex justify-between mt-6">
         <button
           onClick={handlePreviousQuestion}
           disabled={currentQuestionIndex === 0}
           className={`py-2 px-4 rounded-lg transition-colors ${
-            currentQuestionIndex === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-sky-500 hover:bg-sky-600"
+            currentQuestionIndex === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-sky-500 hover:bg-sky-600"
           } text-white shadow-md`}
         >
           Trước
@@ -305,15 +305,15 @@ export default function Result() {
     if (!questionDetails) return <p>Loading question details...</p>;
 
     return (
-      <div className="mt-20 grid grid-cols-1 gap-y-10 pb-10 md:grid-cols-2">
-        <div className="p-6 mx-auto bg-white rounded-lg shadow-lg">
+      <div className="grid grid-cols-1 gap-x-10 md:grid-cols-5">
+        <div className="p-6 mx-auto bg-white rounded-lg shadow-lg md:col-span-3">
           <h2 className="text-xl text-left font-semibold mb-6">
             {questionDetails.question_text}
           </h2>
           <div className="options-container mb-4">
             {currentQuestionIndex === result.questions.length - 1 ? (
               <p className="text-lg text-gray-600 my-20">
-                Đến đây là kết thúc bài khảo sát. Bạn hãy nhấn <span className="font-semibold">Kết thúc</span> để nhận kết quả.
+                Sau khi nhấn '<span className="font-semibold">Kết thúc</span>' bạn sẽ không thể tiếp tục làm bài khảo sát này và sẽ được chuyển đến trang kết quả khảo sát.
               </p>
             ) : (
               questionDetails.options.map((option, index) => (
@@ -333,7 +333,9 @@ export default function Result() {
           </div>
           {renderNavigationButtons2()}
         </div>
-        {renderNavigationButtons()}
+        <div className="md:col-span-2">
+          {renderNavigationButtons()}
+        </div>
       </div>
     );
   };
@@ -343,19 +345,21 @@ export default function Result() {
 
   return (
     <div>
+      <h2 className="text-2xl mb-4 font-bold text-primary">THÔNG TIN KHẢO SÁT</h2>
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
-        <div className="grid grid-cols-1 gap-x-8 gap-y-10 pb-12 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-4 md:grid-cols-2">
         <div>
-          <h1 className="text-xl font-bold">'{form._id}' là mã khảo sát của bạn. <span><button
+          <h1 className="text-xl font-bold">'{form._id}' là mã khảo sát của bạn<span><button
             onClick={handleCopyId}
-            className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
+            className="ml-3 inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
           >
             Copy
           </button></span></h1>
           
           <p className="mt-1 text-sm leading-6 text-slate-600">
-            Lưu ý: <br />
-            Bạn nhớ lưu lại mã khảo sát để tra cứu kết quả.
+            Lưu ý:<br />
+            Bạn nhớ lưu lại mã khảo sát để tra cứu kết quả<br />
+            Sau khi bấm nút 'Kết thúc' bạn sẽ không thể sửa thông tin khảo sát hay thay đổi lựa chọn các câu trả lời của mình<br />
             </p>
           </div>
 
@@ -470,16 +474,18 @@ export default function Result() {
                 </div>
               </div>
             </div>
+            <input
+              type="submit"
+              value="Lưu thông tin"
+              className="text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-9 w-40 rounded-md cursor-pointer"
+            />
           </div>
         </div>
-        <input
-          type="submit"
-          value="Lưu thông tin"
-          className="inline-flex items-center justify-center whitespace-nowrap text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-9 rounded-md px-3 cursor-pointer mt-4"
-        />
+        
       </form>
-      <div className="quiz-container text-center">
-      {renderQuestion()}
+      <div className="quiz-container text-center my-16">
+        <h2 className="text-2xl mb-8 font-bold text-primary text-left">BỘ CÔNG CỤ ĐÁNH GIÁ AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP NHỎ VÀ VỪA</h2>
+        {renderQuestion()}
       </div>
     </div>
   );
