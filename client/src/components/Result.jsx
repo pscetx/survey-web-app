@@ -117,7 +117,7 @@ export default function Result() {
     }
   }
 
-  var avg = score.map((s, index) => (count[index] !== 0 ? s / count[index] : 0)); // Avoid division by zero
+  var avg = score.map((s, index) => (count[index] !== 0 ? s / count[index] : 0));
 
   const data = {
     labels: [
@@ -167,6 +167,42 @@ export default function Result() {
     },
   };
 
+  const getComments = (avg) => {
+    const comments = [];
+
+    if (avg[0] < 2) {
+      comments.push("Quy chế cần được cải thiện, điểm số còn thấp.");
+    } else {
+      comments.push("Quy chế của tổ chức khá ổn định.");
+    }
+
+    if (avg[1] < 2) {
+      comments.push("Tổ chức chưa đạt mức hiệu quả cao trong quản lý.");
+    } else {
+      comments.push("Tổ chức đã đạt mức quản lý tốt.");
+    }
+
+    if (avg[2] < 2) {
+      comments.push("Nhân lực cần được tăng cường về cả chất lượng và số lượng.");
+    } else {
+      comments.push("Nhân lực tổ chức được đánh giá khá tốt.");
+    }
+
+    if (avg[3] < 2) {
+      comments.push("Mức độ đầu tư hiện tại chưa đạt yêu cầu.");
+    } else {
+      comments.push("Mức độ đầu tư của tổ chức đang đáp ứng nhu cầu.");
+    }
+
+    if (avg[4] < 2) {
+      comments.push("Vận hành tổ chức có thể cải thiện thêm.");
+    } else {
+      comments.push("Tổ chức vận hành trơn tru và hiệu quả.");
+    }
+
+    return comments;
+  };
+
   return (
     <div className="results-container">
       <h2 className="text-2xl mb-4">Kết quả khảo sát</h2>
@@ -181,6 +217,15 @@ export default function Result() {
       <div style={{ position: 'relative', width: '500px', left: '50%', marginLeft: '-250px', display: 'inline - block' }}>
         <Radar data={data} config={config} options={options}></Radar>
       </div>
+
+      <div className="mt-6">
+      <h3 className="text-xl mb-2">Nhận xét kết quả:</h3>
+      <ul className="list-disc pl-5">
+        {getComments(avg).map((comment, index) => (
+          <li key={index}>{comment}</li>
+        ))}
+      </ul>
+    </div>
 
       <table className="min-w-full border border-collapse border-gray-200">
         <thead>

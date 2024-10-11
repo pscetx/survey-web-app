@@ -89,7 +89,7 @@ export default function RespondentInfo() {
       }
 
       // Redirect to the edit page with the new respondent's id
-      navigate(`/edit/${newId}`);
+      navigate(`/survey/${newId}`);
     } catch (error) {
       console.error("A problem occurred adding the record: ", error);
     } finally {

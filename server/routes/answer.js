@@ -4,19 +4,6 @@ import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
-// Get all answers
-router.get("/", async (req, res) => {
-  try {
-    const collection = await db.collection("answers");
-    const results = await collection.find({}).toArray();
-    res.status(200).send(results);
-  } catch (err) {
-    console.error("Error fetching answers:", err);
-    res.status(500).send("Error fetching answers");
-  }
-});
-
-// Get answer by respondent ID
 router.get("/:id", async (req, res) => {
   try {
     if (!ObjectId.isValid(req.params.id)) {
@@ -37,7 +24,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Create a new answer
 router.post("/", async (req, res) => {
   try {
     console.log("Received Payload:", req.body);
@@ -69,7 +55,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Update an existing answer
 router.patch("/updateScore", async (req, res) => {
   try {
     const { respondent_id, question_id, new_score } = req.body;

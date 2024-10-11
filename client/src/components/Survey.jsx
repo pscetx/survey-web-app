@@ -32,7 +32,6 @@ export default function Result() {
         return;
       }
       setForm(record);
-      setRespondentId(record._id);
     }
     fetchData();
   }, [params.id, navigate]);
@@ -317,8 +316,8 @@ export default function Result() {
                 Đến đây là kết thúc bài khảo sát. Bạn hãy nhấn <span className="font-semibold">Kết thúc</span> để nhận kết quả.
               </p>
             ) : (
-              questionDetails.options.map((option) => (
-                <label key={option._id} className="flex items-center p-2 mb-3 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 transition duration-300 ease-in-out">
+              questionDetails.options.map((option, index) => (
+                <label key={`${option._id}-${index}`} className="flex items-center p-2 mb-3 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 transition duration-300 ease-in-out">
                   <input
                     type="radio"
                     name={`question-${currentQuestionIndex}`}

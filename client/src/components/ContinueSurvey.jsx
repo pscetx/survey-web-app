@@ -18,7 +18,7 @@ export default function ContinueSurvey() {
       
       // Check if is_finished is false
       if (answerData.is_finished === false) {
-        navigate(`/edit/${respondentId}`);
+        navigate(`/survey/${respondentId}`);
       } else {
         alert("Bài khảo sát này đã được hoàn thành và chỉ có thể tra cứu kết quả.");
       }

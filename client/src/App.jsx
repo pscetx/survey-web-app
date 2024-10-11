@@ -6,7 +6,7 @@ const App = () => {
   return (
     <div className="w-full">
       <Navbar />
-      <div className="m-20">
+      <div className="m-16">
       <Outlet />
       </div>
       <Footer />
