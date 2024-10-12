@@ -275,36 +275,36 @@ export default function Result() {
 
       <h2 className="text-2xl mb-4 font-bold text-primary">KẾT QUẢ CHI TIẾT</h2>
       <div className="overflow-auto">
-      <table className="table-fixed min-w-[800px] rounded-lg shadow-lg overflow-hidden">
-        <thead>
-          <tr className="bg-primary text-white text-center">
-            <th className="border border-gray-300 p-2 w-12">STT</th>
-            <th className="border border-gray-300 p-2">Câu hỏi</th>
-            <th className="border border-gray-300 p-2 w-24">Phân loại</th>
-            <th className="border border-gray-300 p-2">Câu trả lời</th>
-            <th className="border border-gray-300 p-2">Điểm</th>
-          </tr>
-        </thead>
-        <tbody>
-          {questionsToDisplay.map((question, index) => {
-            const questionDetails = questionsMap[question._id];
-            const selectedOption = questionDetails?.options.find(
-              (option) => option.score === question.score
-            );
+        <table className="table-fixed min-w-[800px] rounded-lg shadow-lg overflow-hidden">
+          <thead>
+            <tr className="bg-primary text-white text-center">
+              <th className="border border-gray-300 p-2 w-12">STT</th>
+              <th className="border border-gray-300 p-2">Câu hỏi</th>
+              <th className="border border-gray-300 p-2 w-24">Phân loại</th>
+              <th className="border border-gray-300 p-2">Câu trả lời</th>
+              <th className="border border-gray-300 p-2">Điểm</th>
+            </tr>
+          </thead>
+          <tbody>
+            {questionsToDisplay.map((question, index) => {
+              const questionDetails = questionsMap[question._id];
+              const selectedOption = questionDetails?.options.find(
+                (option) => option.score === question.score
+              );
 
-            return (
-              <tr key={index} className={`border-b ${index % 2 === 0 ? 'bg-white' : 'bg-tertiary'}`}>
-                <td className="border border-gray-300 p-2 text-center">{index + 1}</td>
-                <td className="border border-gray-300 p-2">{questionDetails?.question_text}</td>
-                <td className="border border-gray-300 p-2 text-center">{questionDetails?.category}</td>
-                <td className="border border-gray-300 p-2">{selectedOption ? selectedOption.text : 'N/A'}</td>
-                <td className="border border-gray-300 p-2 text-center">{question.score}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+              return (
+                <tr key={index} className={`border-b ${index % 2 === 0 ? 'bg-white' : 'bg-tertiary'}`}>
+                  <td className="border border-gray-300 p-2 text-center">{index + 1}</td>
+                  <td className="border border-gray-300 p-2">{questionDetails?.question_text}</td>
+                  <td className="border border-gray-300 p-2 text-center">{questionDetails?.category}</td>
+                  <td className="border border-gray-300 p-2">{selectedOption ? selectedOption.text : 'N/A'}</td>
+                  <td className="border border-gray-300 p-2 text-center">{question.score}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

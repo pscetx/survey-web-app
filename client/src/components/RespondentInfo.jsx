@@ -95,7 +95,7 @@ export default function RespondentInfo() {
   }
 
   return (
-    <div>
+    <div className="respondent-info-container">
       <ContinueSurvey />
       <h2 className="text-2xl mb-4 font-bold text-primary">LÀM BÀI KHẢO SÁT MỚI</h2>
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">

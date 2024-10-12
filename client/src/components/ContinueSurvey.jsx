@@ -27,7 +27,7 @@ export default function ContinueSurvey() {
   };
 
   return (
-    <div className="mb-16">
+    <div>
       <h2 className="text-2xl mb-4 font-bold text-primary">TIẾP TỤC LÀM KHẢO SÁT</h2>
       <div className="border rounded-md overflow-hidden p-4 mb-4">
         <h2 className="text-lg mb-4">Nhập mã khảo sát để tiếp tục làm bài:</h2>

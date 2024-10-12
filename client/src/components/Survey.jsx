@@ -344,7 +344,7 @@ export default function Result() {
   if (error) return <p className="text-primary text-xl">{error}</p>;
 
   return (
-    <div>
+    <div className="survey-container">
       <h2 className="text-2xl mb-4 font-bold text-primary">THÔNG TIN KHẢO SÁT</h2>
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
         <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-4 md:grid-cols-2">
@@ -483,7 +483,7 @@ export default function Result() {
         </div>
         
       </form>
-      <div className="quiz-container text-center my-16">
+      <div className="quiz-container text-center mt-16">
         <h2 className="text-2xl mb-8 font-bold text-primary text-left">BỘ CÔNG CỤ ĐÁNH GIÁ AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP NHỎ VÀ VỪA</h2>
         {renderQuestion()}
       </div>

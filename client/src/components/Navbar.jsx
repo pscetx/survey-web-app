@@ -10,7 +10,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <nav className="bg-primary px-5">
+      <nav className="bg-primary md:px-10 md:py-0 px-5 py-2">
         <div className="flex justify-between items-center">
           <NavLink to="/" className="flex items-center">
             <img alt="ITI logo" className="h-10 md:h-12" src="/logo.png" />
