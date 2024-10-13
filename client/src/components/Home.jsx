@@ -1,7 +1,9 @@
+import { NavLink } from 'react-router-dom';
+
 export default function Home() {
   return (
-    <div className="w-full mx-auto md:p-10 p-5">
-      <div className="text-center border-2 border-primary rounded-lg p-6 mb-8 bg-cover bg-right bg-[url('/bg-hero.png')]">
+    <div className="w-full mx-auto md:py-12 md:px-16 p-4">
+      <div className="text-center border-2 border-primary rounded-lg p-6 mb-16 bg-cover bg-right bg-[url('/bg-hero.png')]">
         <h1 className="md:text-4xl text-2xl font-bold text-primary mb-10">
           BỘ CÔNG CỤ ĐÁNH GIÁ AN TOÀN THÔNG TIN <br /> DÀNH CHO DOANH NGHIỆP NHỎ VÀ VỪA
         </h1>
@@ -10,12 +12,14 @@ export default function Home() {
           <br />
           5 trụ cột: Quy chế, Tổ chức, Nhân sự, Đầu tư và Vận hành
         </p>
-        <button className="mt-10 bg-red-700 text-white font-bold py-2 px-8 rounded-lg hover:bg-primary transition">
-          LÀM BÀI NGAY
-        </button>
+        <NavLink to="/create">
+          <button className="md:text-2xl mt-10 bg-red-700 text-white font-bold py-2 px-8 rounded-lg hover:bg-primary transition">
+            LÀM BÀI NGAY
+          </button>
+        </NavLink>
       </div>
 
-      <div className="text-center mb-8">
+      <div className="text-center mb-16">
         <p className="text-lg font-semibold">
           BẠN ĐÃ LÀM BÀI KHẢO SÁT? TRA CỨU KẾT QUẢ <a href="/result" className="text-primary underline">TẠI ĐÂY</a>
         </p>

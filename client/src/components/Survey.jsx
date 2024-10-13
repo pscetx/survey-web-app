@@ -307,7 +307,7 @@ export default function Result() {
     return (
       <div className="grid grid-cols-1 gap-x-10 md:grid-cols-5">
         <div className="p-6 mx-auto bg-white rounded-lg shadow-lg md:col-span-3">
-          <h2 className="text-xl text-left font-semibold mb-6">
+          <h2 className="text-lg text-justify font-semibold mb-6">
             {questionDetails.question_text}
           </h2>
           <div className="options-container mb-4">
@@ -359,7 +359,7 @@ export default function Result() {
           <p className="mt-1 text-sm leading-6 text-slate-600">
             Lưu ý:<br />
             Bạn nhớ lưu lại mã khảo sát để tra cứu kết quả<br />
-            Sau khi bấm nút 'Kết thúc' bạn sẽ không thể sửa thông tin khảo sát hay thay đổi lựa chọn các câu trả lời của mình<br />
+            Sau khi bấm nút 'Kết thúc' bạn sẽ không thể sửa thông tin khảo sát hay thay đổi các câu trả lời của mình<br />
             </p>
           </div>
 

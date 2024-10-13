@@ -171,55 +171,129 @@ export default function Result() {
     const comments = [];
 
     if (avg[0] < 2) {
-      comments.push(`Quy chế: ${avg[0].toFixed(2)} điểm - Quy chế hiện tại của tổ chức còn nhiều hạn chế và cần cải thiện để nâng cao hiệu quả hoạt động.`);
+      comments.push(
+        <span>
+          <strong>Quy chế:</strong> <strong>{avg[0].toFixed(2)} điểm</strong> - Quy chế hiện tại của tổ chức còn nhiều hạn chế và cần cải thiện để nâng cao hiệu quả hoạt động.
+        </span>
+      );
     } else if (avg[0] < 3) {
-      comments.push(`Quy chế: ${avg[0].toFixed(2)} điểm - Quy chế tổ chức ở mức chấp nhận được, nhưng vẫn còn nhiều điểm cần tối ưu để đảm bảo sự ổn định.`);
+      comments.push(
+        <span>
+          <strong>Quy chế:</strong> <strong>{avg[0].toFixed(2)} điểm</strong> - Quy chế tổ chức ở mức chấp nhận được, nhưng vẫn còn nhiều điểm cần tối ưu để đảm bảo sự ổn định.
+        </span>
+      );
     } else {
-      comments.push(`Quy chế: ${avg[0].toFixed(2)} điểm - Khảo sát đánh giá quy chế của tổ chức ở mức tốt, có nền tảng vững chắc cho hoạt động.`);
+      comments.push(
+        <span>
+          <strong>Quy chế:</strong> <strong>{avg[0].toFixed(2)} điểm</strong> - Khảo sát đánh giá quy chế của tổ chức ở mức tốt, có nền tảng vững chắc cho hoạt động.
+        </span>
+      );
     }
 
     if (avg[1] < 2) {
-      comments.push(`Tổ chức: ${avg[1].toFixed(2)} điểm - Hiệu quả quản lý hiện tại chưa đáp ứng yêu cầu, cần có những biện pháp để cải thiện hơn.`);
+      comments.push(
+        <span>
+          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)} điểm</strong> - Hiệu quả quản lý hiện tại chưa đáp ứng yêu cầu, cần có những biện pháp để cải thiện hơn.
+        </span>
+      );
     } else if (avg[1] < 3) {
-      comments.push(`Tổ chức: ${avg[1].toFixed(2)} điểm - Quản lý tổ chức đạt mức trung bình, nhưng vẫn có thể nâng cao quy trình hơn.`);
+      comments.push(
+        <span>
+          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)} điểm</strong> - Quản lý tổ chức đạt mức trung bình, nhưng vẫn có thể nâng cao quy trình hơn.
+        </span>
+      );
     } else {
-      comments.push(`Tổ chức: ${avg[1].toFixed(2)} điểm - Tổ chức đạt hiệu quả quản lý tốt, đảm bảo phối hợp và điều hành hiệu quả.`);
+      comments.push(
+        <span>
+          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)} điểm</strong> - Tổ chức đạt hiệu quả quản lý tốt, đảm bảo phối hợp và điều hành hiệu quả.
+        </span>
+      );
     }
 
     if (avg[2] < 2) {
-      comments.push(`Nhân lực: ${avg[1].toFixed(2)} điểm - Chất lượng và số lượng nhân lực còn hạn chế, cần đầu tư và phát triển hơn.`);
+      comments.push(
+        <span>
+          <strong>Nhân lực:</strong> <strong>{avg[2].toFixed(2)} điểm</strong> - Chất lượng và số lượng nhân lực còn hạn chế, cần đầu tư và phát triển hơn.
+        </span>
+      );
     } else if (avg[2] < 3) {
-      comments.push(`Nhân lực: ${avg[1].toFixed(2)} điểm - Nhân lực tổ chức đang ở mức trung bình, có thể cải thiện thêm để đáp ứng nhu cầu phát triển.`);
+      comments.push(
+        <span>
+          <strong>Nhân lực:</strong> <strong>{avg[2].toFixed(2)} điểm</strong> - Nhân lực tổ chức đang ở mức trung bình, có thể cải thiện thêm để đáp ứng nhu cầu phát triển.
+        </span>
+      );
     } else {
-      comments.push(`Nhân lực: ${avg[1].toFixed(2)} điểm - Khảo sát đánh giá nhân lực tổ chức ở mức cao, đáp ứng tốt yêu cầu chuyên môn và khối lượng công việc.`);
+      comments.push(
+        <span>
+          <strong>Nhân lực:</strong> <strong>{avg[2].toFixed(2)} điểm</strong> - Khảo sát đánh giá nhân lực tổ chức ở mức cao, đáp ứng tốt yêu cầu chuyên môn và khối lượng công việc.
+        </span>
+      );
     }
 
     if (avg[3] < 2) {
-      comments.push(`Đầu tư: ${avg[1].toFixed(2)} điểm - Mức độ đầu tư vào tổ chức còn thấp, cần có sự gia tăng đáng kể để đáp ứng các mục tiêu dài hạn.`);
+      comments.push(
+        <span>
+          <strong>Đầu tư:</strong> <strong>{avg[3].toFixed(2)} điểm</strong> - Mức độ đầu tư vào tổ chức còn thấp, cần có sự gia tăng đáng kể để đáp ứng các mục tiêu dài hạn.
+        </span>
+      );
     } else if (avg[3] < 3) {
-      comments.push(`Đầu tư: ${avg[1].toFixed(2)} điểm - Mức đầu tư của tổ chức ở mức trung bình, nhưng vẫn có khả năng tối ưu để phát triển bền vững.`);
+      comments.push(
+        <span>
+          <strong>Đầu tư:</strong> <strong>{avg[3].toFixed(2)} điểm</strong> - Mức đầu tư của tổ chức ở mức trung bình, nhưng vẫn có khả năng tối ưu để phát triển bền vững.
+        </span>
+      );
     } else {
-      comments.push(`Đầu tư: ${avg[1].toFixed(2)} điểm - Mức độ đầu tư của tổ chức rất tốt, sẽ tạo điều kiện thuận lợi cho các hoạt động và phát triển.`);
+      comments.push(
+        <span>
+          <strong>Đầu tư:</strong> <strong>{avg[3].toFixed(2)} điểm</strong> - Mức độ đầu tư của tổ chức rất tốt, sẽ tạo điều kiện thuận lợi cho các hoạt động và phát triển.
+        </span>
+      );
     }
 
     if (avg[4] < 2) {
-      comments.push(`Vận hành: ${avg[1].toFixed(2)} điểm - Hoạt động vận hành còn nhiều bất cập, cần tái cấu trúc và cải thiện để đạt hiệu quả cao.`);
+      comments.push(
+        <span>
+          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)} điểm</strong> - Hoạt động vận hành còn nhiều bất cập, cần tái cấu trúc và cải thiện để đạt hiệu quả cao.
+        </span>
+      );
     } else if (avg[4] < 3) {
-      comments.push(`Vận hành: ${avg[1].toFixed(2)} điểm - Vận hành tổ chức ở mức chấp nhận được, nhưng vẫn cần điều chỉnh để đạt sự linh hoạt và hiệu quả.`);
+      comments.push(
+        <span>
+          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)} điểm</strong> - Vận hành tổ chức ở mức chấp nhận được, nhưng vẫn cần điều chỉnh để đạt sự linh hoạt và hiệu quả.
+        </span>
+      );
     } else {
-      comments.push(`Vận hành: ${avg[1].toFixed(2)} điểm - Tổ chức vận hành trơn tru, đảm bảo sự liên tục và hiệu quả trong các hoạt động.`);
+      comments.push(
+        <span>
+          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)} điểm</strong> - Tổ chức vận hành trơn tru, đảm bảo sự liên tục và hiệu quả trong các hoạt động.
+        </span>
+      );
     }
 
     const overallAvg = avg.reduce((acc, val) => acc + val, 0) / avg.length;
 
     if (overallAvg < 2) {
-      comments.push(`Nhìn chung, tổ chức còn nhiều khía cạnh cần cải thiện, hiệu quả hoạt động và các yếu tố quan trọng đều ở mức thấp. Tổng điểm: ${overallAvg.toFixed(2)}`);
+      comments.push(
+        <span>
+          Nhìn chung, tổ chức còn nhiều khía cạnh cần cải thiện, hiệu quả hoạt động và các yếu tố quan trọng đều ở mức thấp. 
+          <strong> Tổng điểm: </strong><strong>{overallAvg.toFixed(2)}</strong>
+        </span>
+      );
     } else if (overallAvg < 3) {
-      comments.push(`Tổng thể, tổ chức đạt mức trung bình, mặc dù đã có một số điểm tích cực, vẫn cần cải tiến ở nhiều khía cạnh để đạt hiệu quả cao. Tổng điểm: ${overallAvg.toFixed(2)}`);
+      comments.push(
+        <span>
+          Tổng thể, tổ chức đạt mức trung bình, mặc dù đã có một số điểm tích cực, vẫn cần cải tiến ở nhiều khía cạnh để đạt hiệu quả cao. 
+          <strong> Tổng điểm: </strong><strong>{overallAvg.toFixed(2)}</strong>
+        </span>
+      );
     } else {
-      comments.push(`Tổng thể, tổ chức hoạt động rất tốt trên nhiều mặt. Những nỗ lực hiện tại sẽ tạo ra kết quả tích cực và duy trì sự phát triển bền vững. Tổng điểm: ${overallAvg.toFixed(2)}`);
+      comments.push(
+        <span>
+          Tổng thể, tổ chức hoạt động rất tốt trên nhiều mặt. Những nỗ lực hiện tại sẽ tạo ra kết quả tích cực và duy trì sự phát triển bền vững. 
+          <strong> Tổng điểm: </strong><strong>{overallAvg.toFixed(2)}</strong>
+        </span>
+      );
     }
-
     return comments;
   };
 

@@ -14,7 +14,7 @@ export default function LookUp() {
     <div className="result-input-container">
       <h2 className="text-2xl mb-4 font-bold text-primary">TRA CỨU KẾT QUẢ</h2>
       <div className='border rounded-md overflow-hidden p-4'>
-        <h2 className="text-lg mb-4">Nhập mã khảo sát để tra cứu kết quả:</h2>
+        <h2 className="text-md mb-4">Nhập mã khảo sát để tra cứu kết quả</h2>
         <form onSubmit={handleSubmit}>
           <div className='flex text-md rounded-sm border-b border-secondary'>
             <input
@@ -33,8 +33,8 @@ export default function LookUp() {
       </div>
       <p className="md:mt-16 mt-8 text-sm leading-6 text-slate-600">
         Lưu ý: <br />
-        Mã khảo sát đã được cung cấp sau khi bạn điền thông tin khảo sát<br />
-        Bạn chỉ có thể tra cứu kết quả sau khi đã hoàn thành khảo sát<br /><br />
+        Mã khảo sát đã được cung cấp sau khi bạn điền thông tin tiền khảo sát<br />
+        Bạn chỉ có thể tra cứu kết quả sau khi đã hoàn thành bài khảo sát<br /><br />
         Chưa hoàn thành khảo sát? Tiếp tục làm <a href="/create" className="text-primary underline">tại đây</a><br />
         Xem chi tiết hướng dẫn làm khảo sát <a href="/info" className="text-primary underline">tại đây</a><br />
       </p>

@@ -29,8 +29,8 @@ export default function ContinueSurvey() {
   return (
     <div>
       <h2 className="text-2xl mb-4 font-bold text-primary">TIẾP TỤC LÀM KHẢO SÁT</h2>
-      <div className="border rounded-md overflow-hidden p-4 mb-4">
-        <h2 className="text-lg mb-4">Nhập mã khảo sát để tiếp tục làm bài:</h2>
+      <div className="border rounded-md overflow-hidden p-4 mb-10">
+        <h2 className="text-md mb-4">Nếu bạn đã làm khảo sát nhưng chưa bấm '<strong>Kết thúc</strong>', bạn có thể nhập mã khảo sát để tiếp tục làm bài.</h2>
         <div className="flex text-md rounded-sm border-b border-secondary">
           <input
             type="text"
