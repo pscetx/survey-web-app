@@ -318,10 +318,10 @@ export default function Result() {
           >
             Copy
           </button></span></h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4 mb-16 border rounded-md overflow-hidden p-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-28 gap-7 mt-4 mb-16 border rounded-md overflow-hidden p-4">
         <div>
             <div className="mb-4">
-              <h3 className="text-lg mb-2">Thông tin khảo sát</h3>
+              <h3 className="text-lg mb-2">Thông tin người khảo sát</h3>
               <ul className="list-disc pl-5">
                 <li><strong>Tên người khảo sát:</strong> {respondent.respondent_name}</li>
                 <li><strong>Chức vụ:</strong> {respondent.respondent_role}</li>
@@ -332,7 +332,7 @@ export default function Result() {
             </div>
           <div>
             <h3 className="text-lg mb-2">Nhận xét kết quả khảo sát</h3>
-            <ul className="list-disc pl-5">
+            <ul className="list-disc pl-5 text-justify">
               {getComments(avg).map((comment, index) => (
                 <li key={index}>{comment}</li>
               ))}

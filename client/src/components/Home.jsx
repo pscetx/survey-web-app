@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 export default function Home() {
   return (
-    <div className="w-full mx-auto md:py-12 md:px-16 p-4">
+    <div className="w-full mx-auto md:py-8 md:px-16 p-4">
       <div className="text-center border-2 border-primary rounded-lg p-6 mb-16 bg-cover bg-right bg-[url('/bg-hero.png')]">
         <h1 className="md:text-4xl text-2xl font-bold text-primary mb-10">
           BỘ CÔNG CỤ ĐÁNH GIÁ AN TOÀN THÔNG TIN <br /> DÀNH CHO DOANH NGHIỆP NHỎ VÀ VỪA

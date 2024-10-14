@@ -218,8 +218,8 @@ export default function Result() {
     if (!result) return null;
 
     const rows = [];
-    for (let i = 0; i < result.questions.length; i += 10) {
-      rows.push(result.questions.slice(i, i + 10));
+    for (let i = 0; i < result.questions.length; i += 8) {
+      rows.push(result.questions.slice(i, i + 8));
     }
 
     return (
@@ -227,14 +227,14 @@ export default function Result() {
         {rows.map((row, rowIndex) => (
           <div key={rowIndex} className="mb-2">
             {row.map((_, index) => {
-              const overallIndex = rowIndex * 10 + index;
+              const overallIndex = rowIndex * 8 + index;
               return (
                 <button
                   key={overallIndex}
                   onClick={() => setCurrentQuestionIndex(overallIndex)}
                   onDoubleClick={() => handleColorChange(overallIndex)}
                   className={`p-2 m-1 border rounded-md transition duration-300 ease-in-out ${
-                    overallIndex === result.questions.length - 1 ? "w-20" : "w-10"
+                    overallIndex === result.questions.length - 1 ? "w-20" : "md:w-10 w-8"
                   } hover:bg-tertiary ${coloredButtons.has(overallIndex) ? 'bg-amber-500' : 'bg-white'}`}
                 >
                   {overallIndex === result.questions.length - 1 ? "Kết thúc" : `${overallIndex + 1}`}
@@ -326,7 +326,7 @@ export default function Result() {
                     onChange={() => handleOptionChange(currentQuestion._id, option.score, respondent._id)}
                     className="mr-3 h-4 w-4 accent-primary"
                   />
-                  <span className="text-md text-gray-700">{option.text}</span>
+                  <span className="text-md text-justify text-gray-700">{option.text}</span>
                 </label>
               ))
             )}
@@ -349,7 +349,7 @@ export default function Result() {
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
         <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-4 md:grid-cols-2">
         <div>
-          <h1 className="text-xl font-bold">'{form._id}' là mã khảo sát của bạn<span><button
+          <h1 className="text-xl font-bold">Mã khảo sát: {form._id}<span><button
             onClick={handleCopyId}
             className="ml-3 inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
           >
