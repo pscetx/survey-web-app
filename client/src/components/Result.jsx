@@ -312,9 +312,9 @@ export default function Result() {
   return (
     <div className="results-container">
       <h2 className="text-2xl mb-1 font-bold text-primary">ĐÁNH GIÁ TỔNG QUAN</h2>
-      <h1 className="text-lg">Mã khảo sát của bạn là <span className="font-bold italic">'{respondent._id}'</span><span><button
+      <h1 className="text-lg">Mã khảo sát của bạn là <span className="font-bold">{respondent._id} </span><span><button
             onClick={handleCopyId}
-            className="ml-3 inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
+            className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
           >
             Copy
           </button></span></h1>

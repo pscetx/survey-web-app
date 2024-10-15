@@ -234,7 +234,7 @@ export default function Result() {
                   onClick={() => setCurrentQuestionIndex(overallIndex)}
                   onDoubleClick={() => handleColorChange(overallIndex)}
                   className={`p-2 m-1 border rounded-md transition duration-300 ease-in-out ${
-                    overallIndex === result.questions.length - 1 ? "w-20" : "md:w-10 w-8"
+                    overallIndex === result.questions.length - 1 ? "w-20" : "w-8"
                   } hover:bg-tertiary ${coloredButtons.has(overallIndex) ? 'bg-amber-500' : 'bg-white'}`}
                 >
                   {overallIndex === result.questions.length - 1 ? "Kết thúc" : `${overallIndex + 1}`}
@@ -317,7 +317,7 @@ export default function Result() {
               </p>
             ) : (
               questionDetails.options.map((option, index) => (
-                <label key={`${option._id}-${index}`} className="flex items-center p-2 mb-3 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 transition duration-300 ease-in-out">
+                <label key={`${option._id}-${index}`} className="flex items-center p-3 mb-3 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 transition duration-300 ease-in-out">
                   <input
                     type="radio"
                     name={`question-${currentQuestionIndex}`}
@@ -345,13 +345,23 @@ export default function Result() {
 
   return (
     <div className="survey-container">
-      <h2 className="text-2xl mb-4 font-bold text-primary">THÔNG TIN KHẢO SÁT</h2>
+      <div className="quiz-container text-center">
+        <h2 className="text-2xl font-bold text-primary text-left mb-2">BỘ CÔNG CỤ ĐÁNH GIÁ AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP NHỎ VÀ VỪA</h2>
+        <h1 className="text-xl font-bold text-left mb-4">Mã khảo sát: {form._id} <span><button
+            onClick={handleCopyId}
+            className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
+          >
+            Copy
+          </button></span></h1>
+        {renderQuestion()}
+      </div>
+      <h2 className="text-2xl mb-4 font-bold text-primary mt-16">THÔNG TIN KHẢO SÁT</h2>
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
         <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-4 md:grid-cols-2">
         <div>
-          <h1 className="text-xl font-bold">Mã khảo sát: {form._id}<span><button
+          <h1 className="text-xl font-bold">Mã khảo sát: {form._id} <span><button
             onClick={handleCopyId}
-            className="ml-3 inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
+            className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
           >
             Copy
           </button></span></h1>
@@ -480,13 +490,8 @@ export default function Result() {
               className="text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-9 w-40 rounded-md cursor-pointer"
             />
           </div>
-        </div>
-        
+        </div> 
       </form>
-      <div className="quiz-container text-center mt-16">
-        <h2 className="text-2xl mb-8 font-bold text-primary text-left">BỘ CÔNG CỤ ĐÁNH GIÁ AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP NHỎ VÀ VỪA</h2>
-        {renderQuestion()}
-      </div>
     </div>
   );
 }
