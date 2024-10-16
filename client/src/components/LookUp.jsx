@@ -31,7 +31,7 @@ export default function LookUp() {
           </button>
         </form>
       </div>
-      <p className="md:mt-16 mt-8 text-sm leading-6 text-slate-600">
+      <p className="lg:mt-16 mt-8 text-sm leading-6 text-slate-600">
         Lưu ý: <br />
         Mã khảo sát đã được cung cấp sau khi bạn điền thông tin tiền khảo sát<br />
         Bạn chỉ có thể tra cứu kết quả sau khi đã hoàn thành bài khảo sát<br /><br />

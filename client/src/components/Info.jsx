@@ -7,13 +7,13 @@ export default function Info() {
 
       <div className="space-y-6 text-lg leading-7 text-gray-700">
         <p>
-          Chào mừng bạn đến với <strong>Bộ công cụ đánh giá trực tuyến tình hình an toàn thông tin dành cho doanh nghiệp nhỏ và vừa! </strong><br />
+          Chào mừng bạn đến với <strong>Bộ công cụ khảo sát An toàn thông tin dành cho doanh nghiệp vừa và nhỏ! </strong><br />
           Dưới đây sẽ là hướng dẫn sử dụng chi tiết giúp bạn hoàn thành khảo sát một cách dễ dàng.
         </p>
 
         <h3 className="text-xl font-semibold text-secondary">Bước 1: Truy cập vào trang khảo sát</h3>
         <p>
-          Mở trình duyệt và truy cập vào trang web qua liên kết: <a href="[link website]" className="text-blue-600 underline">[link website]</a>.
+          Mở trình duyệt và truy cập vào trang web qua liên kết: <a href="https://www.facebook.com/profile.php?id=100064061143635&ref=embed_page" className="text-blue-600 underline">link website</a>.
           Tại trang chủ, nhấn vào mục <strong>"LÀM BÀI KHẢO SÁT"</strong> trên thanh điều hướng hoặc tìm nút <strong>“LÀM BÀI NGAY”</strong> tại giao diện trang chủ.
         </p>
 
@@ -33,7 +33,7 @@ export default function Info() {
           Bạn có thể thay đổi các thông tin tiền khảo sát nếu muốn. Kéo xuống và các câu hỏi sẽ được hiển thị tuần tự, bạn chọn đáp án bằng cách nhấp vào 01 trong các tùy chọn.
         </p>
         <p>
-          Mỗi câu hỏi sẽ có 5 đáp án với nội dung đại khái như sau:
+          Mỗi câu hỏi sẽ có 5 đáp án với nội dung tương ứng như sau:
         </p>
         <ul className="list-disc pl-5">
           <li>0 điểm - Chưa từng nghe đến yếu tố an toàn thông tin này</li>

@@ -249,7 +249,7 @@ export default function Result() {
 
   const renderNavigationButtons2 = () => {
     return (
-      <div className="flex justify-between mt-6">
+      <div className="flex justify-between mt-4">
         <button
           onClick={handlePreviousQuestion}
           disabled={currentQuestionIndex === 0}
@@ -305,8 +305,8 @@ export default function Result() {
     if (!questionDetails) return <p>Loading question details...</p>;
 
     return (
-      <div className="grid grid-cols-1 gap-x-10 md:grid-cols-5">
-        <div className="p-6 mx-auto bg-white rounded-lg shadow-lg md:col-span-3">
+      <div className="grid grid-cols-1 gap-x-10 lg:grid-cols-6">
+        <div className="border rounded-md overflow-hidden p-4 lg:col-span-4">
           <h2 className="text-lg text-justify font-semibold mb-6">
             {questionDetails.question_text}
           </h2>
@@ -333,7 +333,7 @@ export default function Result() {
           </div>
           {renderNavigationButtons2()}
         </div>
-        <div className="md:col-span-2">
+        <div className="lg:col-span-2">
           {renderNavigationButtons()}
         </div>
       </div>
@@ -346,7 +346,7 @@ export default function Result() {
   return (
     <div className="survey-container">
       <div className="quiz-container text-center">
-        <h2 className="text-2xl font-bold text-primary text-left mb-2">BỘ CÔNG CỤ ĐÁNH GIÁ AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP NHỎ VÀ VỪA</h2>
+        <h2 className="text-2xl font-bold text-primary text-left mb-2">BỘ CÔNG CỤ KHẢO SÁT AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP VỪA VÀ NHỎ</h2>
         <h1 className="text-xl font-bold text-left mb-4">Mã khảo sát: {form._id} <span><button
             onClick={handleCopyId}
             className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
@@ -357,7 +357,7 @@ export default function Result() {
       </div>
       <h2 className="text-2xl mb-4 font-bold text-primary mt-16">THÔNG TIN KHẢO SÁT</h2>
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
-        <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-4 lg:grid-cols-2">
         <div>
           <h1 className="text-xl font-bold">Mã khảo sát: {form._id} <span><button
             onClick={handleCopyId}

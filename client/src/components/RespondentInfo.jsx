@@ -99,7 +99,7 @@ export default function RespondentInfo() {
       <ContinueSurvey />
       <h2 className="text-2xl mb-4 font-bold text-primary">LÀM BÀI KHẢO SÁT MỚI</h2>
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
-      <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-12 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-12 lg:grid-cols-2">
         <div>
           <h1 className="text-lg font-bold">Nhập thông tin tiền khảo sát</h1>
           <p className="mt-1 text-sm leading-6 text-slate-600">

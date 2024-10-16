@@ -193,7 +193,7 @@ export default function Result() {
     if (avg[1] < 2) {
       comments.push(
         <span>
-          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)} điểm</strong> - Hiệu quả quản lý hiện tại chưa đáp ứng yêu cầu, cần có những biện pháp để cải thiện hơn.
+          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)} điểm</strong> - Hiệu quả quản lý hiện tại chưa đáp ứng yêu cầu, cần có những biện pháp để cải thiện.
         </span>
       );
     } else if (avg[1] < 3) {
@@ -205,7 +205,7 @@ export default function Result() {
     } else {
       comments.push(
         <span>
-          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)} điểm</strong> - Tổ chức đạt hiệu quả quản lý tốt, đảm bảo phối hợp và điều hành hiệu quả.
+          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)} điểm</strong> - Tổ chức đạt hiệu quả quản lý ở mức tốt, có thể đảm bảo phối hợp và điều hành hiệu quả.
         </span>
       );
     }
@@ -219,7 +219,7 @@ export default function Result() {
     } else if (avg[2] < 3) {
       comments.push(
         <span>
-          <strong>Nhân lực:</strong> <strong>{avg[2].toFixed(2)} điểm</strong> - Nhân lực tổ chức đang ở mức trung bình, có thể cải thiện thêm để đáp ứng nhu cầu phát triển.
+          <strong>Nhân lực:</strong> <strong>{avg[2].toFixed(2)} điểm</strong> - Nhân lực tổ chức ở mức trung bình, cần cải thiện thêm để đáp ứng nhu cầu phát triển.
         </span>
       );
     } else {
@@ -245,7 +245,7 @@ export default function Result() {
     } else {
       comments.push(
         <span>
-          <strong>Đầu tư:</strong> <strong>{avg[3].toFixed(2)} điểm</strong> - Mức độ đầu tư của tổ chức rất tốt, sẽ tạo điều kiện thuận lợi cho các hoạt động và phát triển.
+          <strong>Đầu tư:</strong> <strong>{avg[3].toFixed(2)} điểm</strong> - Mức độ đầu tư của tổ chức rất tốt, tạo điều kiện thuận lợi cho các hoạt động phát triển.
         </span>
       );
     }
@@ -259,13 +259,13 @@ export default function Result() {
     } else if (avg[4] < 3) {
       comments.push(
         <span>
-          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)} điểm</strong> - Vận hành tổ chức ở mức chấp nhận được, nhưng vẫn cần điều chỉnh để đạt sự linh hoạt và hiệu quả.
+          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)} điểm</strong> - Vận hành tổ chức ở mức chấp nhận được, nhưng vẫn cần điều chỉnh để đạt được sự linh hoạt và hiệu quả.
         </span>
       );
     } else {
       comments.push(
         <span>
-          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)} điểm</strong> - Tổ chức vận hành trơn tru, đảm bảo sự liên tục và hiệu quả trong các hoạt động.
+          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)} điểm</strong> - Tổ chức đang vận hành trơn tru, đảm bảo sự liên tục, hiệu quả và an toàn trong các hoạt động.
         </span>
       );
     }
@@ -275,22 +275,22 @@ export default function Result() {
     if (overallAvg < 2) {
       comments.push(
         <span>
-          Nhìn chung, tổ chức còn nhiều khía cạnh cần cải thiện, hiệu quả hoạt động và các yếu tố quan trọng đều ở mức thấp. 
-          <strong> Tổng điểm: </strong><strong>{overallAvg.toFixed(2)}</strong>
+          Nhìn chung, doanh nghiệp còn nhiều khía cạnh cần cải thiện, hiệu quả hoạt động và các yếu tố quan trọng đều ở mức kém. 
+          <strong> Tổng điểm trung bình 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
         </span>
       );
     } else if (overallAvg < 3) {
       comments.push(
         <span>
-          Tổng thể, tổ chức đạt mức trung bình, mặc dù đã có một số điểm tích cực, vẫn cần cải tiến ở nhiều khía cạnh để đạt hiệu quả cao. 
-          <strong> Tổng điểm: </strong><strong>{overallAvg.toFixed(2)}</strong>
+          Tổng thể, doanh nghiệp đạt mức trung bình, mặc dù đã có một số khía cạnh ở mức tốt, tuy nhiên vẫn cần cải tiến nhiều hơn để đạt hiệu quả cao. 
+          <strong> Tổng điểm trung bình 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
         </span>
       );
     } else {
       comments.push(
         <span>
-          Tổng thể, tổ chức hoạt động rất tốt trên nhiều mặt. Những nỗ lực hiện tại sẽ tạo ra kết quả tích cực và duy trì sự phát triển bền vững. 
-          <strong> Tổng điểm: </strong><strong>{overallAvg.toFixed(2)}</strong>
+          Tổng thể, tổ chức đang hoạt động tốt trên nhiều mặt, có thể duy trì các kết quả tích cực và sự phát triển bền vững. 
+          <strong> Tổng điểm trung bình 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
         </span>
       );
     }
@@ -318,7 +318,7 @@ export default function Result() {
           >
             Copy
           </button></span></h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-28 gap-7 mt-4 mb-16 border rounded-md overflow-hidden p-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-28 gap-7 mt-4 mb-16 border rounded-md overflow-hidden p-4">
         <div>
             <div className="mb-4">
               <h3 className="text-lg mb-2">Thông tin người khảo sát</h3>
