@@ -276,21 +276,21 @@ export default function Result() {
       comments.push(
         <span>
           Nhìn chung, doanh nghiệp còn nhiều khía cạnh cần cải thiện, hiệu quả hoạt động và các yếu tố quan trọng đều ở mức kém. 
-          <strong> Tổng điểm trung bình 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
+          <strong> Tổng điểm trung bình trên 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
         </span>
       );
     } else if (overallAvg < 3) {
       comments.push(
         <span>
           Tổng thể, doanh nghiệp đạt mức trung bình, mặc dù đã có một số khía cạnh ở mức tốt, tuy nhiên vẫn cần cải tiến nhiều hơn để đạt hiệu quả cao. 
-          <strong> Tổng điểm trung bình 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
+          <strong> Tổng điểm trung bình trên 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
         </span>
       );
     } else {
       comments.push(
         <span>
           Tổng thể, tổ chức đang hoạt động tốt trên nhiều mặt, có thể duy trì các kết quả tích cực và sự phát triển bền vững. 
-          <strong> Tổng điểm trung bình 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
+          <strong> Tổng điểm trung bình trên 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
         </span>
       );
     }

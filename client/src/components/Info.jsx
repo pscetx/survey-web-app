@@ -49,14 +49,14 @@ export default function Info() {
 
         <h3 className="text-xl font-semibold text-secondary">Bước 4: Điều hướng giữa các câu hỏi</h3>
         <p>
-          Bạn có thể nhấn vào nút <strong>“Trước”</strong> hoặc <strong>“Sau”</strong> để chuyển giữa các câu hỏi trước đó / kế tiếp.
-          Bạn có thể tùy ý chọn câu hỏi mình muốn trả lời thông qua bảng đánh số câu hỏi. Bấm nút <strong>“Đánh dấu”</strong> sẽ tạm thời bôi vàng câu hỏi hiện tại.
+          Bạn có thể nhấn vào nút <strong>“Trước”</strong> / <strong>“Sau”</strong> để di chuyển giữa các câu hỏi trước đó / kế tiếp.
+          Bạn có thể tùy ý chọn câu hỏi mình muốn trả lời thông qua bảng đánh số câu hỏi. Nhấn nút <strong>“Đánh dấu”</strong> sẽ tạm thời bôi vàng câu hỏi hiện tại.
         </p>
 
         <h3 className="text-xl font-semibold text-secondary">Bước 5: Hoàn thành khảo sát</h3>
         <p>
           Nhấn nút <strong>"Kết Thúc"</strong> để gửi khảo sát của bạn và nhận kết quả. Đảm bảo rằng bạn đã hoàn thành tất cả câu hỏi trước khi gửi, 
-          vì bạn không thể chỉnh sửa câu trả lời sau khi đã nộp.
+          vì bạn không thể chỉnh sửa câu trả lời sau khi đã nộp bài.
         </p>
 
         <h3 className="text-xl font-semibold text-secondary">Bước 6: Xem kết quả khảo sát</h3>
