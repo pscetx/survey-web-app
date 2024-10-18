@@ -10,7 +10,7 @@ export default function Home() {
         <p className="lg:text-2xl text-xl font-bold">
           40 câu hỏi
           <br />
-          5 khía cạnh: Quy chế, Tổ chức, Nhân sự, Đầu tư và Vận hành
+          5 khía cạnh: Quy chế, Tổ chức, Nhân lực, Đầu tư và Vận hành
         </p>
         <NavLink to="/create">
           <button className="lg:text-2xl mt-10 bg-red-700 text-white font-bold py-2 px-8 rounded-lg hover:bg-primary transition">
