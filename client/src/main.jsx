@@ -11,7 +11,6 @@ import Survey from "./components/Survey";
 import Result from "./components/Result";
 import LookUp from "./components/LookUp";
 import Info from "./components/Info";
-import RespondentList from "./components/RespondentList";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -72,16 +71,6 @@ const router = createBrowserRouter([
       {
         path: "/info",
         element: <Info />,
-      },
-    ],
-  },
-  {
-    path: "/secret",
-    element: <App />,
-    children: [
-      {
-        path: "/secret",
-        element: <RespondentList />,
       },
     ],
   },
