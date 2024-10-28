@@ -50,7 +50,7 @@ export default function RespondentList() {
   // This method fetches the records from the database.
   useEffect(() => {
     async function getRecords() {
-      const response = await fetch(`http://127.0.0.1:5050/respondent/`);
+      const response = await fetch(`http://localhost:5050/respondent/`);
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
         console.error(message);
@@ -65,7 +65,7 @@ export default function RespondentList() {
 
   // This method will delete a record
   async function deleteRecord(id) {
-    await fetch(`http://127.0.0.1:5050/respondent/${id}`, {
+    await fetch(`http://localhost:5050/respondent/${id}`, {
       method: "DELETE",
     });
     const newRecords = records.filter((el) => el._id !== id);

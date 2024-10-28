@@ -22,7 +22,7 @@ export default function RespondentInfo() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5050/question");
+        const response = await fetch("http://localhost:5050/question");
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -39,7 +39,7 @@ export default function RespondentInfo() {
     e.preventDefault();
     const person = { ...form };
     try {
-      const response = await fetch("http://127.0.0.1:5050/respondent", {
+      const response = await fetch("http://localhost:5050/respondent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export default function RespondentInfo() {
         score: 0,
       }));
 
-      const answersResponse = await fetch("http://127.0.0.1:5050/answer", {
+      const answersResponse = await fetch("http://localhost:5050/answer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
