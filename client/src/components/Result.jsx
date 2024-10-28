@@ -14,7 +14,7 @@ export default function Result() {
   useEffect(() => {
     async function fetchResult() {
       try {
-        const response = await fetch(`http://localhost:5050/answer/${id}`);
+        const response = await fetch(`http://127.0.0.1/answer/${id}`);
         if (!response.ok) {
           throw new Error(`Error fetching results: ${response.statusText}`);
         }
@@ -38,7 +38,7 @@ export default function Result() {
     async function fetchQuestions(questions) {
       try {
         const fetchRequests = questions.map((question) =>
-          fetch(`http://localhost:5050/question/${question._id}`)
+          fetch(`http://127.0.0.1:5050/question/${question._id}`)
         );
 
         const responses = await Promise.all(fetchRequests);
@@ -58,7 +58,7 @@ export default function Result() {
 
     async function fetchRespondent(respondentId) {
       try {
-        const response = await fetch(`http://localhost:5050/respondent/${respondentId}`);
+        const response = await fetch(`http://127.0.0.1:5050/respondent/${respondentId}`);
         if (!response.ok) {
           throw new Error(`Error fetching respondent: ${response.statusText}`);
         }
