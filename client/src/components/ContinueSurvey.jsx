@@ -9,7 +9,7 @@ export default function ContinueSurvey() {
     if (!respondentId) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:5050/answer/${respondentId}`);
+      const response = await fetch(`http://localhost:5050/answer/${respondentId}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
