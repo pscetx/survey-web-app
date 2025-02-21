@@ -92,6 +92,7 @@ export default function Result() {
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [coloredButtons, setColoredButtons] = useState(new Set());
+  const [answeredQuestions, setAnsweredQuestions] = useState(new Set());
 
   const handleColorChange = (index) => {
     setColoredButtons((prev) => {
@@ -193,17 +194,19 @@ export default function Result() {
           question._id === questionId ? { ...question, score: newScore } : question
         ),
       }));
+
+      setAnsweredQuestions((prev) => new Set(prev).add(questionId));
     } catch (error) {
       console.error("Error updating score:", error);
     }
   };
 
   const handleStatusChange = async (respondentId) => {
-  try {
-    const response = await fetch(`http://localhost:5050/answer/finished/${respondentId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ is_finished: true }),
+    try {
+      const response = await fetch(`http://localhost:5050/answer/finished/${respondentId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_finished: true }),
       });
       if (!response.ok) {
         throw new Error(`Error updating status: ${response.statusText}`);
@@ -215,37 +218,40 @@ export default function Result() {
   };
 
   const renderNavigationButtons = () => {
-    if (!result) return null;
+  if (!result) return null;
 
-    const rows = [];
-    for (let i = 0; i < result.questions.length; i += 8) {
-      rows.push(result.questions.slice(i, i + 8));
-    }
+  const rows = [];
+  for (let i = 0; i < result.questions.length; i += 8) {
+    rows.push(result.questions.slice(i, i + 8));
+  }
 
-    return (
-      <div className="navigation-buttons mt-8">
-        {rows.map((row, rowIndex) => (
-          <div key={rowIndex} className="mb-2">
-            {row.map((_, index) => {
-              const overallIndex = rowIndex * 8 + index;
-              return (
-                <button
-                  key={overallIndex}
-                  onClick={() => setCurrentQuestionIndex(overallIndex)}
-                  onDoubleClick={() => handleColorChange(overallIndex)}
-                  className={`p-2 m-1 border rounded-md transition duration-300 ease-in-out ${
-                    overallIndex === result.questions.length - 1 ? "w-20" : "w-8"
-                  } hover:bg-tertiary ${coloredButtons.has(overallIndex) ? 'bg-amber-500' : 'bg-white'}`}
-                >
-                  {overallIndex === result.questions.length - 1 ? "Kết thúc" : `${overallIndex + 1}`}
-                </button>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-    );
-  };
+  return (
+    <div className="navigation-buttons mt-8">
+      {rows.map((row, rowIndex) => (
+        <div key={rowIndex} className="mb-2">
+          {row.map((_, index) => {
+            const overallIndex = rowIndex * 8 + index;
+            const isAnswered = answeredQuestions.has(result.questions[overallIndex]._id); // Check if the question is answered
+            return (
+              <button
+                key={overallIndex}
+                onClick={() => setCurrentQuestionIndex(overallIndex)}
+                onDoubleClick={() => handleColorChange(overallIndex)}
+                className={`p-2 m-1 font-semibold border rounded-md transition duration-300 ease-in-out ${
+                  overallIndex === result.questions.length - 1 ? "w-20 border-sky-700" : "w-8"
+                } hover:bg-slate-50 ${coloredButtons.has(overallIndex) ? 'bg-amber-500' : isAnswered ? 'bg-sky-100' : 'bg-white'} ${
+                  overallIndex === currentQuestionIndex ? 'underline' : ''
+                }`}
+              >
+                {overallIndex === result.questions.length - 1 ? "Kết thúc" : `${overallIndex + 1}`}
+              </button>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+};
 
   const renderNavigationButtons2 = () => {
     return (
@@ -261,25 +267,29 @@ export default function Result() {
         </button>
         <button
           onClick={() => handleColorChange(currentQuestionIndex)}
-          className={`py-2 px-4 rounded-lg transition-colors bg-amber-500 hover:bg-amber-600 text-white shadow-md`}
+          className={`py-2 px-4 rounded-lg transition-colors ${
+            currentQuestionIndex === result.questions.length - 1 ? "hidden" : "bg-amber-500 hover:bg-amber-600"
+          } text-white shadow-md`}
         >
           Đánh dấu
         </button>
         <button
           onClick={handleNextQuestion}
+          disabled={currentQuestionIndex === result.questions.length - 2}
           className={`py-2 px-4 rounded-lg transition-colors ${
-            currentQuestionIndex === result.questions.length - 1 ? "bg-primary hover:bg-red-800" : "bg-sky-500 hover:bg-sky-600"
+            currentQuestionIndex === result.questions.length - 1 ? "bg-primary hover:bg-red-800" : 
+            currentQuestionIndex === result.questions.length - 2 ? "bg-gray-400 cursor-not-allowed" : "bg-sky-500 hover:bg-sky-600"
           } text-white shadow-md`}
         >
-          {currentQuestionIndex === result.questions.length - 1 ? "Kết thúc" : "Sau"}
+          {currentQuestionIndex === result.questions.length - 1 ? "Hoàn tất khảo sát" : "Tiếp"}
         </button>
       </div>
     );
   };
-  
+
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
-        setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
 
@@ -305,19 +315,19 @@ export default function Result() {
     if (!questionDetails) return <p>Loading question details...</p>;
 
     return (
-      <div className="grid grid-cols-1 gap-x-10 lg:grid-cols-6">
-        <div className="border rounded-md overflow-hidden p-4 lg:col-span-4">
-          <h2 className="text-lg text-justify font-semibold mb-6">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-6">
+        <div className="overflow-hidden px-5 lg:col-span-4">
+          <h2 className="text-lg text-justify font-semibold mb-4">
             {questionDetails.question_text}
           </h2>
           <div className="options-container mb-4">
             {currentQuestionIndex === result.questions.length - 1 ? (
               <p className="text-lg text-gray-600 my-20">
-                Sau khi nhấn '<span className="font-semibold">Kết thúc</span>' bạn sẽ không thể tiếp tục làm bài khảo sát này và sẽ được chuyển đến trang kết quả khảo sát.
+                Sau khi nhấn '<span className="font-semibold">Hoàn tất khảo sát</span>' bạn sẽ không thể tiếp tục làm bài khảo sát này và sẽ được chuyển đến trang kết quả.
               </p>
             ) : (
               questionDetails.options.map((option, index) => (
-                <label key={`${option._id}-${index}`} className="flex items-center p-3 mb-3 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 transition duration-300 ease-in-out">
+                <label key={`${option._id}-${index}`} className="flex items-center p-3 mb-3 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 hover:scale-105 transition duration-300 ease-in-out">
                   <input
                     type="radio"
                     name={`question-${currentQuestionIndex}`}
@@ -347,7 +357,7 @@ export default function Result() {
     <div className="survey-container">
       <div className="quiz-container text-center">
         <h2 className="text-2xl font-bold text-primary text-left mb-2">BỘ CÔNG CỤ KHẢO SÁT AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP VỪA VÀ NHỎ</h2>
-        <h1 className="text-xl font-bold text-left mb-4">Mã khảo sát: {form._id} <span><button
+        <h1 className="text-xl font-bold text-left mb-10">Mã khảo sát: {form._id} <span><button
             onClick={handleCopyId}
             className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
           >
@@ -355,9 +365,9 @@ export default function Result() {
           </button></span></h1>
         {renderQuestion()}
       </div>
-      <h2 className="text-2xl mb-4 font-bold text-primary mt-16">THÔNG TIN KHẢO SÁT</h2>
+      <h2 className="text-2xl mb-4 font-bold text-primary mt-12">THÔNG TIN KHẢO SÁT</h2>
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
-        <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-10 gap-y-8 pb-4 lg:grid-cols-2">
         <div>
           <h1 className="text-xl font-bold">Mã khảo sát: {form._id} <span><button
             onClick={handleCopyId}
@@ -369,7 +379,7 @@ export default function Result() {
           <p className="mt-1 text-sm leading-6 text-slate-600">
             Lưu ý:<br />
             Bạn nhớ lưu lại mã khảo sát để tra cứu kết quả<br />
-            Sau khi bấm nút 'Kết thúc' bạn sẽ không thể sửa thông tin khảo sát hay thay đổi các câu trả lời của mình<br />
+            Sau khi bấm nút 'Hoàn tất khảo sát' bạn sẽ không thể sửa thông tin khảo sát hay thay đổi các câu trả lời của mình<br />
             </p>
           </div>
 
@@ -449,16 +459,31 @@ export default function Result() {
               </label>
               <div className="mt-2">
                 <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
-                  <input
-                    type="text"
+                  <select
                     name="field"
                     id="field"
                     className="flex-1 border-0 py-2 pl-2 text-slate-900 placeholder:text-slate-400"
-                    placeholder="Business field"
                     value={form.field}
                     onChange={(e) => updateForm({ field: e.target.value })}
                     required
-                  />
+                  >
+                    <option value="" disabled>Chọn lĩnh vực</option>
+                    <option value="An ninh quốc phòng">An ninh quốc phòng</option>
+                    <option value="Tư pháp">Tư pháp</option>
+                    <option value="Tài chính">Tài chính</option>
+                    <option value="Công Thương">Công Thương</option>
+                    <option value="Lao động, Thương Binh và Xã hội">Lao động, Thương Binh và Xã hội</option>
+                    <option value="Giao thông vận tải">Giao thông vận tải</option>
+                    <option value="Xây dựng">Xây dựng</option>
+                    <option value="Thông tin và Truyền thông">Thông tin và Truyền thông</option>
+                    <option value="Giáo dục và Đào tạo">Giáo dục và Đào tạo</option>
+                    <option value="Nông nghiệp và Phát triển nông thôn">Nông nghiệp và Phát triển nông thôn</option>
+                    <option value="Y tế">Y tế</option>
+                    <option value="Khoa học và Công nghệ">Khoa học và Công nghệ</option>
+                    <option value="Văn hóa, Thể thao và Du lịch">Văn hóa, Thể thao và Du lịch</option>
+                    <option value="Tài nguyên và Môi trường">Tài nguyên và Môi trường</option>
+                    <option value="Ngân hàng">Ngân hàng</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -467,12 +492,12 @@ export default function Result() {
                 htmlFor="staff_size"
                 className="block text-md font-medium leading-6 text-slate-900"
               >
-                Số lượng nhân viên
+                Số lượng nhân viên chuyên CNTT
               </label>
               <div className="mt-2">
                 <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
                   <input
-                    type="text"
+                    type="number"
                     name="staff_size"
                     id="staff_size"
                     className="flex-1 border-0 py-2 pl-2 text-slate-900 placeholder:text-slate-400"

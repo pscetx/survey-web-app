@@ -181,15 +181,31 @@ export default function RespondentInfo() {
             </label>
             <div className="mt-2">
               <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
-                <input
-                  type="text"
-                  name="field"
-                  id="field"
-                  className="flex-1 border-0 py-2 pl-2 text-slate-900 placeholder:text-slate-400"
-                  placeholder="Business field"
-                  onChange={(e) => updateForm({ field: e.target.value })}
-                  required
-                />
+                <select
+                    name="field"
+                    id="field"
+                    className="flex-1 border-0 py-2 pl-2 text-slate-900 placeholder:text-slate-400"
+                    value={form.field}
+                    onChange={(e) => updateForm({ field: e.target.value })}
+                    required
+                  >
+                    <option value="" disabled>Chọn lĩnh vực</option>
+                    <option value="An ninh quốc phòng">An ninh quốc phòng</option>
+                    <option value="Tư pháp">Tư pháp</option>
+                    <option value="Tài chính">Tài chính</option>
+                    <option value="Công Thương">Công Thương</option>
+                    <option value="Lao động, Thương Binh và Xã hội">Lao động, Thương Binh và Xã hội</option>
+                    <option value="Giao thông vận tải">Giao thông vận tải</option>
+                    <option value="Xây dựng">Xây dựng</option>
+                    <option value="Thông tin và Truyền thông">Thông tin và Truyền thông</option>
+                    <option value="Giáo dục và Đào tạo">Giáo dục và Đào tạo</option>
+                    <option value="Nông nghiệp và Phát triển nông thôn">Nông nghiệp và Phát triển nông thôn</option>
+                    <option value="Y tế">Y tế</option>
+                    <option value="Khoa học và Công nghệ">Khoa học và Công nghệ</option>
+                    <option value="Văn hóa, Thể thao và Du lịch">Văn hóa, Thể thao và Du lịch</option>
+                    <option value="Tài nguyên và Môi trường">Tài nguyên và Môi trường</option>
+                    <option value="Ngân hàng">Ngân hàng</option>
+                  </select>
               </div>
             </div>
           </div>
@@ -198,12 +214,12 @@ export default function RespondentInfo() {
               htmlFor="staff_size"
               className="block text-md font-medium leading-6 text-slate-900"
             >
-              Số lượng nhân viên
+              Số lượng nhân viên chuyên CNTT
             </label>
             <div className="mt-2">
               <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
                 <input
-                  type="text"
+                  type="number"
                   name="staff_size"
                   id="staff_size"
                   className="flex-1 border-0 py-2 pl-2 text-slate-900 placeholder:text-slate-400"

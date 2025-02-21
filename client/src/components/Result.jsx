@@ -10,6 +10,9 @@ export default function Result() {
   const [respondent, setRespondent] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filterScore, setFilterScore] = useState('');
 
   useEffect(() => {
     async function fetchResult() {
@@ -90,6 +93,35 @@ export default function Result() {
       category: questionDetails?.category || '',
       score: question.score || 0,
     };
+  });
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedQuestions = [...questionsToDisplay].sort((a, b) => {
+    if (sortConfig.key) {
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
+      if (aValue < bValue) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+    }
+    return 0;
+  });
+
+  const filteredQuestions = sortedQuestions.filter((question) => {
+    const questionDetails = questionsMap[question._id];
+    const matchesCategory = filterCategory ? questionDetails?.category === filterCategory : true;
+    const matchesScore = filterScore ? question.score === parseInt(filterScore) : true;
+    return matchesCategory && matchesScore;
   });
 
   var score = [0, 0, 0, 0, 0];
@@ -173,19 +205,19 @@ export default function Result() {
     if (avg[0] < 2) {
       comments.push(
         <span>
-          <strong>Quy chế:</strong> <strong>{avg[0].toFixed(2)} điểm</strong> - Quy chế hiện tại của tổ chức còn nhiều hạn chế và cần cải thiện để nâng cao hiệu quả hoạt động.
+          <strong>Quy chế:</strong> <strong>{avg[0].toFixed(2)}/4 điểm</strong> - Quy chế hiện tại của tổ chức còn nhiều hạn chế và cần cải thiện để nâng cao hiệu quả hoạt động.
         </span>
       );
     } else if (avg[0] < 3) {
       comments.push(
         <span>
-          <strong>Quy chế:</strong> <strong>{avg[0].toFixed(2)} điểm</strong> - Quy chế tổ chức ở mức chấp nhận được, nhưng vẫn còn nhiều điểm cần tối ưu để đảm bảo sự ổn định.
+          <strong>Quy chế:</strong> <strong>{avg[0].toFixed(2)}/4 điểm</strong> - Quy chế tổ chức ở mức chấp nhận được, nhưng vẫn còn nhiều điểm cần tối ưu để đảm bảo sự ổn định.
         </span>
       );
     } else {
       comments.push(
         <span>
-          <strong>Quy chế:</strong> <strong>{avg[0].toFixed(2)} điểm</strong> - Khảo sát đánh giá quy chế của tổ chức ở mức tốt, có nền tảng vững chắc cho hoạt động.
+          <strong>Quy chế:</strong> <strong>{avg[0].toFixed(2)}/4 điểm</strong> - Khảo sát đánh giá quy chế của tổ chức ở mức tốt, có nền tảng vững chắc cho hoạt động.
         </span>
       );
     }
@@ -193,19 +225,19 @@ export default function Result() {
     if (avg[1] < 2) {
       comments.push(
         <span>
-          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)} điểm</strong> - Hiệu quả quản lý hiện tại chưa đáp ứng yêu cầu, cần có những biện pháp để cải thiện.
+          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)}/4 điểm</strong> - Hiệu quả quản lý hiện tại chưa đáp ứng yêu cầu, cần có những biện pháp để cải thiện.
         </span>
       );
     } else if (avg[1] < 3) {
       comments.push(
         <span>
-          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)} điểm</strong> - Quản lý tổ chức đạt mức trung bình, nhưng vẫn có thể nâng cao quy trình hơn.
+          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)}/4 điểm</strong> - Quản lý tổ chức đạt mức trung bình, nhưng vẫn có thể nâng cao quy trình hơn.
         </span>
       );
     } else {
       comments.push(
         <span>
-          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)} điểm</strong> - Tổ chức đạt hiệu quả quản lý ở mức tốt, có thể đảm bảo phối hợp và điều hành hiệu quả.
+          <strong>Tổ chức:</strong> <strong>{avg[1].toFixed(2)}/4 điểm</strong> - Tổ chức đạt hiệu quả quản lý ở mức tốt, có thể đảm bảo phối hợp và điều hành hiệu quả.
         </span>
       );
     }
@@ -213,19 +245,19 @@ export default function Result() {
     if (avg[2] < 2) {
       comments.push(
         <span>
-          <strong>Nhân lực:</strong> <strong>{avg[2].toFixed(2)} điểm</strong> - Chất lượng và số lượng nhân lực còn hạn chế, cần đầu tư và phát triển hơn.
+          <strong>Nhân lực:</strong> <strong>{avg[2].toFixed(2)}/4 điểm</strong> - Chất lượng và số lượng nhân lực còn hạn chế, cần đầu tư và phát triển hơn.
         </span>
       );
     } else if (avg[2] < 3) {
       comments.push(
         <span>
-          <strong>Nhân lực:</strong> <strong>{avg[2].toFixed(2)} điểm</strong> - Nhân lực tổ chức ở mức trung bình, cần cải thiện thêm để đáp ứng nhu cầu phát triển.
+          <strong>Nhân lực:</strong> <strong>{avg[2].toFixed(2)}/4 điểm</strong> - Nhân lực tổ chức ở mức trung bình, cần cải thiện thêm để đáp ứng nhu cầu phát triển.
         </span>
       );
     } else {
       comments.push(
         <span>
-          <strong>Nhân lực:</strong> <strong>{avg[2].toFixed(2)} điểm</strong> - Khảo sát đánh giá nhân lực tổ chức ở mức cao, đáp ứng tốt yêu cầu chuyên môn và khối lượng công việc.
+          <strong>Nhân lực:</strong> <strong>{avg[2].toFixed(2)}/4 điểm</strong> - Khảo sát đánh giá nhân lực tổ chức ở mức cao, đáp ứng tốt yêu cầu chuyên môn và khối lượng công việc.
         </span>
       );
     }
@@ -233,19 +265,19 @@ export default function Result() {
     if (avg[3] < 2) {
       comments.push(
         <span>
-          <strong>Đầu tư:</strong> <strong>{avg[3].toFixed(2)} điểm</strong> - Mức độ đầu tư vào tổ chức còn thấp, cần có sự gia tăng đáng kể để đáp ứng các mục tiêu dài hạn.
+          <strong>Đầu tư:</strong> <strong>{avg[3].toFixed(2)}/4 điểm</strong> - Mức độ đầu tư vào tổ chức còn thấp, cần có sự gia tăng đáng kể để đáp ứng các mục tiêu dài hạn.
         </span>
       );
     } else if (avg[3] < 3) {
       comments.push(
         <span>
-          <strong>Đầu tư:</strong> <strong>{avg[3].toFixed(2)} điểm</strong> - Mức đầu tư của tổ chức ở mức trung bình, nhưng vẫn có khả năng tối ưu để phát triển bền vững.
+          <strong>Đầu tư:</strong> <strong>{avg[3].toFixed(2)}/4 điểm</strong> - Mức đầu tư của tổ chức ở mức trung bình, nhưng vẫn có khả năng tối ưu để phát triển bền vững.
         </span>
       );
     } else {
       comments.push(
         <span>
-          <strong>Đầu tư:</strong> <strong>{avg[3].toFixed(2)} điểm</strong> - Mức độ đầu tư của tổ chức rất tốt, tạo điều kiện thuận lợi cho các hoạt động phát triển.
+          <strong>Đầu tư:</strong> <strong>{avg[3].toFixed(2)}/4 điểm</strong> - Mức độ đầu tư của tổ chức rất tốt, tạo điều kiện thuận lợi cho các hoạt động phát triển.
         </span>
       );
     }
@@ -253,19 +285,19 @@ export default function Result() {
     if (avg[4] < 2) {
       comments.push(
         <span>
-          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)} điểm</strong> - Hoạt động vận hành còn nhiều bất cập, cần tái cấu trúc và cải thiện để đạt hiệu quả cao.
+          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)}/4 điểm</strong> - Hoạt động vận hành còn nhiều bất cập, cần tái cấu trúc và cải thiện để đạt hiệu quả cao.
         </span>
       );
     } else if (avg[4] < 3) {
       comments.push(
         <span>
-          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)} điểm</strong> - Vận hành tổ chức ở mức chấp nhận được, nhưng vẫn cần điều chỉnh để đạt được sự linh hoạt và hiệu quả.
+          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)}/4 điểm</strong> - Vận hành tổ chức ở mức chấp nhận được, nhưng vẫn cần điều chỉnh để đạt được sự linh hoạt và hiệu quả.
         </span>
       );
     } else {
       comments.push(
         <span>
-          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)} điểm</strong> - Tổ chức đang vận hành trơn tru, đảm bảo sự liên tục, hiệu quả và an toàn trong các hoạt động.
+          <strong>Vận hành:</strong> <strong>{avg[4].toFixed(2)}/4 điểm</strong> - Tổ chức đang vận hành trơn tru, đảm bảo sự liên tục, hiệu quả và an toàn trong các hoạt động.
         </span>
       );
     }
@@ -276,21 +308,21 @@ export default function Result() {
       comments.push(
         <span>
           Nhìn chung, doanh nghiệp còn nhiều khía cạnh cần cải thiện, hiệu quả hoạt động và các yếu tố quan trọng đều ở mức kém. 
-          <strong> Tổng điểm trung bình trên 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
+          <strong> Tổng điểm trung bình trên 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)}/4 điểm!</strong>
         </span>
       );
     } else if (overallAvg < 3) {
       comments.push(
         <span>
           Tổng thể, doanh nghiệp đạt mức trung bình, mặc dù đã có một số khía cạnh ở mức tốt, tuy nhiên vẫn cần cải tiến nhiều hơn để đạt hiệu quả cao. 
-          <strong> Tổng điểm trung bình trên 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
+          <strong> Tổng điểm trung bình trên 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)}/4 điểm!</strong>
         </span>
       );
     } else {
       comments.push(
         <span>
           Tổng thể, tổ chức đang hoạt động tốt trên nhiều mặt, có thể duy trì các kết quả tích cực và sự phát triển bền vững. 
-          <strong> Tổng điểm trung bình trên 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)} điểm</strong>
+          <strong> Tổng điểm trung bình trên 5 khía cạnh: </strong><strong>{overallAvg.toFixed(2)}/4 điểm!</strong>
         </span>
       );
     }
@@ -347,7 +379,45 @@ export default function Result() {
         </div>
       </div>
 
+
       <h2 className="text-2xl mb-4 font-bold text-primary">KẾT QUẢ CHI TIẾT</h2>
+      <div className="flex flex-wrap gap-3 mb-3">
+        <button onClick={() => handleSort('category')} className="px-2 py-2 border border-secondary hover:bg-gray-50 transition duration-300 ease-in-out rounded-md">
+          Sắp xếp theo STT
+        </button>
+        <button onClick={() => handleSort('score')} className=" px-2 py-2 border border-secondary hover:bg-gray-50 transition duration-300 ease-in-out rounded-md">
+          Sắp xếp theo điểm
+        </button>
+          <div>
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="px-2 py-2"
+            >
+              <option value="">Tất cả phân loại</option>
+              <option value="Quy chế">Quy chế</option>
+              <option value="Tổ chức">Tổ chức</option>
+              <option value="Nhân lực">Nhân lực</option>
+              <option value="Đầu tư">Đầu tư</option>
+              <option value="Vận hành">Vận hành</option>
+            </select>
+          </div>
+          <div>
+            <select
+              value={filterScore}
+              onChange={(e) => setFilterScore(e.target.value)}
+              className="px-2 py-2"
+            >
+              <option value="">Tất cả điểm</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+      </div>
+
       <div className="overflow-auto">
         <table className="table-fixed min-w-[800px] rounded-lg shadow-lg overflow-hidden">
           <thead>
@@ -360,7 +430,7 @@ export default function Result() {
             </tr>
           </thead>
           <tbody>
-            {questionsToDisplay.map((question, index) => {
+            {filteredQuestions.map((question, index) => {
               const questionDetails = questionsMap[question._id];
               const selectedOption = questionDetails?.options.find(
                 (option) => option.score === question.score
