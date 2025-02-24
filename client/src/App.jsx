@@ -6,7 +6,7 @@ const App = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-grow lg:mx-44 lg:my-12 m-8">
+      <div className="flex-grow lg:mx-12 lg:my-8 m-6">
         <Outlet />
       </div>
       <Footer />

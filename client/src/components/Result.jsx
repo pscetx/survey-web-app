@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Radar } from 'react-chartjs-2';
 import 'chart.js/auto';
+import Loader from "./Loader";
 
 export default function Result() {
   const { id } = useParams();
@@ -81,7 +82,7 @@ export default function Result() {
   }
 
   if (!result || !respondent) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
 
   const questionsToDisplay = result.questions.slice(0, -1);
@@ -343,17 +344,17 @@ export default function Result() {
 
   return (
     <div className="results-container">
-      <h2 className="text-2xl mb-1 font-bold text-primary">ĐÁNH GIÁ TỔNG QUAN</h2>
-      <h1 className="text-lg">Mã khảo sát của bạn là <span className="font-bold">{respondent._id} </span><span><button
+      <h1 className="text-2xl mb-1 font-bold text-primary">ĐÁNH GIÁ TỔNG QUAN</h1>
+      <h2><span className="text-lg font-semibold">Mã khảo sát của bạn là</span><span className="inline-flex items-center justify-center whitespace-nowrap text-sm text-secondary font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-tertiary h-8 rounded-md px-1 mx-1">{respondent._id} </span><span><button
             onClick={handleCopyId}
             className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
           >
             Copy
-          </button></span></h1>
+          </button></span></h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-28 gap-7 mt-4 mb-16 border rounded-md overflow-hidden p-4">
         <div>
             <div className="mb-4">
-              <h3 className="text-lg mb-2">Thông tin người khảo sát</h3>
+              <h3 className="text-lg mb-2 italic">Thông tin người khảo sát</h3>
               <ul className="list-disc pl-5">
                 <li><strong>Tên người khảo sát:</strong> {respondent.respondent_name}</li>
                 <li><strong>Chức vụ:</strong> {respondent.respondent_role}</li>
@@ -363,7 +364,7 @@ export default function Result() {
               </ul>
             </div>
           <div>
-            <h3 className="text-lg mb-2">Nhận xét kết quả khảo sát</h3>
+            <h2 className="text-lg mb-2 italic">Đánh giá kết quả khảo sát</h2>
             <ul className="list-disc pl-5 text-justify">
               {getComments(avg).map((comment, index) => (
                 <li key={index}>{comment}</li>
@@ -380,12 +381,12 @@ export default function Result() {
       </div>
 
 
-      <h2 className="text-2xl mb-4 font-bold text-primary">KẾT QUẢ CHI TIẾT</h2>
+      <h1 className="text-2xl mb-4 font-bold text-primary">KẾT QUẢ CHI TIẾT</h1>
       <div className="flex flex-wrap gap-3 mb-3">
-        <button onClick={() => handleSort('category')} className="px-2 py-2 border border-secondary hover:bg-gray-50 transition duration-300 ease-in-out rounded-md">
+        <button onClick={() => handleSort('category')} className="px-2 py-2 border border-gray-300 hover:bg-gray-50 transition duration-300 ease-in-out rounded-md">
           Sắp xếp theo STT
         </button>
-        <button onClick={() => handleSort('score')} className=" px-2 py-2 border border-secondary hover:bg-gray-50 transition duration-300 ease-in-out rounded-md">
+        <button onClick={() => handleSort('score')} className=" px-2 py-2 border border-gray-300 hover:bg-gray-50 transition duration-300 ease-in-out rounded-md">
           Sắp xếp theo điểm
         </button>
           <div>

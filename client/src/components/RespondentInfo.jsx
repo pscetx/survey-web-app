@@ -102,13 +102,15 @@ export default function RespondentInfo() {
       <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-12 lg:grid-cols-2">
         <div>
           <h1 className="text-lg font-bold">Nhập thông tin tiền khảo sát</h1>
-          <p className="mt-1 text-sm leading-6 text-slate-600">
-            Lưu ý: <br />
-            Bạn vẫn có thể thay đổi các thông tin này trong quá trình làm bài khảo sát<br />
-            Dữ liệu thu thập sẽ chỉ được sử dụng cho mục đích nghiên cứu và sẽ không được trao đổi với bất kỳ bên thứ ba nào khác nhằm mục đích thương mại
-          </p>
+          <div className="mt-1 text-sm leading-6 text-slate-600">
+              <div className="italic font-semibold">
+                Lưu ý:
+            </div>
+            Bạn vẫn có thể thay đổi các thông tin này trong quá trình làm bài khảo sát.<br />
+            Dữ liệu thu thập sẽ chỉ được sử dụng cho mục đích nghiên cứu và sẽ không được trao đổi với bất kỳ bên thứ ba nào khác nhằm mục đích thương mại.
+          </div>
         </div>
-        <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 ">
+        <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8">
           <div className="sm:col-span-4">
             <label
               htmlFor="respondent_name"
@@ -117,7 +119,7 @@ export default function RespondentInfo() {
               Tên người khảo sát
             </label>
             <div className="mt-2">
-              <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
+              <div className="flex text-md max-w-lg rounded-sm border-b border-secondary">
                 <input
                   type="text"
                   name="respondent_name"
@@ -138,7 +140,7 @@ export default function RespondentInfo() {
               Chức vụ
             </label>
             <div className="mt-2">
-              <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
+              <div className="flex text-md max-w-lg rounded-sm border-b border-secondary">
                 <input
                   type="text"
                   name="respondent_role"
@@ -159,7 +161,7 @@ export default function RespondentInfo() {
               Tên tổ chức
             </label>
             <div className="mt-2">
-              <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
+              <div className="flex text-md max-w-lg rounded-sm border-b border-secondary">
                 <input
                   type="text"
                   name="org_name"
@@ -180,7 +182,7 @@ export default function RespondentInfo() {
               Lĩnh vực
             </label>
             <div className="mt-2">
-              <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
+              <div className="flex text-md max-w-lg rounded-sm border-b border-secondary">
                 <select
                     name="field"
                     id="field"
@@ -189,7 +191,7 @@ export default function RespondentInfo() {
                     onChange={(e) => updateForm({ field: e.target.value })}
                     required
                   >
-                    <option value="" disabled>Chọn lĩnh vực</option>
+                    <option value="" disabled>Business field</option>
                     <option value="An ninh quốc phòng">An ninh quốc phòng</option>
                     <option value="Tư pháp">Tư pháp</option>
                     <option value="Tài chính">Tài chính</option>
@@ -214,10 +216,10 @@ export default function RespondentInfo() {
               htmlFor="staff_size"
               className="block text-md font-medium leading-6 text-slate-900"
             >
-              Số lượng nhân viên chuyên CNTT
+              Số lượng nhân viên mảng CNTT
             </label>
             <div className="mt-2">
-              <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
+              <div className="flex text-md max-w-lg rounded-sm border-b border-secondary">
                 <input
                   type="number"
                   name="staff_size"

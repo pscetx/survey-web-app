@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Loader from "./Loader";
 
 export default function Result() {
   const [form, setForm] = useState({
@@ -231,14 +232,14 @@ export default function Result() {
         <div key={rowIndex} className="mb-2">
           {row.map((_, index) => {
             const overallIndex = rowIndex * 8 + index;
-            const isAnswered = answeredQuestions.has(result.questions[overallIndex]._id); // Check if the question is answered
+            const isAnswered = answeredQuestions.has(result.questions[overallIndex]._id);
             return (
               <button
                 key={overallIndex}
                 onClick={() => setCurrentQuestionIndex(overallIndex)}
                 onDoubleClick={() => handleColorChange(overallIndex)}
                 className={`p-2 m-1 font-semibold border rounded-md transition duration-300 ease-in-out ${
-                  overallIndex === result.questions.length - 1 ? "w-20 border-sky-700" : "w-8"
+                  overallIndex === result.questions.length - 1 ? "h-15 rounded-lg hover:text-primary hover:border-primary" : "w-8"
                 } hover:bg-slate-50 ${coloredButtons.has(overallIndex) ? 'bg-amber-500' : isAnswered ? 'bg-sky-100' : 'bg-white'} ${
                   overallIndex === currentQuestionIndex ? 'underline' : ''
                 }`}
@@ -260,16 +261,16 @@ export default function Result() {
           onClick={handlePreviousQuestion}
           disabled={currentQuestionIndex === 0}
           className={`py-2 px-4 rounded-lg transition-colors ${
-            currentQuestionIndex === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-sky-500 hover:bg-sky-600"
-          } text-white shadow-md`}
+            currentQuestionIndex === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-sky-600 hover:bg-sky-500"
+          } text-white shadow-sm`}
         >
-          Trước
+          &lt; Trước
         </button>
         <button
           onClick={() => handleColorChange(currentQuestionIndex)}
-          className={`py-2 px-4 rounded-lg transition-colors ${
-            currentQuestionIndex === result.questions.length - 1 ? "hidden" : "bg-amber-500 hover:bg-amber-600"
-          } text-white shadow-md`}
+          className={`py-2 px-3 rounded-lg transition-colors ${
+            currentQuestionIndex === result.questions.length - 1 ? "hidden" : "border border-amber-500 transition duration-300 ease-in-out hover:bg-amber-500"
+          } shadow-sm`}
         >
           Đánh dấu
         </button>
@@ -277,11 +278,11 @@ export default function Result() {
           onClick={handleNextQuestion}
           disabled={currentQuestionIndex === result.questions.length - 2}
           className={`py-2 px-4 rounded-lg transition-colors ${
-            currentQuestionIndex === result.questions.length - 1 ? "bg-primary hover:bg-red-800" : 
-            currentQuestionIndex === result.questions.length - 2 ? "bg-gray-400 cursor-not-allowed" : "bg-sky-500 hover:bg-sky-600"
-          } text-white shadow-md`}
+            currentQuestionIndex === result.questions.length - 1 ? "bg-primary hover:bg-red-600" : 
+            currentQuestionIndex === result.questions.length - 2 ? "bg-gray-400 cursor-not-allowed" : "bg-sky-600 hover:bg-sky-500"
+          } text-white shadow-sm`}
         >
-          {currentQuestionIndex === result.questions.length - 1 ? "Hoàn tất khảo sát" : "Tiếp"}
+          {currentQuestionIndex === result.questions.length - 1 ? "Hoàn tất khảo sát" : "Tiếp >"}
         </button>
       </div>
     );
@@ -307,17 +308,17 @@ export default function Result() {
   };
 
   const renderQuestion = () => {
-    if (!result || !questionsMap || result.questions.length === 0) return <p>Loading questions...</p>;
+    if (!result || !questionsMap || result.questions.length === 0) return <Loader />;
 
     const currentQuestion = result.questions[currentQuestionIndex];
     const questionDetails = questionsMap[currentQuestion._id];
 
-    if (!questionDetails) return <p>Loading question details...</p>;
+    if (!questionDetails) return <Loader />;
 
     return (
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-6">
         <div className="overflow-hidden px-5 lg:col-span-4">
-          <h2 className="text-lg text-justify font-semibold mb-4">
+          <h2 className="text-lg text-justify font-bold mb-4">
             {questionDetails.question_text}
           </h2>
           <div className="options-container mb-4">
@@ -350,14 +351,14 @@ export default function Result() {
     );
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader />;
   if (error) return <p className="text-primary text-xl">{error}</p>;
 
   return (
     <div className="survey-container">
       <div className="quiz-container text-center">
         <h2 className="text-2xl font-bold text-primary text-left mb-2">BỘ CÔNG CỤ KHẢO SÁT AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP VỪA VÀ NHỎ</h2>
-        <h1 className="text-xl font-bold text-left mb-10">Mã khảo sát: {form._id} <span><button
+        <h1 className="text-lg text-left mb-10"><span className="font-semibold">Mã khảo sát của bạn là</span><span className="inline-flex items-center justify-center whitespace-nowrap text-sm text-secondary font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-tertiary h-8 rounded-md px-1 mx-1">{form._id}</span><span><button
             onClick={handleCopyId}
             className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
           >
@@ -367,20 +368,22 @@ export default function Result() {
       </div>
       <h2 className="text-2xl mb-4 font-bold text-primary mt-12">THÔNG TIN KHẢO SÁT</h2>
       <form onSubmit={onSubmit} className="border rounded-md overflow-hidden p-4">
-        <div className="grid grid-cols-1 gap-x-10 gap-y-8 pb-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-32 gap-y-8 pb-4 lg:grid-cols-2">
         <div>
-          <h1 className="text-xl font-bold">Mã khảo sát: {form._id} <span><button
+          <h1><span className="font-bold text-lg">Mã khảo sát</span> <span className="inline-flex items-center justify-center whitespace-nowrap text-sm text-secondary font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-tertiary h-8 rounded-md px-1 mx-1">{form._id}</span><span><button
             onClick={handleCopyId}
             className="inline-flex items-center justify-center whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
           >
             Copy
           </button></span></h1>
           
-          <p className="mt-1 text-sm leading-6 text-slate-600">
-            Lưu ý:<br />
-            Bạn nhớ lưu lại mã khảo sát để tra cứu kết quả<br />
-            Sau khi bấm nút 'Hoàn tất khảo sát' bạn sẽ không thể sửa thông tin khảo sát hay thay đổi các câu trả lời của mình<br />
-            </p>
+          <div className="mt-1 text-sm leading-6 text-slate-600">
+              <div className="italic font-semibold">
+                Lưu ý:
+            </div>
+            Bạn nhớ lưu lại mã khảo sát để tra cứu kết quả.<br />
+            Sau khi bấm nút 'Hoàn tất khảo sát' bạn sẽ không thể sửa thông tin tiền khảo sát hay thay đổi các câu trả lời của mình.<br />
+            </div>
           </div>
 
           <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 ">
@@ -392,7 +395,7 @@ export default function Result() {
                 Tên người khảo sát
               </label>
               <div className="mt-2">
-                <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
+                <div className="flex text-md max-w-lg rounded-sm border-b border-secondary">
                   <input
                     type="text"
                     name="respondent_name"
@@ -414,7 +417,7 @@ export default function Result() {
                 Chức vụ
               </label>
               <div className="mt-2">
-                <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
+                <div className="flex text-md max-w-lg rounded-sm border-b border-secondary">
                   <input
                     type="text"
                     name="respondent_role"
@@ -436,7 +439,7 @@ export default function Result() {
                 Tên tổ chức
               </label>
               <div className="mt-2">
-                <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
+                <div className="flex text-md max-w-lg rounded-sm border-b border-secondary">
                   <input
                     type="text"
                     name="org_name"
@@ -458,7 +461,7 @@ export default function Result() {
                 Lĩnh vực
               </label>
               <div className="mt-2">
-                <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
+                <div className="flex text-md max-w-lg rounded-sm border-b border-secondary">
                   <select
                     name="field"
                     id="field"
@@ -467,7 +470,7 @@ export default function Result() {
                     onChange={(e) => updateForm({ field: e.target.value })}
                     required
                   >
-                    <option value="" disabled>Chọn lĩnh vực</option>
+                    <option value="" disabled>Business field</option>
                     <option value="An ninh quốc phòng">An ninh quốc phòng</option>
                     <option value="Tư pháp">Tư pháp</option>
                     <option value="Tài chính">Tài chính</option>
@@ -492,10 +495,10 @@ export default function Result() {
                 htmlFor="staff_size"
                 className="block text-md font-medium leading-6 text-slate-900"
               >
-                Số lượng nhân viên chuyên CNTT
+                Số lượng nhân viên mảng CNTT
               </label>
               <div className="mt-2">
-                <div className="flex text-md max-w-md rounded-sm border-b border-secondary">
+                <div className="flex text-md max-w-lg rounded-sm border-b border-secondary">
                   <input
                     type="number"
                     name="staff_size"

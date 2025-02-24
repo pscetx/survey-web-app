@@ -1,59 +1,84 @@
 import { NavLink } from 'react-router-dom';
+import Button1 from "./Button1";
+import Button2 from "./Button2";
+import Card from './Card';
 
 export default function Home() {
   return (
-    <div className="w-full mx-auto py-8 p-4">
-      <div className="text-center border-2 border-primary rounded-lg p-6 mb-16 bg-cover bg-right bg-[url('/bg-hero.png')]">
-        <h1 className="lg:text-4xl text-2xl font-bold text-primary mb-10">
-          BỘ CÔNG CỤ KHẢO SÁT AN TOÀN THÔNG TIN <br /> DÀNH CHO DOANH NGHIỆP VỪA VÀ NHỎ
+    <div className="w-full mx-auto lg:py-4">
+      <div className="min-h-[80vh] flex flex-col justify-between text-center border-4 border-tertiary rounded-2xl p-6 mb-16 bg-cover bg-center bg-[url('/bg-hero.png')]">
+        <h1 className="p-2 border border-2 border-secondary rounded-2xl bg-white lg:text-3xl text-xl font-bold text-primary drop-shadow-[5px_5px_0px_#b10913]">
+          BỘ CÔNG CỤ KHẢO SÁT AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP VỪA VÀ NHỎ
         </h1>
-        <p className="lg:text-2xl text-xl font-bold">
-          40 câu hỏi
-          <br />
-          5 khía cạnh: Quy chế, Tổ chức, Nhân lực, Đầu tư và Vận hành
-        </p>
-        <NavLink to="/create">
-          <button className="lg:text-2xl mt-10 bg-red-700 text-white font-bold py-2 px-8 rounded-lg hover:bg-primary transition">
-            LÀM BÀI NGAY
-          </button>
-        </NavLink>
-      </div>
+        <div className="flex lg:flex-row lg:justify-around lg:scale-100 scale-75 flex-col gap-2 items-center">
+          <Card
+            title="40"
+            name="CÂU HỎI"
+            $bgColor1="#06befb"
+            $bgColor2="#1ac3fb"
+            $bgColor3="#f5f5f5"
+            $delay="0s"
+          />
+          <Card
+            title="10"
+            name="PHÚT LÀM"
+            $bgColor1="#fb6762"
+            $bgColor2="#B80C14"
+            $bgColor3="#f5f5f5"
+            $delay="0.3s"
+          />
+          <Card
+            title="5"
+            name="KHÍA CẠNH"
+            $bgColor1="#06ff88"
+            $bgColor2="#43dd93"
+            $bgColor3="#f5f5f5"
+            $delay="0.6s"
+          />
+        </div>
 
-      <div className="text-center mb-10">
-        <p className="text-lg font-semibold">
-          BẠN ĐÃ LÀM BÀI KHẢO SÁT? TRA CỨU KẾT QUẢ <a href="/result" className="text-primary underline">TẠI ĐÂY</a>
-        </p>
-      </div>
-
-      <div className="mt-12">
-        <h2 className="text-center text-2xl font-bold mb-6">
-          GIỚI THIỆU VỀ KHẢO SÁT
-        </h2>
-        <div className="flex flex-col gap-y-6 lg:grid lg:grid-cols-5 lg:gap-x-10">
-          <div className="text-justify text-gray-600 lg:col-span-3">
-            <p className="mb-4">
-              Cùng với sự phát triển nhanh chóng của công nghệ thông tin và những lợi ích mà nó đem lại, việc sử dụng và thích nghi với các hệ thống thông tin đã trở thành một điều cơ bản ở bất cứ công ty, doanh nghiệp nào. Tuy nhiên đi kèm với đó là những khó khăn, thách thức liên quan đến vấn đề An toàn An ninh thông tin (ATTT). Do đó, việc có một phương pháp đánh giá tình hình an toàn thông tin cho doanh nghiệp là rất cần thiết.
-            </p>
-            <div className="lg:hidden mb-4">
-              <img
-                src="img.jpg"
-                alt="Survey Introduction"
-                className="rounded-lg shadow-lg h-[250px] object-cover mx-auto"
-              />
-            </div>
-            <p>
-              Với tinh thần đó, viện Công nghệ thông tin Đại học Quốc Gia Hà Nội (VNU-ITI) tìm hiểu các chính sách, tiêu chuẩn Quốc Tế cũng như Tiêu chuẩn Việt Nam liên quan đến An toàn An ninh thông tin nhằm đưa ra một bộ câu hỏi đánh giá về tình hình ATTT theo 5 khía cạnh: Quy chế, Tổ chức, Nhân lực, Đầu tư, Vận hành. Từ đó tìm ra điểm yếu về an toàn thông tin của doanh nghiệp và đưa ra những lời khuyên phù hợp nhằm tránh rủi ro về an toàn thông tin.
-            </p>
-          </div>
-          <div className="hidden lg:block lg:col-span-2">
-            <img
-              src="img.jpg"
-              alt="Survey Introduction"
-              className="rounded-lg shadow-lg h-full object-cover"
-            />
-          </div>
+        <div className='flex lg:flex-row lg:gap-12 lg:justify-center flex-col gap-8 items-center'>
+          <NavLink to="/create">
+            <Button1 />
+          </NavLink>
+          <NavLink to="/result">
+            <Button2 />
+          </NavLink>
         </div>
       </div>
+
+      <h2 className="text-2xl mb-4 font-bold text-primary">GIỚI THIỆU</h2>
+      <div className="lg:grid grid-cols-5 items-center">
+        <div className="col-span-3 p-4 border border-2 border-secondary rounded-2xl bg-white drop-shadow-[4px_4px_0px_#b10913]">
+          <p className='text-secondary'>
+            - Sự phát triển nhanh chóng của Công nghệ Thông tin (CNTT) mang lại nhiều lợi ích nhưng cũng đặt ra thách thức về An toàn An ninh Thông tin (ATTT), đặc biệt trong quá trình chuyển đổi số. Các nguy cơ mất ATTT có thể xuất phát từ nhiều yếu tố như nhân lực, quy định, đầu tư hay công nghệ.
+            <br />
+            - Nhằm hỗ trợ doanh nghiệp tự đánh giá ATTT, Viện CNTT - ĐHQG Hà Nội (VNU-ITI) đã nghiên cứu và phát triển “Bộ công cụ đánh giá ATTT dành cho doanh nghiệp nhỏ và vừa” dựa trên các tiêu chuẩn quốc tế và Việt Nam. Công cụ này sẽ giúp lãnh đạo và nhân sự không chuyên về ATTT có thể đánh giá tình trạng ATTT của tổ chức mình.
+            <br />
+            - Nhằm phát triển Bộ công cụ đánh giá sát với các nguy cơ, rủi ro an toàn thông tin, nhóm nghiên cứu cũng tham khảo và lựa chọn các yếu tố phù hợp để xây dựng <strong>Bộ công cụ dựa theo tiêu chuẩn quốc tế ISO 2700x</strong> và <strong>Khung an ninh mạng của Viện Tiêu chuẩn Hoa Kỳ (NIST 800)</strong>.
+          </p>
+        </div>
+        <div className="lg:col-span-2">
+          <img src="1st.png" alt="Survey Introduction" className="w-full max-h-[350px] object-contain rounded-lg" />
+        </div>
+      </div>
+      
+      <h2 className="text-2xl my-4 font-bold text-primary justify-end">SƠ BỘ CÔNG CỤ</h2>
+      <div className="lg:grid grid-cols-7 items-center">
+        <div className="col-span-4">
+          <img src="2nd.png" alt="Survey Introduction" className="w-full max-h-[600px] object-contain rounded-lg" />
+        </div>
+        <div className="col-span-3 p-4 border border-2 border-secondary rounded-2xl bg-white drop-shadow-[4px_4px_0px_#b10913]">
+          <p className='text-secondary'>
+            - Bộ công cụ này được thiết kế cho các doanh nghiệp vừa và nhỏ, đặc biệt là những đơn vị chưa có bộ phận ATTT chuyên trách hoặc chưa quan tâm đúng mức đến vấn đề này. Với hệ thống câu hỏi đơn giản, dễ hiểu và có thể đo lường, công cụ hướng đến CEO và nhân sự nắm rõ chính sách doanh nghiệp nhưng không chuyên sâu về ATTT hay CNTT. Mục tiêu là giúp doanh nghiệp tự đánh giá sơ bộ mức độ an toàn thông tin của mình.
+            <br />
+            - Bộ công cụ tập trung vào 5 khía cạnh quan trọng đó là <strong>Quy chế, Tổ chức, Nhân lực, Đầu tư và Vận hành</strong>. Sau khi hoàn tất khảo sát, doanh nghiệp sẽ nhận được khuyến nghị sơ bộ, từ đó có cái nhìn rõ ràng hơn về tình trạng an toàn thông tin, xác định các điểm yếu cần cải thiện và đưa ra quyết định phù hợp, từ đầu tư thêm nguồn lực đến tìm kiếm hỗ trợ chuyên gia.
+            <br />
+            - <strong>Lưu ý:</strong> Để có kết quả đánh giá chính xác, người thực hiện cần đọc kỹ câu hỏi và trả lời trung thực, sát với thực tế của doanh nghiệp.
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }
