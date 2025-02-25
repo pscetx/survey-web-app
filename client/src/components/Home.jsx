@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import Button1 from "./Button1";
 import Button2 from "./Button2";
+import Button3 from "./Button3";
 import Card from './Card';
 
 export default function Home() {
   return (
-    <div className="w-full mx-auto lg:py-4">
+    <div className="w-full mx-auto lg:pt-4">
       <div className="min-h-[80vh] flex flex-col justify-between text-center border-4 border-tertiary rounded-2xl p-6 mb-16 bg-cover bg-center bg-[url('/bg-hero.png')]">
         <h1 className="p-2 border border-2 border-secondary rounded-2xl bg-white lg:text-3xl text-xl font-bold text-primary drop-shadow-[5px_5px_0px_#b10913]">
           BỘ CÔNG CỤ KHẢO SÁT AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP VỪA VÀ NHỎ
@@ -63,7 +64,7 @@ export default function Home() {
         </div>
       </div>
       
-      <h2 className="text-2xl my-4 font-bold text-primary justify-end">SƠ BỘ CÔNG CỤ</h2>
+      <h2 className="text-2xl my-4 font-bold text-primary">SƠ BỘ CÔNG CỤ</h2>
       <div className="lg:grid grid-cols-7 items-center">
         <div className="col-span-4">
           <img src="2nd.png" alt="Survey Introduction" className="w-full max-h-[600px] object-contain rounded-lg" />
@@ -77,6 +78,10 @@ export default function Home() {
             - <strong>Lưu ý:</strong> Để có kết quả đánh giá chính xác, người thực hiện cần đọc kỹ câu hỏi và trả lời trung thực, sát với thực tế của doanh nghiệp.
           </p>
         </div>
+      </div>
+
+      <div className='mt-12 grid place-content-center'>
+        <Button3/>
       </div>
 
     </div>
