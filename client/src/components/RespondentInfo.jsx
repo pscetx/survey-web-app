@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ContinueSurvey from "./ContinueSurvey";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function RespondentInfo() {
   const [form, setForm] = useState({
@@ -22,7 +23,7 @@ export default function RespondentInfo() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch("http://localhost:5050/question");
+        const response = await fetch(`${API_BASE_URL}/question`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -39,7 +40,7 @@ export default function RespondentInfo() {
     e.preventDefault();
     const person = { ...form };
     try {
-      const response = await fetch("http://localhost:5050/respondent", {
+      const response = await fetch(`${API_BASE_URL}/respondent`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +66,7 @@ export default function RespondentInfo() {
         score: 0,
       }));
 
-      const answersResponse = await fetch("http://localhost:5050/answer", {
+      const answersResponse = await fetch(`${API_BASE_URL}/answer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Loader from "./Loader";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function Result() {
   const [form, setForm] = useState({
@@ -20,7 +21,7 @@ export default function Result() {
       const id = params.id?.toString() || undefined;
       if (!id) return;
       setIsNew(false);
-      const response = await fetch(`http://localhost:5050/respondent/${id}`);
+      const response = await fetch(`${API_BASE_URL}/respondent/${id}`);
       if (!response.ok) {
         const message = `An error has occurred: ${response.statusText}`;
         console.error(message);
@@ -49,7 +50,7 @@ export default function Result() {
     try {
       let response;
       if (isNew) {
-        response = await fetch("http://localhost:5050/respondent", {
+        response = await fetch(`${API_BASE_URL}/respondent`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -57,7 +58,7 @@ export default function Result() {
           body: JSON.stringify(person),
         });
       } else {
-        response = await fetch(`http://localhost:5050/respondent/${params.id}`, {
+        response = await fetch(`${API_BASE_URL}/respondent/${params.id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -112,7 +113,7 @@ export default function Result() {
 
     async function fetchResult() {
       try {
-        const response = await fetch(`http://localhost:5050/answer/${id}`);
+        const response = await fetch(`${API_BASE_URL}/answer/${id}`);
         if (!response.ok) {
           throw new Error(`Error fetching results: ${response.statusText}`);
         }
@@ -140,7 +141,7 @@ export default function Result() {
     async function fetchQuestions(questions) {
       try {
         const fetchRequests = questions.map((question) =>
-          fetch(`http://localhost:5050/question/${question._id}`)
+          fetch(`${API_BASE_URL}/question/${question._id}`)
         );
 
         const responses = await Promise.all(fetchRequests);
@@ -160,7 +161,7 @@ export default function Result() {
 
     async function fetchRespondent(respondentId) {
       try {
-        const response = await fetch(`http://localhost:5050/respondent/${respondentId}`);
+        const response = await fetch(`${API_BASE_URL}/respondent/${respondentId}`);
         if (!response.ok) {
           throw new Error(`Error fetching respondent: ${response.statusText}`);
         }
@@ -179,7 +180,7 @@ export default function Result() {
 
   const handleOptionChange = async (questionId, newScore, respondentId) => {
     try {
-      const response = await fetch(`http://localhost:5050/answer/updateScore`, {
+      const response = await fetch(`${API_BASE_URL}/answer/updateScore`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ respondent_id: respondentId, question_id: questionId, new_score: newScore }),
@@ -204,7 +205,7 @@ export default function Result() {
 
   const handleStatusChange = async (respondentId) => {
     try {
-      const response = await fetch(`http://localhost:5050/answer/finished/${respondentId}`, {
+      const response = await fetch(`${API_BASE_URL}/answer/finished/${respondentId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ is_finished: true }),

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function ContinueSurvey() {
   const [respondentId, setRespondentId] = useState("");
@@ -9,7 +10,7 @@ export default function ContinueSurvey() {
     if (!respondentId) return;
 
     try {
-      const response = await fetch(`http://localhost:5050/answer/${respondentId}`);
+      const response = await fetch(`${API_BASE_URL}/answer/${respondentId}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

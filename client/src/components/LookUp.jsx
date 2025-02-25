@@ -36,7 +36,7 @@ export default function LookUp() {
         Lưu ý:</div>
         Mã khảo sát đã được cung cấp sau khi bạn điền thông tin tiền khảo sát.<br />
         Bạn chỉ có thể tra cứu kết quả sau khi đã hoàn tất khảo sát.<br /><br />
-        Chưa hoàn tấtất khảo sát? Tiếp tục làm <a href="/create" className="text-primary underline">tại đây</a>.<br />
+        Chưa hoàn tất khảo sát? Tiếp tục làm <a href="/create" className="text-primary underline">tại đây</a>.<br />
         Xem chi tiết hướng dẫn làm khảo sát <a href="/info" className="text-primary underline">tại đây</a>.<br />
       </div>
     </div>
