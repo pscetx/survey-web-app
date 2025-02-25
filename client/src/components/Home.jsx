@@ -11,7 +11,7 @@ export default function Home() {
         <h1 className="p-2 border border-2 border-secondary rounded-2xl bg-white lg:text-3xl text-xl font-bold text-primary drop-shadow-[5px_5px_0px_#b10913]">
           BỘ CÔNG CỤ KHẢO SÁT AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP VỪA VÀ NHỎ
         </h1>
-        <div className="flex lg:flex-row lg:justify-around lg:scale-100 scale-75 flex-col gap-2 items-center">
+        <div className="lg:flex lg:flex-row lg:justify-around lg:scale-100 scale-75 grid grid-cols-2 gap-x-16 place-items-center">
           <Card
             title="40"
             name="CÂU HỎI"
@@ -26,16 +26,18 @@ export default function Home() {
             $bgColor1="#fb6762"
             $bgColor2="#B80C14"
             $bgColor3="#f5f5f5"
-            $delay="0.3s"
+            $delay="0.25s"
           />
-          <Card
+          <div className="col-span-2">
+            <Card
             title="5"
             name="KHÍA CẠNH"
             $bgColor1="#06ff88"
             $bgColor2="#43dd93"
             $bgColor3="#f5f5f5"
-            $delay="0.6s"
-          />
+            $delay="0.5s"
+            />
+          </div>     
         </div>
 
         <div className='flex lg:flex-row lg:gap-12 lg:justify-center flex-col gap-8 items-center'>

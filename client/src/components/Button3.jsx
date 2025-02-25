@@ -27,7 +27,7 @@ const StyledWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 0px 0px 4px rgba(255, 160, 160, 0);
+    box-shadow: 0px 0px 0px 4px rgba(245, 245, 245, 1);
     cursor: pointer;
     transition-duration: 0.3s;
     overflow: hidden;
