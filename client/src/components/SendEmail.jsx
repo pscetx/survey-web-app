@@ -1,16 +1,6 @@
 import emailjs from "emailjs-com";
 
 const sendEmail = (respondent_id, respondent_email, respondent_name, respondent_role, org_name, field, staff_size, time) => {
-  console.log("sendEmail called with:", {
-    respondent_id,
-    respondent_email,
-    respondent_name,
-    respondent_role,
-    org_name,
-    field,
-    staff_size,
-    time
-  });
 
   if (!respondent_email) {
     console.error("Error: respondent_email is empty or undefined");

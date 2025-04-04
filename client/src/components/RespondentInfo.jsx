@@ -13,6 +13,7 @@ export default function RespondentInfo() {
     org_name: "",
     field: "",
     staff_size: "",
+    date: "",
   });
   const [questions, setQuestions] = useState([]);
   const navigate = useNavigate();
@@ -24,6 +25,12 @@ export default function RespondentInfo() {
   }
 
   useEffect(() => {
+
+    setForm((prevForm) => ({
+      ...prevForm,
+      date: new Date().toISOString(),
+    }));
+
     const fetchQuestions = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/question`);
@@ -41,7 +48,17 @@ export default function RespondentInfo() {
 
   async function onSubmit(e) {
     e.preventDefault();
-    const person = { ...form };
+    const formattedDate = new Date().toLocaleString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    }).toUpperCase();
+
+    const person = { ...form, date: formattedDate };
     try {
       const response = await fetch(`${API_BASE_URL}/respondent`, {
         method: "POST",
@@ -84,8 +101,6 @@ export default function RespondentInfo() {
         throw new Error(`HTTP error! status: ${answersResponse.status}`);
       }
 
-      const time = new Date().toLocaleString();
-
       try {
       await sendEmail(
         newId,
@@ -95,7 +110,7 @@ export default function RespondentInfo() {
         form.org_name,
         form.field,
         form.staff_size,
-        time
+        formattedDate,
       );
     } catch (emailError) {
       console.error("Failed to send email:", emailError);
@@ -112,6 +127,7 @@ export default function RespondentInfo() {
         org_name: "",
         field: "",
         staff_size: "",
+        date: "",
       });
     }
   }
@@ -138,7 +154,7 @@ export default function RespondentInfo() {
               { label: "Chức vụ", name: "respondent_role", type: "text" },
               { label: "Tên doanh nghiệp", name: "org_name", type: "text" },
               { label: "Số nhân sự bộ phận công nghệ thông tin", name: "staff_size", type: "number", placeholder: "Không có nhân sự CNTT điền giá trị 0" }
-            ].map(({ label, name, type, placeholder, autoComplete, pattern, disabled }) => (
+            ].map(({ label, name, type, placeholder, autoComplete, pattern }) => (
               <div className="sm:col-span-4" key={name}>
                 <label htmlFor={name} className="block text-md font-medium leading-6 text-gray-900">
                   {label}

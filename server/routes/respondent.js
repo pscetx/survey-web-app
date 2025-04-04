@@ -18,6 +18,18 @@ router.get("/", async (req, res) => {
   res.send(results).status(200);
 });
 
+router.get("/email/:email", async (req, res) => {
+  let collection = await db.collection("respondents");
+  let query = { respondent_email: req.params.email };
+  let results = await collection.find(query).toArray();
+
+  if (results.length === 0) {
+    res.status(404).send("No records found for this email");
+  } else {
+    res.status(200).json(results);
+  }
+});
+
 // This section will help you get a single record by id
 router.get("/:id", async (req, res) => {
   let collection = await db.collection("respondents");
@@ -38,6 +50,7 @@ router.post("/", async (req, res) => {
       org_name: req.body.org_name,
       field: req.body.field,
       staff_size: req.body.staff_size,
+      date: req.body.date,
     };
     let collection = await db.collection("respondents");
     let result = await collection.insertOne(newDocument);
@@ -60,6 +73,7 @@ router.patch("/:id", async (req, res) => {
         org_name: req.body.org_name,
         field: req.body.field,
         staff_size: req.body.staff_size,
+        date: req.body.date,
       },
     };
 

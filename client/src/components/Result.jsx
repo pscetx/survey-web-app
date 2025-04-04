@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Radar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import Loader from "./Loader";
+import SurveyComparison from "./SurveyComparison";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -16,6 +17,20 @@ export default function Result() {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [filterCategory, setFilterCategory] = useState('');
   const [filterScore, setFilterScore] = useState('');
+  const [relatedRespondents, setRelatedRespondents] = useState([]);
+  const [showComparison, setShowComparison] = useState(false);
+  const [surveyIds, setSurveyIds] = useState({ id1: null, id2: null });
+  const [selectedRowId, setSelectedRowId] = useState(null);
+
+  const handleComparisonClick = (id1, id2) => {
+    if (selectedRowId === id2) {
+      setSelectedRowId(null);
+    } else {
+      setSelectedRowId(id2);
+    }
+    setSurveyIds({ id1, id2 });
+    setShowComparison(true);
+  };
 
   useEffect(() => {
     async function fetchResult() {
@@ -35,6 +50,7 @@ export default function Result() {
         setResult(data);
         await fetchQuestions(data.questions);
         await fetchRespondent(data.respondent_id);
+        
       } catch (error) {
         setError("Không tìm thấy mã khảo sát trong cơ sở dữ liệu.");
         console.error(error);
@@ -70,9 +86,26 @@ export default function Result() {
         }
         const data = await response.json();
         setRespondent(data);
+        await fetchRelatedRespondents(data.respondent_email, data._id);
       } catch (error) {
         console.error("Error fetching respondent:", error);
         setError("Failed to fetch respondent.");
+      }
+    }
+
+    async function fetchRelatedRespondents(email, currentRespondentId) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/respondent/email/${email}`);
+        if (!response.ok) {
+          throw new Error(`Error fetching related respondents: ${response.statusText}`);
+        }
+        const data = await response.json();
+
+        // Filter out the current respondent
+        const filtered = data.filter(r => r._id !== currentRespondentId);
+        setRelatedRespondents(filtered);
+      } catch (error) {
+        console.error("Error fetching related respondents:", error);
       }
     }
 
@@ -363,7 +396,8 @@ export default function Result() {
                 <li><strong>Chức vụ:</strong> {respondent.respondent_role}</li>
                 <li><strong>Tên tổ chức:</strong> {respondent.org_name}</li>
                 <li><strong>Lĩnh vực:</strong> {respondent.field}</li>
-                <li><strong>Số lượng nhân viên:</strong> {respondent.staff_size}</li>
+                <li><strong>Số lượng nhân viên CNTT:</strong> {respondent.staff_size}</li>
+                <li><strong>Thời gian thực hiện:</strong> {respondent.date}</li>
               </ul>
             </div>
           <div>
@@ -383,20 +417,75 @@ export default function Result() {
         </div>
       </div>
 
+      <h1 className="text-2xl mb-4 font-bold text-primary">SO SÁNH KẾT QUẢ</h1>
+      <div className="mb-4 text-sm leading-6 text-gray-600">
+        <div className='italic font-semibold'>
+        Lưu ý:</div>
+        Bạn chỉ có thể so sánh các bài khảo sát đã hoàn thiện và có cùng email đăng ký.<br />
+      </div>
+      {relatedRespondents.length > 0 ? (
+        <div className="mb-16">
+          <div className="overflow-x-auto">
+            <table className="min-w-full border border-gray-200">
+            <thead className="bg-tertiary">
+              <tr>
+                <th className="border px-2 py-2 text-left">Mã khảo sát</th>
+                <th className="border px-2 py-2 text-left">Tên người khảo sát</th>
+                <th className="border px-2 py-2 text-left">Chức vụ</th>
+                <th className="border px-2 py-2 text-left">Tên tổ chức</th>
+                <th className="border px-2 py-2 text-left">Lĩnh vực</th>
+                <th className="border px-2 py-2 text-left">Nhân sự</th>
+                <th className="border px-2 py-2 text-left">Thời gian thực hiện</th>
+                <th className="border px-2 py-2 text-left"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {relatedRespondents.map((related, index) => (
+                <tr key={index} className={selectedRowId === related._id ? 'bg-red-50' : ''}>
+                  <td className="border px-2 py-2"><span className="inline-flex items-center justify-center whitespace-nowrap text-sm text-secondary font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-tertiary h-8 rounded-md px-1 mr-1 w-52">{related._id}
+                  <button className="ml-2" onClick={() => window.open(`/result/${related._id}`, "_blank")}>
+                    <img src="/external-link-svgrepo-com.svg" alt="External Link" className="w-4 h-4 hover:scale-110" />
+                  </button></span></td>
+                  <td className="border px-2 py-2">{related.respondent_name}</td>
+                  <td className="border px-2 py-2">{related.respondent_role}</td>
+                  <td className="border px-2 py-2">{related.org_name}</td>
+                  <td className="border px-2 py-2">{related.field}</td>
+                  <td className="border px-2 py-2">{related.staff_size}</td>
+                  <td className="border px-2 py-2">{related.date}</td>
+                  <td className="border px-2 py-2">
+                    <button 
+                      className="w-full px-3 py-1 text-md text-white bg-primary border border-white rounded-md hover:bg-white hover:text-secondary hover:border-primary transition duration-300 ease-in-out"
+                      onClick={() => handleComparisonClick(respondent._id, related._id)}
+                    >
+                      So sánh
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          </div>
+          {showComparison && (
+            <SurveyComparison id1={surveyIds.id1} id2={surveyIds.id2} />
+          )}
+        </div>
+      ) : (
+        <p className="mb-16 text-xl">Chưa có dữ liệu khảo sát so sánh.</p>
+      )}
 
       <h1 className="text-2xl mb-4 font-bold text-primary">KẾT QUẢ CHI TIẾT</h1>
-      <div className="flex flex-wrap gap-3 mb-3">
-        <button onClick={() => handleSort('category')} className="p-2 border border-gray-200 rounded-lg shadow-sm hover:border-primary transition duration-300 ease-in-out">
-          Sắp xếp theo STT
+      <div className="flex flex-wrap gap-3 mb-3 md:justify-end">
+        <button onClick={() => handleSort('category')} className="p-2 pl-1 font-semibold hover:text-primary transition duration-300 ease-in-out">
+          Sắp xếp theo câu
         </button>
-        <button onClick={() => handleSort('score')} className="p-2 border border-gray-200 rounded-lg shadow-sm hover:border-primary transition duration-300 ease-in-out">
+        <button onClick={() => handleSort('score')} className="p-2 pr-4 font-semibold hover:text-primary transition duration-300 ease-in-out">
           Sắp xếp theo điểm
         </button>
           <div>
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="p-2 border border-gray-200 rounded-lg shadow-sm hover:border-primary transition duration-300 ease-in-out"
+              className="p-2 pl-0 font-semibold hover:text-primary transition duration-300 ease-in-out"
             >
               <option value="">Tất cả phân loại</option>
               <option value="Quy chế">Quy chế</option>
@@ -410,7 +499,7 @@ export default function Result() {
             <select
               value={filterScore}
               onChange={(e) => setFilterScore(e.target.value)}
-              className="p-2 border border-gray-200 rounded-lg shadow-sm hover:border-primary transition duration-300 ease-in-out"
+              className="p-2 font-semibold hover:text-primary transition duration-300 ease-in-out"
             >
               <option value="">Tất cả điểm</option>
               <option value="0">0</option>
@@ -423,14 +512,14 @@ export default function Result() {
       </div>
 
       <div className="overflow-auto">
-        <table className="table-fixed min-w-[800px] rounded-lg shadow-lg overflow-hidden">
+        <table className="table-fixed min-w-[800px] rounded-md shadow-lg overflow-hidden">
           <thead>
             <tr className="bg-primary text-white text-center">
               <th className="border border-gray-300 p-2 w-12">STT</th>
               <th className="border border-gray-300 p-2">Câu hỏi</th>
               <th className="border border-gray-300 p-2 w-24">Phân loại</th>
-              <th className="border border-gray-300 p-2">Câu trả lời</th>
               <th className="border border-gray-300 p-2">Điểm</th>
+              <th className="border border-gray-300 p-2">Câu trả lời</th>
             </tr>
           </thead>
           <tbody>
@@ -445,8 +534,8 @@ export default function Result() {
                   <td className="border border-gray-300 p-2 text-center">{index + 1}</td>
                   <td className="border border-gray-300 p-2">{questionDetails?.question_text}</td>
                   <td className="border border-gray-300 p-2 text-center">{questionDetails?.category}</td>
-                  <td className="border border-gray-300 p-2">{selectedOption ? selectedOption.text : 'N/A'}</td>
                   <td className="border border-gray-300 p-2 text-center">{question.score}</td>
+                  <td className="border border-gray-300 p-2">{selectedOption ? selectedOption.text : 'N/A'}</td>
                 </tr>
               );
             })}

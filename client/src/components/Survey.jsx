@@ -387,6 +387,7 @@ export default function Result() {
           <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-4">
             {[
               { label: "Email người khảo sát", name: "respondent_email", type: "email", placeholder: "Thông tin khảo sát sẽ được gửi về email này", disabled: true },
+              { label: "Thời gian khảo sát", name: "date", type: "text", disabled: true },
               { label: "Tên người khảo sát", name: "respondent_name", type: "text" },
               { label: "Chức vụ", name: "respondent_role", type: "text" },
               { label: "Tên doanh nghiệp", name: "org_name", type: "text" },
