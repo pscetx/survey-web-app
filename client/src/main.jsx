@@ -11,7 +11,7 @@ import Survey from "./components/Survey";
 import Result from "./components/Result";
 import LookUp from "./components/LookUp";
 import Info from "./components/Info";
-import Login from "./components/Login";
+import Admin from "./components/Admin";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -81,7 +81,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/admin",
-        element: <Login />,
+        element: <Admin />,
       },
     ],
   },

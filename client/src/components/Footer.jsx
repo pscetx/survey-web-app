@@ -5,7 +5,7 @@ export default function Footer() {
     <div className="lg:mt-14 mt-8">
       <nav className="flex flex-col lg:flex-row justify-between items-center px-4 lg:px-20 py-5 bg-secondary">
         <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-5">
-          <NavLink to="/" className="flex items-center justify-center">
+          <NavLink to="/admin" className="flex items-center justify-center">
             <img
               alt="ITI logo"
               className="h-16 lg:h-24 inline"
