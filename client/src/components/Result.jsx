@@ -404,7 +404,7 @@ export default function Result() {
             <h2 className="text-lg mb-2 italic">Đánh giá kết quả khảo sát</h2>
             <ul className="list-disc pl-5 text-justify">
               {getComments(avg).map((comment, index) => (
-                <li className="mb-2" key={index}>{comment}</li>
+                <li className="mb-1" key={index}>{comment}</li>
               ))}
             </ul>
           </div>
@@ -425,45 +425,49 @@ export default function Result() {
       </div>
       {relatedRespondents.length > 0 ? (
         <div className="mb-16">
-          <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-200">
-            <thead className="bg-tertiary">
-              <tr>
-                <th className="border px-2 py-2 text-left">Mã khảo sát</th>
-                <th className="border px-2 py-2 text-left">Tên người khảo sát</th>
-                <th className="border px-2 py-2 text-left">Chức vụ</th>
-                <th className="border px-2 py-2 text-left">Tên tổ chức</th>
-                <th className="border px-2 py-2 text-left">Lĩnh vực</th>
-                <th className="border px-2 py-2 text-left">Nhân sự</th>
-                <th className="border px-2 py-2 text-left">Thời gian thực hiện</th>
-                <th className="border px-2 py-2 text-left"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {relatedRespondents.map((related, index) => (
-                <tr key={index} className={selectedRowId === related._id ? 'bg-red-50' : ''}>
-                  <td className="border px-2 py-2"><span className="inline-flex items-center justify-center whitespace-nowrap text-sm text-secondary font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-tertiary h-8 rounded-md px-1 mr-1 w-52">{related._id}
-                  <button className="ml-2" onClick={() => window.open(`/result/${related._id}`, "_blank")}>
-                    <img src="/external-link-svgrepo-com.svg" alt="External Link" className="w-4 h-4 hover:scale-110" />
-                  </button></span></td>
-                  <td className="border px-2 py-2">{related.respondent_name}</td>
-                  <td className="border px-2 py-2">{related.respondent_role}</td>
-                  <td className="border px-2 py-2">{related.org_name}</td>
-                  <td className="border px-2 py-2">{related.field}</td>
-                  <td className="border px-2 py-2">{related.staff_size}</td>
-                  <td className="border px-2 py-2">{related.date}</td>
-                  <td className="border px-2 py-2">
-                    <button 
-                      className="w-full px-3 py-1 text-md text-white bg-primary border border-white rounded-md hover:bg-white hover:text-secondary hover:border-primary transition duration-300 ease-in-out"
-                      onClick={() => handleComparisonClick(respondent._id, related._id)}
-                    >
-                      So sánh
-                    </button>
-                  </td>
+          <div className="overflow-x-auto rounded-md border border-gray-200 overflow-hidden">
+            <table className="min-w-full text-sm">
+              <thead className="bg-tertiary">
+                <tr>
+                  <th className="border px-2 py-2 text-left">Mã khảo sát</th>
+                  <th className="border px-2 py-2 text-left">Tên người khảo sát</th>
+                  <th className="border px-2 py-2 text-left">Chức vụ</th>
+                  <th className="border px-2 py-2 text-left">Tên tổ chức</th>
+                  <th className="border px-2 py-2 text-left">Lĩnh vực</th>
+                  <th className="border px-2 py-2 text-left">Nhân sự</th>
+                  <th className="border px-2 py-2 text-left">Thời gian thực hiện</th>
+                  <th className="border px-2 py-2 text-left"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {relatedRespondents.map((related, index) => (
+                  <tr key={index} className={selectedRowId === related._id ? 'bg-red-50' : 'bg-white'}>
+                    <td className="border px-2 py-2">
+                      <span className="inline-flex items-center justify-center whitespace-nowrap text-sm text-secondary font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-tertiary h-8 rounded-md px-1 mr-1 w-52">
+                        {related._id}
+                        <button className="ml-2" onClick={() => window.open(`/result/${related._id}`, "_blank")}>
+                          <img src="/external-link-svgrepo-com.svg" alt="External Link" className="w-4 h-4 hover:scale-110" />
+                        </button>
+                      </span>
+                    </td>
+                    <td className="border px-2 py-2">{related.respondent_name}</td>
+                    <td className="border px-2 py-2">{related.respondent_role}</td>
+                    <td className="border px-2 py-2">{related.org_name}</td>
+                    <td className="border px-2 py-2">{related.field}</td>
+                    <td className="border px-2 py-2">{related.staff_size}</td>
+                    <td className="border px-2 py-2">{related.date}</td>
+                    <td className="border px-2 py-2">
+                      <button 
+                        className="text-md w-full px-3 py-1 text-md text-white bg-primary border border-white rounded-md hover:bg-white hover:text-secondary hover:border-primary transition duration-300 ease-in-out"
+                        onClick={() => handleComparisonClick(respondent._id, related._id)}
+                      >
+                        So sánh
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
           {showComparison && (
             <SurveyComparison id1={surveyIds.id1} id2={surveyIds.id2} />

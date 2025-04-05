@@ -106,19 +106,44 @@ router.patch("/finished/:id", async (req, res) => {
 router.patch("/banned/:id", async (req, res) => {
   try {
     const query = { respondent_id: new ObjectId(req.params.id) };
+    const collection = await db.collection("answers");
+
+    const existingDocument = await collection.findOne(query);
+    if (!existingDocument) {
+      return res.status(404).send("No answer found with the given ID.");
+    }
+
     const update = {
-      $set: { is_banned: true },
+      $set: { is_banned: !existingDocument.is_banned },
     };
-    let collection = await db.collection("answers");
-    let result = await collection.updateOne(query, update);
+
+    const result = await collection.updateOne(query, update);
 
     if (result.matchedCount === 0) {
       return res.status(404).send("No answer found with the given ID.");
     }
-    res.status(200).send({ message: "Answer updated successfully", updatedDocument });
+
+    res.status(200).send({
+      message: "Banned state toggled successfully",
+      newBannedState: !existingDocument.is_banned,
+    });
   } catch (err) {
     console.error("Error updating answer:", err);
     res.status(500).send("Error updating answer");
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const query = { respondent_id: new ObjectId(req.params.id) };
+
+    const collection = db.collection("answers");
+    let result = await collection.deleteOne(query);
+
+    res.send(result).status(200);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error deleting answer");
   }
 });
 

@@ -96,16 +96,59 @@ export default function SurveyComparison({ id1, id2 }) {
   };
 
   return (
-    <div className="pt-10">
+    <div className="mt-10 mb-16">
       {loading && <Loader />}
 
       {error && <p className="text-red-600">{error}</p>}
 
-      {averages.survey1 && averages.survey2 && (
-        <div className="max-w-sm mx-auto">
-          <Radar data={data} options={options} />
-        </div>
-      )}
+      <div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-10 gap-4 mt-4 overflow-hidden'>
+        {averages.survey1 && averages.survey2 && (
+          <div className="max-w-sm mx-auto">
+            <Radar data={data} options={options} />
+          </div>
+        )}
+
+        {averages.survey1 && averages.survey2 && (
+          <div className="overflow-x-auto overflow-hidden">
+            <table className="table-auto w-full rounded-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="p-2 text-left">Phân loại</th>
+                  <th className="border-l-[#ff6384] border-l-4 bg-[#ffe0e6]"></th>
+                  <th className="border-r-[#36a2eb] border-r-4 bg-[#d7ecfb]"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories.map((category, index) => (
+                  <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <td className="border-b border-gray-200 p-2">{category}</td>
+                    <td className="border-b border-gray-200 p-2 text-center">
+                      {averages.survey1[index]?.toFixed(2) || 'N/A'}
+                    </td>
+                    <td className="border-b border-gray-200 p-2 text-center">
+                      {averages.survey2[index]?.toFixed(2) || 'N/A'}
+                    </td>
+                  </tr>
+                ))}
+                <tr className="bg-tertiary font-bold">
+                  <td className="border-b border-gray-200 text-primary p-2">Trung bình</td>
+                  <td className="border-b border-gray-200 text-secondary p-2 text-center">
+                    {averages.survey1.length ? (
+                      (averages.survey1.reduce((acc, val) => acc + val, 0) / averages.survey1.length).toFixed(2)
+                    ) : 'N/A'}
+                  </td>
+                  <td className="border-b border-gray-200 text-secondary p-2 text-center">
+                    {averages.survey2.length ? (
+                      (averages.survey2.reduce((acc, val) => acc + val, 0) / averages.survey2.length).toFixed(2)
+                    ) : 'N/A'}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
     </div>
   );
 }
