@@ -38,7 +38,7 @@ export default function SurveyComparison({ id1, id2 }) {
 
   const compare = async () => {
     setLoading(true);
-    setError(null); // Reset error state
+    setError(null);
     try {
       const [avg1, avg2] = await Promise.all([
         fetchSurveyAverage(id1),
@@ -46,7 +46,7 @@ export default function SurveyComparison({ id1, id2 }) {
       ]);
       setAverages({ survey1: avg1, survey2: avg2 });
     } catch (err) {
-      setError(err.message); // Set error state
+      setError(err.message);
     } finally {
       setLoading(false);
     }

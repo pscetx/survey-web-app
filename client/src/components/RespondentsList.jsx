@@ -24,7 +24,6 @@ const RespondentsList = () => {
         }
         const data = await response.json();
 
-        // Fetch is_finished for each respondent
         const respondentsWithStatus = await Promise.all(
           data.map(async (respondent) => {
             try {
@@ -71,7 +70,6 @@ const RespondentsList = () => {
 
   const handleDelete = async (id) => {
     try {
-      // Delete respondent
       const respondentResponse = await fetch(`${API_BASE_URL}/respondent/${id}`, {
         method: "DELETE",
       });
@@ -79,7 +77,6 @@ const RespondentsList = () => {
         throw new Error(`Error deleting respondent: ${respondentResponse.statusText}`);
       }
 
-      // Delete respondent's answer
       const answerResponse = await fetch(`${API_BASE_URL}/answer/${id}`, {
         method: "DELETE",
       });
@@ -87,7 +84,6 @@ const RespondentsList = () => {
         throw new Error(`Error deleting answer: ${answerResponse.statusText}`);
       }
 
-      // Update state
       setRespondents((prev) => prev.filter((respondent) => respondent._id !== id));
     } catch (error) {
       console.error("Error deleting respondent or answer:", error);
@@ -104,7 +100,6 @@ const RespondentsList = () => {
         throw new Error(`Error toggling banned state: ${response.statusText}`);
       }
 
-      // Optionally, fetch updated respondents or update state directly
       setRespondents((prev) =>
         prev.map((respondent) =>
           respondent._id === id

@@ -8,7 +8,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function AdminDashboard() {
   const [id1, setId1] = useState("");
   const [id2, setId2] = useState("");
-  const [activeTab, setActiveTab] = useState("comparison");
+  const [activeTab, setActiveTab] = useState("report");
   const [respondent1, setRespondent1] = useState(null);
   const [respondent2, setRespondent2] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
                   placeholder="Điền mã khảo sát 1"
                   value={id1}
                   onChange={(e) => setId1(e.target.value)}
-                  className="w-60 border border-gray-300 rounded-md py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-50 transition duration-300 ease-in-out"
+                  className="w-60 text-md rounded-sm border-b border-secondary border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400"
                 />
               </div>
               <div>
@@ -94,17 +94,15 @@ export default function AdminDashboard() {
                   placeholder="Điền mã khảo sát 2"
                   value={id2}
                   onChange={(e) => setId2(e.target.value)}
-                  className="w-60 border border-gray-300 rounded-md py-2 px-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-50 transition duration-300 ease-in-out"
+                  className="w-60 text-md rounded-sm border-b border-secondary border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400"
                 />
               </div>
             </div>
 
-            <span className="text-lg font-semibold">Thông tin khảo sát:</span>
-
             {loading ? (
               <div className="animate-pulse text-center text-gray-500">Loading...</div>
             ) : (
-              <div className="my-4">
+              <div className="my-12 ">
                 {respondent1 && respondent2 && (
                   <div className="overflow-x-auto rounded-md shadow">
                     <table className="min-w-full table-auto border-collapse border border-gray-300 text-sm">

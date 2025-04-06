@@ -24,6 +24,17 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const collection = await db.collection("answers");
+    const answers = await collection.find({}).toArray();
+    res.status(200).send(answers);
+  } catch (err) {
+    console.error("Error fetching all answers:", err);
+    res.status(500).send("Error fetching all answers");
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     console.log("Received Payload:", req.body);
@@ -144,6 +155,28 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Error deleting answer");
+  }
+});
+
+router.get("/count/finished", async (req, res) => {
+  try {
+    const collection = await db.collection("answers");
+    const finishedSurveys = await collection.countDocuments({ is_finished: true });
+    res.status(200).send({ finishedSurveys });
+  } catch (err) {
+    console.error("Error counting finished surveys:", err);
+    res.status(500).send("Error counting finished surveys");
+  }
+});
+
+router.get("/count/banned", async (req, res) => {
+  try {
+    const collection = await db.collection("answers");
+    const bannedSurveys = await collection.countDocuments({ is_banned: true });
+    res.status(200).send({ bannedSurveys });
+  } catch (err) {
+    console.error("Error counting banned surveys:", err);
+    res.status(500).send("Error counting banned surveys");
   }
 });
 

@@ -3,15 +3,15 @@ import express from "express";
 // This will help us connect to the database
 import db from "../db/connection.js";
 
-// This help convert the id from string to ObjectId for the _id.
+// This converts the id from string to ObjectId for the _id
 import { ObjectId } from "mongodb";
 
-// router is an instance of the express router.
-// We use it to define our routes.
-// The router will be added as a middleware and will take control of requests starting with path /record.
+// router is an instance of the express router
+// We use it to define our routes
+// The router will be added as a middleware and will take control of requests starting with path /record
 const router = express.Router();
 
-// This section will help you get a list of all the records.
+// This section will help you get a list of all the records
 router.get("/", async (req, res) => {
   let collection = await db.collection("respondents");
   let results = await collection.find({}).toArray();
@@ -30,6 +30,38 @@ router.get("/email/:email", async (req, res) => {
   }
 });
 
+router.get("/count", async (req, res) => {
+  try {
+    let collection = await db.collection("respondents");
+    let count = await collection.countDocuments();
+    res.status(200).json({ totalRespondents: count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching respondent count");
+  }
+});
+
+router.get("/count/last7days", async (req, res) => {
+  try {
+    const collection = await db.collection("respondents");
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const allDocs = await collection.find({}).toArray();
+
+    // Filter with proper date parsing
+    const recentCount = allDocs.filter(doc => {
+      const parsedDate = new Date(doc.date);
+      return parsedDate >= sevenDaysAgo;
+    }).length;
+
+    res.status(200).json({ respondentsLast7Days: recentCount });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching respondent count for the last 7 days");
+  }
+});
+
 // This section will help you get a single record by id
 router.get("/:id", async (req, res) => {
   let collection = await db.collection("respondents");
@@ -40,7 +72,7 @@ router.get("/:id", async (req, res) => {
   else res.send(result).status(200);
 });
 
-// This section will help you create a new record.
+// This section will help you create a new record
 router.post("/", async (req, res) => {
   try {
     let newDocument = {
@@ -61,7 +93,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// This section will help you update a record by id.
+// This section will help you update a record by id
 router.patch("/:id", async (req, res) => {
   try {
     const query = { _id: new ObjectId(req.params.id) };

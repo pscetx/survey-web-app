@@ -39,7 +39,7 @@ export default function ContinueSurvey() {
             name="respondent_id"
             id="respondent_id"
             className="flex-1 border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400"
-            placeholder="Survey ID"
+            placeholder="Điền mã khảo sát của bạn"
             onChange={(e) => setRespondentId(e.target.value)}
             required
           />
