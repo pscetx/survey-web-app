@@ -32,9 +32,17 @@ const RespondentsList = () => {
                 throw new Error(`Error fetching answer: ${answerResponse.statusText}`);
               }
               const answerData = await answerResponse.json();
-              return { ...respondent, is_finished: answerData.is_finished };
+              return { 
+                ...respondent, 
+                is_finished: answerData.is_finished, 
+                is_banned: answerData.is_banned
+              };
             } catch {
-              return { ...respondent, is_finished: false };
+              return { 
+                ...respondent, 
+                is_finished: false, 
+                is_banned: false
+              };
             }
           })
         );
@@ -166,14 +174,16 @@ const RespondentsList = () => {
                         handleDelete(respondent._id);
                       }
                     }}
-                    className="px-6 py-1 bg-red-600 text-white rounded"
+                    className="px-6 py-1 bg-red-600 hover:bg-red-700 text-white rounded"
                   >
                     Xóa
                   </button>
                   <button
                     onClick={() => handleToggleBanned(respondent._id)}
-                    className={`px-6 py-1 rounded ${
-                      respondent.is_banned ? "bg-sky-600" : "bg-gray-500"
+                    className={`px-6 py-1 rounded transition-colors duration-200 ${
+                      respondent.is_banned
+                        ? "bg-sky-600 hover:bg-sky-700"
+                        : "bg-gray-500 hover:bg-gray-600"
                     } text-white`}
                   >
                     {respondent.is_banned ? "Hiện" : "Ẩn"}

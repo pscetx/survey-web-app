@@ -137,7 +137,7 @@ export default function Report() {
     const scoreCounts = {};
     let totalResponses = 0;
 
-    answers.forEach((answer) => {
+    filteredAnswersByDate.forEach((answer) => {
       answer.questions.forEach((question) => {
         if (question._id === questionId) {
           scoreCounts[question.score] = (scoreCounts[question.score] || 0) + 1;
@@ -149,12 +149,14 @@ export default function Report() {
     const labels = Object.keys(scoreCounts);
     const data = Object.values(scoreCounts).map((count) => ((count / totalResponses) * 100).toFixed(1));
 
+    const barColors = ["#fb6762", "#f366bb", "#8769fd", "#1ac3fb", "#43dd93"];
+
     return {
       labels: [""],
       datasets: labels.map((label, index) => ({
         label: `Score ${label}`,
         data: [data[index]],
-        backgroundColor: ["#fb6762", "#f366bb", "#8769fd", "#1ac3fb", "#43dd93"][index % 5],
+        backgroundColor: barColors[label],
       })),
     };
   };
@@ -166,7 +168,7 @@ export default function Report() {
     const parsedDate = new Date(
       respondentDate.replace(
         /(\d{2})\/(\d{2})\/(\d{4}), (\d{2}):(\d{2}):(\d{2}) (AM|PM)/,
-        (_, month, day, year, hour, minute, second, period) => {
+        (_, day, month, year, hour, minute, second, period) => {
           const adjustedHour = period === "PM" && hour !== "12" ? parseInt(hour) + 12 : hour === "12" && period === "AM" ? "00" : hour;
           return `${year}-${month}-${day}T${adjustedHour}:${minute}:${second}`;
         }
@@ -216,7 +218,10 @@ export default function Report() {
         stacked: true,
         ticks: {
           callback: (value) => `${value}%`,
+          stepSize: 20,
         },
+        min: 0,
+        max: 100,
       },
       y: {
         stacked: true,
