@@ -129,10 +129,10 @@ const RespondentsList = () => {
         placeholder="Tìm kiếm theo mã khảo sát, email hoặc thời gian thực hiện"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="mb-4 p-2 border rounded w-full"
+        className="mb-4 p-2 border rounded w-full focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
       />
-      <div className="overflow-x-auto rounded-md shadow">
-        <table className="min-w-full table-auto border border-gray-200 text-xs">
+      <div className="overflow-x-auto rounded shadow">
+        <table className="min-w-full table-auto text-xs">
           <thead className="bg-gray-100 text-left">
             <tr>
               <th className="border p-2">Mã khảo sát</th>
@@ -173,10 +173,10 @@ const RespondentsList = () => {
                   <button
                     onClick={() => handleToggleBanned(respondent._id)}
                     className={`px-6 py-1 rounded ${
-                      respondent.is_banned ? "bg-gray-600" : "bg-sky-600"
+                      respondent.is_banned ? "bg-sky-600" : "bg-gray-500"
                     } text-white`}
                   >
-                    {respondent.is_banned ? "Ẩn" : "Hiện"}
+                    {respondent.is_banned ? "Hiện" : "Ẩn"}
                   </button>
                 </td>
               </tr>

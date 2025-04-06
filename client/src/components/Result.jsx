@@ -380,13 +380,13 @@ export default function Result() {
   return (
     <div className="results-container">
       <h1 className="text-2xl mb-4 font-bold text-primary">ĐÁNH GIÁ TỔNG QUAN</h1>
-      <h2 className="text-lg font-semibold mb-6">Mã khảo sát của bạn là <span className="inline-flex items-center justify-center whitespace-nowrap text-sm text-secondary font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-tertiary h-8 rounded-md px-1 mr-1">{respondent._id} </span><span><button
+      <h2 className="text-lg mb-6">Mã khảo sát của bạn <span className="inline-flex items-center justify-center whitespace-nowrap text-sm text-secondary font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-tertiary h-8 rounded-md px-1 mr-1">{respondent._id} </span><span><button
             onClick={handleCopyId}
             className="inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointerinline-flex items-center justify-center whitespace-nowrap text-sm font-semibold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
           >
             Copy
-          </button> và đã được gửi về email đăng ký khảo sát.</span></h2>
-      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-28 gap-7 mt-4 mb-16 border rounded-md overflow-hidden p-4">
+          </button> đã được gửi về email đăng ký khảo sát.</span></h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-28 gap-7 mt-4 mb-16 shadow rounded-md overflow-hidden md:px-6 p-4">
         <div>
             <div className="mb-4">
               <h3 className="text-lg mb-2 italic">Thông tin người khảo sát</h3>
@@ -402,7 +402,7 @@ export default function Result() {
             </div>
           <div>
             <h2 className="text-lg mb-2 italic">Đánh giá kết quả khảo sát</h2>
-            <ul className="list-disc pl-5 text-justify">
+            <ul className="list-disc pl-5">
               {getComments(avg).map((comment, index) => (
                 <li className="mb-1" key={index}>{comment}</li>
               ))}
@@ -425,7 +425,7 @@ export default function Result() {
       </div>
       {relatedRespondents.length > 0 ? (
         <div className="mb-16">
-          <div className="overflow-x-auto rounded-md border border-gray-200 overflow-hidden">
+          <div className="overflow-x-auto rounded-md overflow-hidden">
             <table className="min-w-full text-sm">
               <thead className="bg-tertiary">
                 <tr>
@@ -516,14 +516,14 @@ export default function Result() {
       </div>
 
       <div className="overflow-auto">
-        <table className="table-fixed min-w-[800px] rounded-md shadow-lg overflow-hidden">
+        <table className="table-fixed min-w-[800px] rounded-md shadow overflow-hidden">
           <thead>
             <tr className="bg-primary text-white text-center">
-              <th className="border border-gray-300 p-2 w-12">STT</th>
-              <th className="border border-gray-300 p-2">Câu hỏi</th>
-              <th className="border border-gray-300 p-2 w-24">Phân loại</th>
-              <th className="border border-gray-300 p-2">Điểm</th>
-              <th className="border border-gray-300 p-2">Câu trả lời</th>
+              <th className="border border-gray-200 p-2 w-12">STT</th>
+              <th className="border border-gray-200 p-2">Câu hỏi</th>
+              <th className="border border-gray-200 p-2 w-24">Phân loại</th>
+              <th className="border border-gray-200 p-2">Điểm</th>
+              <th className="border border-gray-200 p-2">Câu trả lời</th>
             </tr>
           </thead>
           <tbody>
@@ -535,11 +535,11 @@ export default function Result() {
 
               return (
                 <tr key={index} className={`border-b ${index % 2 === 0 ? 'bg-white' : 'bg-tertiary'}`}>
-                  <td className="border border-gray-300 p-2 text-center">{index + 1}</td>
-                  <td className="border border-gray-300 p-2">{questionDetails?.question_text}</td>
-                  <td className="border border-gray-300 p-2 text-center">{questionDetails?.category}</td>
-                  <td className="border border-gray-300 p-2 text-center">{question.score}</td>
-                  <td className="border border-gray-300 p-2">{selectedOption ? selectedOption.text : 'N/A'}</td>
+                  <td className="border border-gray-200 p-2 text-center">{index + 1}</td>
+                  <td className="border border-gray-200 p-2">{questionDetails?.question_text}</td>
+                  <td className="border border-gray-200 p-2 text-center">{questionDetails?.category}</td>
+                  <td className="border border-gray-200 p-2 text-center font-semibold">{question.score}</td>
+                  <td className="border border-gray-200 p-2">{selectedOption ? selectedOption.text : 'N/A'}</td>
                 </tr>
               );
             })}

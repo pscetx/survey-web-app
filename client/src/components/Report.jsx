@@ -18,9 +18,9 @@ export default function Report() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [questionDetails, setQuestionDetails] = useState({});
-  const [sortOrder, setSortOrder] = useState("original"); // Default to original order
+  const [sortOrder, setSortOrder] = useState("original");
   const [originalQuestions, setOriginalQuestions] = useState([]);
-  const [filterCategory, setFilterCategory] = useState(""); // Default to show all categories
+  const [filterCategory, setFilterCategory] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [respondentDates, setRespondentDates] = useState({});
@@ -66,12 +66,11 @@ export default function Report() {
           answersResponse.json(),
         ]);
 
-        // Exclude answers that are banned or not finished and ignore the last question
         const filteredAnswers = answersData.filter(
           (answer) => answer.is_finished && !answer.is_banned
         ).map((answer) => ({
           ...answer,
-          questions: answer.questions.slice(0, -1), // Remove the last question
+          questions: answer.questions.slice(0, -1),
         }));
 
         // Fetch question details
@@ -151,7 +150,7 @@ export default function Report() {
     const data = Object.values(scoreCounts).map((count) => ((count / totalResponses) * 100).toFixed(1));
 
     return {
-      labels: [""], // Single label for stacked bar
+      labels: [""],
       datasets: labels.map((label, index) => ({
         label: `Score ${label}`,
         data: [data[index]],
@@ -160,38 +159,10 @@ export default function Report() {
     };
   };
 
-  const getAverageScoresByCategory = () => {
-    const categoryScores = {};
-    const categoryCounts = {};
-
-    answers.forEach((answer) => {
-      answer.questions.forEach((question) => {
-        const category = questionDetails[question._id]?.category || "Uncategorized";
-        if (!categoryScores[category]) {
-          categoryScores[category] = 0;
-          categoryCounts[category] = 0;
-        }
-        categoryScores[category] += question.score;
-        categoryCounts[category] += 1;
-      });
-    });
-
-    const categories = Object.keys(categoryScores);
-    const averages = categories.map((category) => ({
-      category,
-      average: categoryCounts[category] > 0
-        ? (categoryScores[category] / categoryCounts[category]).toFixed(2)
-        : "N/A",
-    }));
-
-    return averages;
-  };
-
   const filteredAnswersByDate = answers.filter((answer) => {
     const respondentDate = respondentDates[answer.respondent_id];
     if (!respondentDate) return false;
 
-    // Parse the date in the format MM/DD/YYYY, HH:mm:ss AM/PM
     const parsedDate = new Date(
       respondentDate.replace(
         /(\d{2})\/(\d{2})\/(\d{4}), (\d{2}):(\d{2}):(\d{2}) (AM|PM)/,
@@ -235,17 +206,16 @@ export default function Report() {
     }));
   };
 
-  const averageScores = getAverageScoresByCategory();
   const filteredAverageScores = getFilteredAverageScoresByCategory();
 
   const chartOptions = {
-    indexAxis: "y", // Horizontal bar chart
+    indexAxis: "y",
     responsive: true,
     scales: {
       x: {
         stacked: true,
         ticks: {
-          callback: (value) => `${value}%`, // Add percentage symbol to x-axis
+          callback: (value) => `${value}%`,
         },
       },
       y: {
@@ -254,7 +224,7 @@ export default function Report() {
     },
     plugins: {
       legend: {
-        position: "top",
+        display: false,
       },
       tooltip: {
         callbacks: {
@@ -283,7 +253,6 @@ export default function Report() {
 
   const sortedQuestions = [...uniqueQuestions].sort((a, b) => {
     if (sortOrder === "original") {
-      // Use the order in the database by comparing their indices in the originalQuestions array
       const indexA = originalQuestions.findIndex((q) => q._id === a._id);
       const indexB = originalQuestions.findIndex((q) => q._id === b._id);
       return indexA - indexB;
@@ -317,27 +286,42 @@ export default function Report() {
 
   return (
     <div>
-      <h2 className="text-2xl mb-4 font-bold text-primary">BÁO CÁO</h2>
-      <div className="mt-4">
-        <p className="text-gray-800">Khảo sát đã hoàn thành: {stats.finishedSurveys}</p>
-        <p className="text-gray-800">Khảo sát bị cấm: {stats.bannedSurveys}</p>
-        <p className="text-gray-800">Tổng số người tham gia: {stats.totalRespondents}</p>
-        <p className="text-gray-800">Người tham gia mới trong 7 ngày: {stats.newRespondents}</p>
+      <h2 className="text-2xl mb-4 font-bold text-primary">BÁO CÁO SỐ LƯỢNG</h2>
+      <div className="mt-4 mb-10 flex gap-8 divide-x divide-gray-300 p-6 rounded-md shadow">
+        <div className="flex-1 text-center">
+          <div className="text-gray-500 mb-2">Người tham gia</div>
+          <div className="flex justify-center items-end gap-6">
+            <div>
+              <div className="text-xl font-semibold text-gray-800">{stats.totalRespondents}</div>
+              <div className="text-gray-500">Tổng cộng</div>
+             </div>
+            <div>
+              <div className="text-xl font-semibold text-gray-800">{stats.newRespondents}</div>
+              <div className="text-gray-500">7 ngày qua</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 text-center pl-8">
+          <div className="text-gray-500 mb-2">Khảo sát</div>
+          <div className="flex justify-center items-end gap-6">
+            <div>
+              <div className="text-xl font-semibold text-gray-800">{stats.finishedSurveys}</div>
+              <div className="text-gray-500">Hoàn thành</div>
+            </div>
+            <div>
+              <div className="text-xl font-semibold text-gray-800">{stats.bannedSurveys}</div>
+              <div className="text-gray-500">Bị ẩn</div>
+            </div>
+          </div>
+        </div>
       </div>
+      
+      <h2 className="text-2xl mb-4 font-bold text-primary">BÁO CÁO KẾT QUẢ</h2>
       <div className="mt-6">
-        <h3 className="text-xl font-bold text-primary">Điểm trung bình theo danh mục</h3>
-        <ul className="list-disc pl-5">
-          {filteredAverageScores.map((item, index) => (
-            <li key={index} className="text-gray-800">
-              <strong>{item.category}:</strong> {item.average}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="mt-6">
-        <div className="flex justify-between mb-4 gap-4">
+        <div className="flex flex-wrap justify-between mb-4 gap-4">
           <div>
-            <label htmlFor="categoryFilter" className="mr-2 font-semibold">Lọc theo danh mục:</label>
+            <label htmlFor="categoryFilter" className="mr-2 font-semibold">Lọc theo phân loại:</label>
             <select
               id="categoryFilter"
               value={filterCategory}
@@ -375,39 +359,82 @@ export default function Report() {
           <div className="flex gap-4">
             <button
               onClick={toggleSortOrder}
-              className="px-4 py-2 bg-primary text-white rounded-md hover:bg-secondary transition"
+              className="px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 transition duration-300 ease-in-out"
             >
               Sắp xếp theo điểm {sortOrder === "desc" ? "thấp nhất" : "cao nhất"}
             </button>
             <button
               onClick={resetToOriginalOrder}
-              className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition"
+              className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-300 ease-in-out"
             >
               Đặt lại thứ tự gốc
             </button>
           </div>
         </div>
-        <h3 className="text-xl font-bold text-primary">Biểu đồ câu hỏi</h3>
+
+      <div className="mt-6 bg-white p-6 rounded-lg shadow">
+        <h3 className="text-gray-500 mb-4">Điểm trung bình theo phân loại</h3>
+        <div className="grid grid-cols-5 gap-x-4">
+          {filteredAverageScores.map((item, index) => (
+            <div key={index}>
+              <div className="text-xl font-semibold text-gray-800">{item.average}</div>
+              <div className="text-sm text-gray-500">{item.category}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+        
+        <table className="w-60 my-6">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="p-2"></th>
+              <th className="bg-[#fb6762]"></th>
+              <th className="bg-[#f366bb]"></th>
+              <th className="bg-[#8769fd]"></th>
+              <th className="bg-[#1ac3fb]"></th>
+              <th className="bg-[#43dd93]"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="bg-white">
+              <td className="px-4 py-2">Điểm</td>
+              <td className="px-4 py-2">0</td>
+              <td className="px-4 py-2">1</td>
+              <td className="px-4 py-2">2</td>
+              <td className="px-4 py-2">3</td>
+              <td className="px-4 py-2">4</td>
+            </tr>
+          </tbody>
+        </table>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredQuestions.slice(0, 40).map((question) => (
             <div
               key={question._id}
-              className="p-4 border rounded shadow"
+              className="p-4 rounded shadow"
             >
-              <h4 className="text-lg font-bold text-gray-800 mb-2">
-                Question ID: {question._id}
-              </h4>
               {questionDetails[question._id] && (
                 <>
-                  <p className="text-gray-600 mb-2">
-                    <strong>Category:</strong> {questionDetails[question._id].category || "No additional info available"}
-                  </p>
-                  <p className="text-gray-600 mb-2">
-                    <strong>Question:</strong> {questionDetails[question._id].question_text || "No question text available"}
+                  <span className="text-secondary font-semibold mb-2 italic text-sm mr-1">
+                    {questionDetails[question._id].category || "No additional info available"}
+                  </span>
+                  <span className="text-secondary font-semibold mb-2 italic text-sm">
+                - Điểm trung bình: {
+                  (
+                    filteredAnswersByDate.reduce((sum, answer) => {
+                      const questionData = answer.questions.find((q) => q._id === question._id);
+                      return questionData ? sum + questionData.score : sum;
+                    }, 0) /
+                    filteredAnswersByDate.filter((answer) => answer.questions.some((q) => q._id === question._id)).length || 0
+                  ).toFixed(2)
+                }
+              </span>
+                  <p className="text-secondary mb-2 text-sm">
+                    {questionDetails[question._id].question_text || "No question text available"}
                   </p>
                 </>
               )}
-              <Bar data={getChartDataForQuestion(question._id)} options={chartOptions} />
+              <Bar data={getChartDataForQuestion(question._id)} options={chartOptions} height={50} />
+              
             </div>
           ))}
         </div>

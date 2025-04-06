@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Info() {
   return (
-    <div className="max-w-4xl mx-auto p-6 shadow-sm rounded-lg">
+    <div className="max-w-4xl mx-auto md:p-6 p-4 border border-2 border-secondary rounded-2xl bg-white drop-shadow-[5px_5px_0px_#b10913]">
       <h2 className="lg:text-3xl text-2xl mb-6 font-bold text-primary text-center">HƯỚNG DẪN SỬ DỤNG</h2>
 
       <div className="space-y-6 text-lg leading-6 text-gray-800">

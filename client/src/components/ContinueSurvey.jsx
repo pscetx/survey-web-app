@@ -31,14 +31,14 @@ export default function ContinueSurvey() {
   return (
     <div>
       <h2 className="text-2xl mb-4 font-bold text-primary">TIẾP TỤC LÀM KHẢO SÁT</h2>
-      <div className="border rounded-md overflow-hidden p-4 mb-10">
-        <h2 className="text-md mb-4">Nếu bạn đã làm khảo sát nhưng chưa bấm '<strong>Hoàn tất khảo sát</strong>', bạn có thể nhập mã khảo sát để tiếp tục làm bài.</h2>
+      <div className="shadow rounded-md overflow-hidden p-4 mb-10">
+        <h2 className="text-md mb-4">Nếu bạn đã khảo sát nhưng chưa chọn <strong>Hoàn tất khảo sát</strong>, bạn có thể nhập mã để tiếp tục làm.</h2>
         <div className="flex text-md rounded-sm border-b border-secondary">
           <input
             type="text"
             name="respondent_id"
             id="respondent_id"
-            className="flex-1 border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400"
+            className="flex-1 border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
             placeholder="Điền mã khảo sát của bạn"
             onChange={(e) => setRespondentId(e.target.value)}
             required

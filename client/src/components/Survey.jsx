@@ -360,13 +360,13 @@ export default function Result() {
   return (
     <div className="survey-container">
       <div className="quiz-container text-center">
-        <h2 className="text-2xl font-bold text-primary text-left mb-4">BỘ CÔNG CỤ KHẢO SÁT AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP VỪA VÀ NHỎ</h2>
-        <h1 className="text-lg text-left mb-6">Mã khảo sát của bạn là <span className="inline-flex items-center justify-center whitespace-nowrap text-sm text-secondary font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-gray-50 h-8 rounded-md px-1 mr-1">{form._id}</span><span><button
+        <h2 className="text-2xl font-bold text-primary text-left mb-4">BỘ CÔNG CỤ KHẢO SÁT AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP NHỎ VÀ VỪA</h2>
+        <h1 className="text-lg text-left mb-6">Mã khảo sát của bạn <span className="inline-flex items-center justify-center whitespace-nowrap text-sm text-secondary font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-gray-50 h-8 rounded-md px-1 mr-1">{form._id}</span><span><button
             onClick={handleCopyId}
             className="inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-white hover:bg-primary hover:text-white h-8 rounded-md px-2 cursor-pointer"
           >
             Copy
-          </button> và đã được gửi về email đăng ký khảo sát.</span></h1>
+          </button> đã được gửi về email đăng ký khảo sát.</span></h1>
         {renderQuestion()}
       </div>
       <h2 className="text-2xl mb-4 font-bold text-primary mt-12">THÔNG TIN KHẢO SÁT</h2>
@@ -380,7 +380,7 @@ export default function Result() {
             </div>
             Bạn nhớ lưu lại mã khảo sát để tra cứu kết quả.<br />
             Email chứa mã khảo sát thường mất 1-2 phút để gửi.<br />
-            Sau khi bấm nút 'Hoàn tất khảo sát' bạn sẽ không thể sửa thông tin khảo sát hay thay đổi các câu trả lời.<br />
+            Sau khi bấm 'Hoàn tất khảo sát' bạn sẽ không thể sửa thông tin khảo sát hay thay đổi các câu trả lời.<br />
             </div>
           </div>
 

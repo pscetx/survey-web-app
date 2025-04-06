@@ -84,7 +84,7 @@ export default function AdminDashboard() {
                   placeholder="Điền mã khảo sát 1"
                   value={id1}
                   onChange={(e) => setId1(e.target.value)}
-                  className="w-60 text-md rounded-sm border-b border-secondary border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400"
+                  className="w-60 border-b border-secondary border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
                 />
               </div>
               <div>
@@ -94,7 +94,7 @@ export default function AdminDashboard() {
                   placeholder="Điền mã khảo sát 2"
                   value={id2}
                   onChange={(e) => setId2(e.target.value)}
-                  className="w-60 text-md rounded-sm border-b border-secondary border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400"
+                  className="w-60 border-b border-secondary border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
                 />
               </div>
             </div>
@@ -104,7 +104,7 @@ export default function AdminDashboard() {
             ) : (
               <div className="my-12 ">
                 {respondent1 && respondent2 && (
-                  <div className="overflow-x-auto rounded-md shadow">
+                  <div className="overflow-x-auto rounded shadow">
                     <table className="min-w-full table-auto border-collapse border border-gray-300 text-sm">
                       <thead className="bg-gray-100 text-left">
                         <tr>
@@ -150,8 +150,8 @@ export default function AdminDashboard() {
                         </tr>
                         <tr className="even:bg-gray-50">
                           <td className="border px-4 py-2">Date</td>
-                          <td className="border px-4 py-2">{new Date(respondent1.date).toLocaleDateString()}</td>
-                          <td className="border px-4 py-2">{new Date(respondent2.date).toLocaleDateString()}</td>
+                          <td className="border px-4 py-2">{respondent1.date}</td>
+                          <td className="border px-4 py-2">{respondent2.date}</td>
                         </tr>
                       </tbody>
                     </table>

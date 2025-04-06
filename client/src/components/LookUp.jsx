@@ -13,16 +13,16 @@ export default function LookUp() {
   return (
     <div className="result-input-container">
       <h2 className="text-2xl mb-4 font-bold text-primary">TRA CỨU KẾT QUẢ</h2>
-      <div className='border rounded-md overflow-hidden p-4'>
-        <h2 className="text-md mb-4">Nhập mã khảo sát để tra cứu kết quả</h2>
+      <div className='shadow rounded-md overflow-hidden p-4'>
+        <h2 className="text-md mb-4">Nhập mã khảo sát để tra cứu kết quả.</h2>
         <form onSubmit={handleSubmit}>
           <div className='flex text-md rounded-sm border-b border-secondary'>
             <input
             type="text"
             value={respondentId}
             onChange={(e) => setRespondentId(e.target.value)}
-            placeholder="Survey ID"
-            className="flex-1 border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400"
+            placeholder="Điền mã khảo sát của bạn"
+            className="flex-1 border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
             required
           />
           </div>
