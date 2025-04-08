@@ -41,7 +41,7 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <div className="mb-6 flex flex-wrap gap-3 mb-3 md:justify-end">
+      <div className="mb-8 flex flex-wrap gap-3 mb-3 md:justify-end">
         <button
           onClick={() => setActiveTab("report")}
           className={`px-4 py-2 rounded-md transition-all duration-300 ${

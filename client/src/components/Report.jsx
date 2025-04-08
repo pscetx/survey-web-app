@@ -295,28 +295,28 @@ export default function Report() {
       <div className="mt-4 mb-10 flex gap-8 divide-x divide-gray-300 p-6 rounded-md shadow">
         <div className="flex-1 text-center">
           <div className="text-gray-500 mb-2">Người tham gia</div>
-          <div className="flex justify-center items-end gap-6">
+          <div className="flex justify-center items-end md:gap-10 gap-2">
             <div>
               <div className="text-xl font-semibold text-gray-800">{stats.totalRespondents}</div>
-              <div className="text-gray-500">Tổng cộng</div>
+              <div className="md:text-base text-xs text-gray-500">Tổng cộng</div>
              </div>
             <div>
               <div className="text-xl font-semibold text-gray-800">{stats.newRespondents}</div>
-              <div className="text-gray-500">7 ngày qua</div>
+              <div className="md:text-base text-xs text-gray-500">7 ngày qua</div>
             </div>
           </div>
         </div>
 
         <div className="flex-1 text-center pl-8">
           <div className="text-gray-500 mb-2">Khảo sát</div>
-          <div className="flex justify-center items-end gap-6">
+          <div className="flex justify-center items-end md:gap-10 gap-2">
             <div>
               <div className="text-xl font-semibold text-gray-800">{stats.finishedSurveys}</div>
-              <div className="text-gray-500">Hoàn thành</div>
+              <div className="md:text-base text-xs text-gray-500">Hoàn thành</div>
             </div>
             <div>
               <div className="text-xl font-semibold text-gray-800">{stats.bannedSurveys}</div>
-              <div className="text-gray-500">Bị ẩn</div>
+              <div className="md:text-base text-xs text-gray-500">Bị ẩn</div>
             </div>
           </div>
         </div>
@@ -361,7 +361,6 @@ export default function Report() {
               className="px-4 py-2 border rounded-md"
             />
           </div>
-          <div className="flex gap-4">
             <button
               onClick={toggleSortOrder}
               className="px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 transition duration-300 ease-in-out"
@@ -374,7 +373,6 @@ export default function Report() {
             >
               Đặt lại thứ tự gốc
             </button>
-          </div>
         </div>
 
       <div className="mt-6 bg-white p-6 rounded-lg shadow">
@@ -389,7 +387,7 @@ export default function Report() {
         </div>
       </div>
         
-        <table className="w-60 my-6">
+        <table className="my-6">
           <thead>
             <tr className="bg-gray-100">
               <th className="p-2"></th>
@@ -402,7 +400,7 @@ export default function Report() {
           </thead>
           <tbody>
             <tr className="bg-white">
-              <td className="px-4 py-2">Điểm</td>
+              <td className="px-4 py-2">Ký hiệu điểm</td>
               <td className="px-4 py-2">0</td>
               <td className="px-4 py-2">1</td>
               <td className="px-4 py-2">2</td>
