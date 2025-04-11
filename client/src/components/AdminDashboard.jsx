@@ -5,6 +5,8 @@ import Report from "./Report";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+const isValidObjectId = (id) => /^[a-fA-F0-9]{24}$/.test(id);
+
 export default function AdminDashboard() {
   const [id1, setId1] = useState("");
   const [id2, setId2] = useState("");
@@ -14,6 +16,10 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(false);
 
   const fetchRespondent = async (id, setRespondent) => {
+    if (!isValidObjectId(id)) {
+      console.error(`Invalid ID: ${id}. Must be a 24-character hex string.`);
+      return;
+    }
     setLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/respondent/${id}`);
@@ -84,7 +90,9 @@ export default function AdminDashboard() {
                   placeholder="Điền mã khảo sát 1"
                   value={id1}
                   onChange={(e) => setId1(e.target.value)}
-                  className="w-60 border-b border-secondary border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                  className={`w-60 border-b border-secondary border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 focus-visible:outline-none focus-visible:ring-0 ${
+                    isValidObjectId(id1) ? "" : "border-secondary"
+                  }`}
                 />
               </div>
               <div>
@@ -94,7 +102,9 @@ export default function AdminDashboard() {
                   placeholder="Điền mã khảo sát 2"
                   value={id2}
                   onChange={(e) => setId2(e.target.value)}
-                  className="w-60 border-b border-secondary border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                  className={`w-60 border-b border-secondary border-0 py-2 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 focus-visible:outline-none focus-visible:ring-0 ${
+                    isValidObjectId(id2) ? "" : "border-secondary"
+                  }`}
                 />
               </div>
             </div>
@@ -111,9 +121,15 @@ export default function AdminDashboard() {
                           <th className="border px-4 py-2">Field</th>
                           <th className="border px-4 py-2 border-l-[#ff6384] border-l-2 bg-[#ffe0e6]">
                             {respondent1._id}
+                            <button className="ml-2" onClick={() => window.open(`/result/${respondent1._id}`, "_blank")}>
+                              <img src="/external-link-svgrepo-com.svg" alt="External Link" className="w-4 h-4 hover:scale-110" />
+                            </button>
                           </th>
                           <th className="border px-4 py-2 border-r-[#36a2eb] border-r-2 bg-[#d7ecfb]">
                             {respondent2._id}
+                            <button className="ml-2" onClick={() => window.open(`/result/${respondent2._id}`, "_blank")}>
+                              <img src="/external-link-svgrepo-com.svg" alt="External Link" className="w-4 h-4 hover:scale-110" />
+                            </button>
                           </th>
                         </tr>
                       </thead>
