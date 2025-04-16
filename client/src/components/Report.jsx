@@ -24,6 +24,16 @@ export default function Report() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [respondentDates, setRespondentDates] = useState({});
+  const [respondentDetails, setRespondentDetails] = useState([]);
+  const [answerFilterValue, setAnswerFilterValue] = useState("");
+
+  const allowedFields = [
+    "An ninh quốc phòng", "Tư pháp", "Tài chính", "Công Thương", 
+    "Lao động, Thương Binh và Xã hội", "Giao thông vận tải", "Xây dựng", 
+    "Thông tin và Truyền thông", "Giáo dục và Đào tạo", 
+    "Nông nghiệp và Phát triển nông thôn", "Y tế", "Khoa học và Công nghệ", 
+    "Văn hóa, Thể thao và Du lịch", "Tài nguyên và Môi trường", "Ngân hàng"
+  ];
 
   useEffect(() => {
     async function fetchStatsAndAnswers() {
@@ -73,7 +83,6 @@ export default function Report() {
           questions: answer.questions.slice(0, -1),
         }));
 
-        // Fetch question details
         const questionIds = [
           ...new Set(filteredAnswers.flatMap((answer) => answer.questions.map((q) => q._id))),
         ];
@@ -133,6 +142,26 @@ export default function Report() {
     }
   }, [answers]);
 
+  useEffect(() => {
+    async function fetchAllRespondentDetails() {
+      try {
+        const respondentIds = [...new Set(answers.map((answer) => answer.respondent_id))];
+        const fetchRequests = respondentIds.map((id) =>
+          fetch(`${API_BASE_URL}/respondent/${id}`).then((res) => res.json())
+        );
+
+        const respondents = await Promise.all(fetchRequests);
+        setRespondentDetails(respondents);
+      } catch (error) {
+        console.error("Error fetching respondent details:", error);
+      }
+    }
+
+    if (answers.length > 0) {
+      fetchAllRespondentDetails();
+    }
+  }, [answers]);
+
   const getChartDataForQuestion = (questionId) => {
     const scoreCounts = {};
     let totalResponses = 0;
@@ -161,7 +190,13 @@ export default function Report() {
     };
   };
 
-  const filteredAnswersByDate = answers.filter((answer) => {
+  const filteredAnswersByRespondentField = answers.filter((answer) => {
+    if (!answerFilterValue) return true;
+    const respondent = respondentDetails.find((r) => r._id === answer.respondent_id);
+    return respondent?.field?.toString().toLowerCase().includes(answerFilterValue.toLowerCase());
+  });
+
+  const filteredAnswersByDate = filteredAnswersByRespondentField.filter((answer) => {
     const respondentDate = respondentDates[answer.respondent_id];
     if (!respondentDate) return false;
 
@@ -291,7 +326,7 @@ export default function Report() {
 
   return (
     <div>
-      <h2 className="text-2xl mb-4 font-bold text-primary">BÁO CÁO SỐ LƯỢNG</h2>
+      <h2 className="text-2xl mb-4 font-bold text-primary">BÁO CÁO SỐ LƯỢNG</h2>   
       <div className="mt-4 mb-10 flex gap-8 divide-x divide-gray-300 p-6 rounded-md shadow">
         <div className="flex-1 text-center">
           <div className="text-gray-500 mb-2">Người tham gia</div>
@@ -321,7 +356,7 @@ export default function Report() {
           </div>
         </div>
       </div>
-      
+
       <h2 className="text-2xl mb-4 font-bold text-primary">BÁO CÁO KẾT QUẢ</h2>
       <div className="mt-6">
         <div className="flex flex-wrap justify-between mb-4 gap-4">
@@ -339,6 +374,22 @@ export default function Report() {
               <option value="Nhân lực">Nhân lực</option>
               <option value="Đầu tư">Đầu tư</option>
               <option value="Vận hành">Vận hành</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="answerValueFilter" className="mr-2 font-semibold">Lọc theo lĩnh vực:</label>
+            <select
+              id="answerValueFilter"
+              value={answerFilterValue}
+              onChange={(e) => setAnswerFilterValue(e.target.value)}
+              className="px-4 py-2 border rounded-md md:mt-0 mt-4"
+            >
+              <option value="">Tất cả</option>
+              {allowedFields.map((field, index) => (
+                <option key={index} value={field}>
+                  {field}
+                </option>
+              ))}
             </select>
           </div>
           <div>
@@ -361,22 +412,28 @@ export default function Report() {
               className="px-4 py-2 border rounded-md"
             />
           </div>
-            <button
-              onClick={toggleSortOrder}
-              className="px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 transition duration-300 ease-in-out"
-            >
-              Sắp xếp theo điểm {sortOrder === "desc" ? "thấp nhất" : "cao nhất"}
-            </button>
-            <button
-              onClick={resetToOriginalOrder}
-              className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-300 ease-in-out"
-            >
-              Đặt lại thứ tự gốc
-            </button>
         </div>
 
+        <div className="flex flex-wrap my-6 gap-4">
+          <button
+            onClick={toggleSortOrder}
+            className="px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 transition duration-300 ease-in-out"
+          >
+            Sắp xếp theo điểm {sortOrder === "desc" ? "thấp nhất" : "cao nhất"}
+          </button>
+          <button
+            onClick={resetToOriginalOrder}
+            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-300 ease-in-out"
+          >
+            Đặt lại thứ tự gốc
+          </button>
+        </div>
+      </div>
+
       <div className="mt-6 bg-white p-6 rounded-lg shadow">
-        <h3 className="text-gray-500 mb-4">Điểm trung bình theo phân loại</h3>
+        <h3 className="text-gray-500 mb-4">
+          Đã tim thấy <strong>{filteredAnswersByDate.length} khảo sát</strong> với điểm trung bình theo phân loại như sau:
+        </h3>
         <div className="grid grid-cols-5 gap-x-4">
           {filteredAverageScores.map((item, index) => (
             <div key={index}>
@@ -386,61 +443,57 @@ export default function Report() {
           ))}
         </div>
       </div>
-        
-        <table className="my-6">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="p-2"></th>
-              <th className="bg-[#fb6762]"></th>
-              <th className="bg-[#f366bb]"></th>
-              <th className="bg-[#8769fd]"></th>
-              <th className="bg-[#1ac3fb]"></th>
-              <th className="bg-[#43dd93]"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="bg-white">
-              <td className="px-4 py-2">Ký hiệu điểm</td>
-              <td className="px-4 py-2">0</td>
-              <td className="px-4 py-2">1</td>
-              <td className="px-4 py-2">2</td>
-              <td className="px-4 py-2">3</td>
-              <td className="px-4 py-2">4</td>
-            </tr>
-          </tbody>
-        </table>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredQuestions.slice(0, 40).map((question) => (
-            <div
-              key={question._id}
-              className="p-4 rounded shadow"
-            >
-              {questionDetails[question._id] && (
-                <>
-                  <span className="text-secondary font-semibold mb-2 italic text-sm mr-1">
-                    {questionDetails[question._id].category || "No additional info available"}
-                  </span>
-                  <span className="text-secondary font-semibold mb-2 italic text-sm">
-                - Điểm trung bình: {
-                  (
-                    filteredAnswersByDate.reduce((sum, answer) => {
-                      const questionData = answer.questions.find((q) => q._id === question._id);
-                      return questionData ? sum + questionData.score : sum;
-                    }, 0) /
-                    filteredAnswersByDate.filter((answer) => answer.questions.some((q) => q._id === question._id)).length || 0
-                  ).toFixed(2)
-                }
-              </span>
-                  <p className="text-secondary mb-2 text-sm">
-                    {questionDetails[question._id].question_text || "No question text available"}
-                  </p>
-                </>
-              )}
-              <Bar data={getChartDataForQuestion(question._id)} options={chartOptions} height={50} />
-              
-            </div>
-          ))}
-        </div>
+
+      <table className="my-6">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="p-2"></th>
+            <th className="bg-[#fb6762]"></th>
+            <th className="bg-[#f366bb]"></th>
+            <th className="bg-[#8769fd]"></th>
+            <th className="bg-[#1ac3fb]"></th>
+            <th className="bg-[#43dd93]"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="bg-white">
+            <td className="px-4 py-2">Ký hiệu điểm</td>
+            <td className="px-4 py-2">0</td>
+            <td className="px-4 py-2">1</td>
+            <td className="px-4 py-2">2</td>
+            <td className="px-4 py-2">3</td>
+            <td className="px-4 py-2">4</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredQuestions.slice(0, 40).map((question) => (
+          <div key={question._id} className="p-4 rounded shadow">
+            {questionDetails[question._id] && (
+              <>
+                <span className="text-secondary font-semibold mb-2 italic text-sm mr-1">
+                  {questionDetails[question._id].category || "No additional info available"}
+                </span>
+                <span className="text-secondary font-semibold mb-2 italic text-sm">
+                  - Điểm trung bình: {
+                    (
+                      filteredAnswersByDate.reduce((sum, answer) => {
+                        const questionData = answer.questions.find((q) => q._id === question._id);
+                        return questionData ? sum + questionData.score : sum;
+                      }, 0) /
+                      filteredAnswersByDate.filter((answer) => answer.questions.some((q) => q._id === question._id)).length || 0
+                    ).toFixed(2)
+                  }
+                </span>
+                <p className="text-secondary mb-2 text-sm">
+                  {questionDetails[question._id].question_text || "No question text available"}
+                </p>
+              </>
+            )}
+            <Bar data={getChartDataForQuestion(question._id)} options={chartOptions} height={50} />
+          </div>
+        ))}
       </div>
     </div>
   );
