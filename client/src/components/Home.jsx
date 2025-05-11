@@ -9,7 +9,7 @@ export default function Home() {
     <div className="w-full mx-auto lg:pt-4">
       <div className="min-h-[80vh] flex flex-col justify-between text-center border-4 border-tertiary rounded-2xl p-6 mb-16 bg-cover bg-center bg-[url('/bg-hero.png')]">
         <h1 className="p-2 border border-2 border-secondary rounded-2xl bg-white lg:text-3xl text-xl font-bold text-primary drop-shadow-[5px_5px_0px_#b10913]">
-          BỘ CÔNG CỤ KHẢO SÁT AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP VỪA VÀ NHỎ
+          KHẢO SÁT AN TOÀN THÔNG TIN DÀNH CHO DOANH NGHIỆP VỪA VÀ NHỎ
         </h1>
         <div className="lg:flex lg:flex-row lg:justify-around lg:scale-100 scale-75 grid grid-cols-2 gap-x-16 place-items-center">
           <Card
